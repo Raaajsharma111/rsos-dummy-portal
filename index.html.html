@@ -1,0 +1,1906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RSOS Admission Portal – Training Mode | Educate Girls</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ─── VARIABLES ─────────────────────────────────────────────── */
+:root {
+  --gov-blue:#0b2e6e; --gov-blue2:#1a4494; --gov-light:#e8f0fc;
+  --saffron:#e67e00; --saffron-l:#fff3e0;
+  --green-gov:#1a6e36;
+  --success:#16a34a; --error:#dc2626; --warn:#d97706;
+  --bg:#eef2f7; --card:#fff; --border:#c8d3e8;
+  --text:#1e2d47; --muted:#5b6e8c;
+  --step-done:#16a34a; --step-act:#0b2e6e; --step-todo:#c8d3e8;
+  --font:'Noto Sans',sans-serif;
+  --radius:6px; --shadow:0 2px 8px rgba(11,46,110,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px}
+
+/* ─── TRAINING BANNER ────────────────────────────────────────── */
+#training-banner{background:#7f1d1d;color:#fff;text-align:center;padding:6px 12px;font-size:12px;font-weight:600;letter-spacing:.5px;position:sticky;top:0;z-index:9999}
+#training-banner span{background:#fca5a5;color:#7f1d1d;padding:1px 8px;border-radius:99px;margin-right:6px;font-weight:700}
+
+/* ─── HEADER ─────────────────────────────────────────────────── */
+header{background:var(--gov-blue);color:#fff;position:sticky;top:30px;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+.header-top{background:#091f4a;padding:6px 16px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:#aac0e8}
+.header-top a{color:#aac0e8;text-decoration:none}
+.header-main{display:flex;align-items:center;gap:16px;padding:10px 20px}
+.emblem{width:56px;height:56px;flex-shrink:0}
+.portal-title h1{font-family:'Noto Serif',serif;font-size:18px;font-weight:700;letter-spacing:.3px}
+.portal-title h1 span{font-size:13px;font-family:'Noto Sans',sans-serif;font-weight:400;display:block;color:#b8d0f8;margin-top:2px}
+.portal-title p{font-size:11px;color:#93b3e8;margin-top:3px}
+.header-right{margin-left:auto;text-align:right;font-size:11px;color:#93b3e8}
+.header-right strong{display:block;color:#fff;font-size:14px}
+#logged-user-badge{background:#1a4494;border:1px solid #4a73c0;border-radius:4px;padding:4px 12px;font-size:12px;color:#b8d0f8}
+#logged-user-badge strong{color:#fff}
+
+/* ─── LOGIN OVERLAY ─────────────────────────────────────────── */
+#login-overlay{position:fixed;inset:0;background:rgba(9,31,74,.97);z-index:9998;display:flex;align-items:center;justify-content:center}
+.login-box{background:#fff;border-radius:10px;width:400px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.login-header{background:var(--gov-blue);padding:24px;text-align:center}
+.login-header img.emblem-lg{width:70px;margin-bottom:10px}
+.login-header h2{color:#fff;font-family:'Noto Serif',serif;font-size:18px}
+.login-header p{color:#93b3e8;font-size:12px;margin-top:4px}
+.login-body{padding:28px}
+.login-body label{font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+.login-body input{width:100%;border:1.5px solid var(--border);border-radius:var(--radius);padding:10px 12px;font-size:14px;font-family:var(--font);outline:none;transition:.2s}
+.login-body input:focus{border-color:var(--gov-blue2);background:#f0f4ff}
+.login-note{font-size:11px;color:var(--muted);margin:8px 0 18px;padding:8px;background:#fff8e1;border-left:3px solid var(--saffron);border-radius:2px}
+.btn-login{width:100%;background:var(--gov-blue);color:#fff;border:none;padding:12px;border-radius:var(--radius);font-size:15px;font-weight:600;cursor:pointer;font-family:var(--font);transition:.2s}
+.btn-login:hover{background:var(--gov-blue2)}
+.login-footer{background:#f8faff;padding:12px 28px;text-align:center;font-size:11px;color:var(--muted);border-top:1px solid #eee}
+.admin-link{color:var(--gov-blue2);cursor:pointer;text-decoration:underline;font-size:11px}
+
+/* ─── ADMIN PANEL ────────────────────────────────────────────── */
+#admin-overlay{position:fixed;inset:0;background:rgba(9,31,74,.97);z-index:9997;display:none;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
+.admin-box{background:#fff;border-radius:10px;width:100%;max-width:900px;overflow:hidden;margin:auto}
+.admin-header{background:#1a0533;padding:16px 24px;display:flex;align-items:center;justify-content:space-between}
+.admin-header h2{color:#fff;font-size:16px}
+.btn-close-admin{background:transparent;border:1px solid #aaa;color:#aaa;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:12px}
+.admin-body{padding:20px}
+.admin-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
+.stat-card{background:var(--gov-light);border-radius:8px;padding:14px;text-align:center}
+.stat-card .num{font-size:28px;font-weight:700;color:var(--gov-blue)}
+.stat-card .lbl{font-size:11px;color:var(--muted);margin-top:2px}
+.admin-table-wrap{overflow-x:auto}
+.admin-table{width:100%;border-collapse:collapse;font-size:12px}
+.admin-table th{background:var(--gov-blue);color:#fff;padding:8px 12px;text-align:left;white-space:nowrap}
+.admin-table td{padding:8px 12px;border-bottom:1px solid #eee;white-space:nowrap}
+.admin-table tr:hover td{background:#f0f4ff}
+.badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:600}
+.badge-paid{background:#dcfce7;color:#16a34a}
+.badge-pending{background:#fef3c7;color:#b45309}
+.badge-submitted{background:#dbeafe;color:#1d4ed8}
+#admin-refresh{background:var(--gov-blue2);color:#fff;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;font-size:12px;margin-bottom:12px}
+.export-btn{background:var(--green-gov);color:#fff;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;font-size:12px;margin-left:8px}
+
+/* ─── MAIN LAYOUT ────────────────────────────────────────────── */
+#main-portal{display:none}
+.portal-body{display:flex;min-height:calc(100vh - 100px);gap:0}
+
+/* ─── SIDEBAR / STEPPER ──────────────────────────────────────── */
+.steps-sidebar{width:220px;flex-shrink:0;background:#0e2456;padding:16px 0;position:sticky;top:80px;align-self:flex-start;min-height:calc(100vh - 80px)}
+.steps-sidebar h3{color:#7a9fd8;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:0 16px 10px;border-bottom:1px solid #1a3a7a;margin-bottom:8px}
+.step-item{display:flex;align-items:center;gap:10px;padding:8px 16px;cursor:default;transition:.15s;position:relative}
+.step-item.done{cursor:pointer}
+.step-item.done:hover{background:#162d63}
+.step-num{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;transition:.2s}
+.step-item.todo .step-num{background:#1a3670;color:#7a9fd8;border:2px solid #2a4d8a}
+.step-item.active .step-num{background:var(--saffron);color:#fff;box-shadow:0 0 10px rgba(230,126,0,.5)}
+.step-item.done .step-num{background:var(--step-done);color:#fff}
+.step-lbl{font-size:11px;color:#7a9fd8;line-height:1.3}
+.step-item.active .step-lbl{color:#fff;font-weight:600}
+.step-item.done .step-lbl{color:#86efac}
+.step-conn{width:2px;height:10px;background:#1a3670;margin-left:29px}
+
+/* ─── FORM AREA ──────────────────────────────────────────────── */
+.form-area{flex:1;padding:20px;min-width:0}
+.step-panel{display:none}
+.step-panel.active{display:block}
+.step-header{background:var(--gov-blue);color:#fff;padding:14px 20px;border-radius:var(--radius) var(--radius) 0 0;display:flex;align-items:center;gap:10px}
+.step-header h2{font-size:16px;font-weight:600}
+.step-header .step-badge{background:var(--saffron);color:#fff;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700;margin-left:auto}
+.step-body{background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius);padding:24px}
+
+/* ─── FORM COMPONENTS ────────────────────────────────────────── */
+.form-section{margin-bottom:24px}
+.form-section-title{font-size:12px;font-weight:700;color:var(--gov-blue2);text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid var(--gov-light);padding-bottom:6px;margin-bottom:14px}
+.form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:0}
+.form-row.cols-3{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.form-row.cols-2{grid-template-columns:1fr 1fr}
+.form-row.cols-1{grid-template-columns:1fr}
+.form-group{display:flex;flex-direction:column;gap:4px}
+.form-group label{font-size:11.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.form-group label .req{color:var(--error);margin-left:2px}
+.form-group input,.form-group select,.form-group textarea{border:1.5px solid var(--border);border-radius:var(--radius);padding:8px 10px;font-size:13.5px;font-family:var(--font);color:var(--text);outline:none;background:#fff;transition:.2s;width:100%}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--gov-blue2);background:#f5f8ff;box-shadow:0 0 0 3px rgba(26,68,148,.1)}
+.form-group input.error,.form-group select.error{border-color:var(--error);background:#fff5f5}
+.form-group .hint{font-size:10.5px;color:var(--muted);margin-top:2px}
+.form-group .err-msg{font-size:10.5px;color:var(--error);margin-top:2px;display:none}
+.form-group .err-msg.show{display:block}
+.form-group textarea{resize:vertical;min-height:70px}
+
+/* OTP row */
+.otp-row{display:flex;gap:8px;align-items:flex-end}
+.otp-row input{flex:1}
+.btn-otp{background:var(--gov-blue2);color:#fff;border:none;padding:8px 14px;border-radius:var(--radius);font-size:12px;cursor:pointer;white-space:nowrap;font-family:var(--font);flex-shrink:0}
+.btn-otp:disabled{background:#aaa;cursor:not-allowed}
+.otp-info{font-size:11px;color:var(--success);font-weight:600;margin-top:4px;display:none}
+
+/* Checkboxes */
+.check-group{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.check-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1.5px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:.15s}
+.check-item:hover{border-color:var(--gov-blue2);background:var(--gov-light)}
+.check-item.selected{border-color:var(--gov-blue);background:var(--gov-light)}
+.check-item input[type=checkbox]{accent-color:var(--gov-blue)}
+.check-item .sub-code{font-size:10px;color:var(--muted);display:block}
+
+/* Upload */
+.upload-box{border:2px dashed var(--border);border-radius:var(--radius);padding:20px;text-align:center;cursor:pointer;transition:.2s;background:#fafcff}
+.upload-box:hover{border-color:var(--gov-blue2);background:var(--gov-light)}
+.upload-box .icon{font-size:28px;margin-bottom:6px}
+.upload-box .name{font-size:12px;color:var(--muted)}
+.upload-box.uploaded{border-color:var(--success);background:#f0fdf4}
+.upload-box.uploaded .name{color:var(--success);font-weight:600}
+
+/* ─── NAVIGATION BUTTONS ─────────────────────────────────────── */
+.form-nav{display:flex;justify-content:space-between;margin-top:24px;padding-top:16px;border-top:1px solid #eee;gap:10px}
+.btn-prev{background:#fff;color:var(--gov-blue);border:1.5px solid var(--gov-blue);padding:10px 24px;border-radius:var(--radius);font-size:14px;cursor:pointer;font-family:var(--font);font-weight:600;transition:.2s}
+.btn-prev:hover{background:var(--gov-light)}
+.btn-next{background:var(--gov-blue);color:#fff;border:none;padding:10px 28px;border-radius:var(--radius);font-size:14px;cursor:pointer;font-family:var(--font);font-weight:600;transition:.2s;display:flex;align-items:center;gap:6px}
+.btn-next:hover{background:var(--gov-blue2)}
+.btn-submit{background:var(--green-gov);color:#fff;border:none;padding:10px 28px;border-radius:var(--radius);font-size:14px;cursor:pointer;font-family:var(--font);font-weight:600;transition:.2s}
+.btn-submit:hover{background:#15602e}
+
+/* ─── PREVIEW ────────────────────────────────────────────────── */
+.preview-section{margin-bottom:20px}
+.preview-section h3{font-size:13px;font-weight:700;color:var(--gov-blue);background:var(--gov-light);padding:8px 12px;border-left:4px solid var(--gov-blue);margin-bottom:10px}
+.preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px}
+.preview-item{display:flex;flex-direction:column;gap:2px;padding:8px 10px;background:#f8faff;border-radius:4px}
+.preview-item .lbl{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+.preview-item .val{font-size:13px;color:var(--text);font-weight:500}
+.declaration-box{background:#fff8e1;border:1px solid #fcd34d;border-radius:var(--radius);padding:14px;margin:16px 0}
+.declaration-box p{font-size:12px;color:#78350f;line-height:1.6;margin-bottom:10px}
+.decl-check{display:flex;align-items:flex-start;gap:8px;font-size:12.5px}
+.decl-check input{margin-top:2px;accent-color:var(--gov-blue)}
+
+/* ─── PAYMENT ────────────────────────────────────────────────── */
+.payment-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px;max-width:460px;margin:0 auto}
+.fee-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px}
+.fee-table td{padding:8px 10px;border-bottom:1px solid #eee}
+.fee-table td:last-child{text-align:right;font-weight:600}
+.fee-table tr.total td{background:var(--gov-light);font-weight:700;font-size:14px;color:var(--gov-blue)}
+.payment-methods{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
+.pay-method{border:2px solid var(--border);border-radius:6px;padding:14px;text-align:center;cursor:pointer;transition:.2s}
+.pay-method:hover,.pay-method.selected{border-color:var(--gov-blue);background:var(--gov-light)}
+.pay-method .icon{font-size:24px;margin-bottom:4px}
+.pay-method .name{font-size:12px;font-weight:600}
+.btn-pay{background:var(--saffron);color:#fff;border:none;padding:12px 32px;border-radius:var(--radius);font-size:15px;cursor:pointer;font-family:var(--font);font-weight:700;width:100%;transition:.2s}
+.btn-pay:hover{background:#cc6f00}
+.pay-success{text-align:center;padding:20px;display:none}
+.pay-success .tick{font-size:56px;animation:pop .4s ease}
+.pay-success h3{color:var(--success);font-size:18px;margin:8px 0}
+@keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.2)}100%{transform:scale(1)}}
+
+/* ─── RECEIPT ────────────────────────────────────────────────── */
+#receipt-panel{display:none}
+.receipt-container{background:#fff;border:2px solid var(--gov-blue);border-radius:8px;max-width:760px;margin:0 auto;overflow:hidden}
+.receipt-header{background:var(--gov-blue);color:#fff;padding:16px 24px;display:flex;align-items:center;gap:16px}
+.receipt-header h2{font-family:'Noto Serif',serif;font-size:16px}
+.receipt-header p{font-size:11px;color:#93b3e8;margin-top:2px}
+.receipt-ack{background:#fff8e1;border-bottom:2px solid #fcd34d;padding:12px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.receipt-ack .ack-num{font-size:18px;font-weight:700;color:var(--gov-blue);font-family:'Noto Serif',serif}
+.receipt-ack .ack-lbl{font-size:10px;color:var(--muted);display:block}
+.status-badge{background:#dcfce7;color:#16a34a;padding:4px 14px;border-radius:99px;font-size:12px;font-weight:700;border:1px solid #86efac}
+.receipt-body{padding:20px 24px}
+.receipt-section{margin-bottom:18px}
+.receipt-section h4{font-size:11px;font-weight:700;color:var(--gov-blue);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid #e2e8f0}
+.receipt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px}
+.receipt-item .rl{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase}
+.receipt-item .rv{font-size:12.5px;color:var(--text);font-weight:500;margin-top:1px}
+.receipt-footer{background:#f1f5f9;padding:12px 24px;font-size:11px;color:var(--muted);text-align:center;border-top:1px solid #e2e8f0}
+.receipt-actions{display:flex;gap:10px;margin-top:16px;justify-content:center}
+.btn-print{background:var(--gov-blue);color:#fff;border:none;padding:10px 24px;border-radius:var(--radius);cursor:pointer;font-family:var(--font);font-weight:600;font-size:13px}
+.btn-new{background:var(--green-gov);color:#fff;border:none;padding:10px 24px;border-radius:var(--radius);cursor:pointer;font-family:var(--font);font-weight:600;font-size:13px}
+
+/* ─── ALERTS ─────────────────────────────────────────────────── */
+.alert{padding:10px 14px;border-radius:var(--radius);margin-bottom:12px;font-size:12.5px;display:none;align-items:center;gap:8px}
+.alert.show{display:flex}
+.alert-error{background:#fef2f2;border:1px solid #fca5a5;color:#991b1b}
+.alert-success{background:#f0fdf4;border:1px solid #86efac;color:#166534}
+.alert-warn{background:#fffbeb;border:1px solid #fcd34d;color:#92400e}
+
+/* ─── SAVED BADGE ────────────────────────────────────────────── */
+#save-indicator{position:fixed;bottom:20px;right:20px;background:var(--success);color:#fff;padding:8px 16px;border-radius:99px;font-size:12px;font-weight:600;opacity:0;transition:.3s;z-index:100;pointer-events:none}
+#save-indicator.show{opacity:1}
+
+/* ─── SUBMISSION COUNT ───────────────────────────────────────── */
+.submission-count{background:var(--saffron-l);border:1px solid #fcd34d;border-radius:6px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;font-size:13px}
+.submission-count .cnt{font-size:22px;font-weight:700;color:var(--saffron)}
+
+/* ─── PRINT STYLES ───────────────────────────────────────────── */
+@media print{
+  #training-banner,header,.steps-sidebar,.form-nav,.receipt-actions,#save-indicator{display:none!important}
+  body{background:#fff}
+  .receipt-container{border:2px solid #000;max-width:100%}
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────── */
+@media(max-width:768px){
+  .steps-sidebar{display:none}
+  .form-row,.form-row.cols-2,.form-row.cols-3{grid-template-columns:1fr}
+  .portal-title h1{font-size:14px}
+  .header-right{display:none}
+  .payment-methods{grid-template-columns:1fr}
+  .receipt-grid{grid-template-columns:1fr 1fr}
+}
+
+/* ─── MISC ────────────────────────────────────────────────────── */
+.divider{border:none;border-top:1px solid #e2e8f0;margin:18px 0}
+.required-note{font-size:11px;color:var(--muted);margin-bottom:10px}
+.required-note .req{color:var(--error)}
+.info-box{background:#eff6ff;border:1px solid #bfdbfe;border-radius:var(--radius);padding:10px 14px;font-size:12px;color:#1e3a8a;margin-bottom:14px}
+select option[disabled]{color:#999}
+</style>
+</head>
+<body>
+
+<!-- TRAINING BANNER -->
+<div id="training-banner"><span>⚠ TRAINING ONLY</span> यह एक प्रशिक्षण पोर्टल है | This is a DUMMY portal for Educate Girls internal training — NOT a real government system</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-top">
+    <span>राजस्थान सरकार | Government of Rajasthan</span>
+    <span>Helpdesk: 1800-XXX-XXXX (Training Simulation)</span>
+  </div>
+  <div class="header-main">
+    <svg class="emblem" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="28" cy="28" r="27" fill="#0e2456" stroke="#f59e0b" stroke-width="2"/>
+      <circle cx="28" cy="28" r="18" fill="none" stroke="#f59e0b" stroke-width="1"/>
+      <path d="M28 14 L30 22 L38 22 L32 27 L34 35 L28 30 L22 35 L24 27 L18 22 L26 22Z" fill="#f59e0b"/>
+      <text x="28" y="47" text-anchor="middle" fill="#aac0e8" font-size="5" font-family="sans-serif">RSOS</text>
+    </svg>
+    <div class="portal-title">
+      <h1>राजस्थान राज्य ओपन स्कूल <span>Rajasthan State Open School (RSOS)</span></h1>
+      <p>Online Admission Form – Session 2024-25 | प्रवेश पोर्टल &nbsp;|&nbsp; <strong style="color:#fca5a5">TRAINING SIMULATION</strong></p>
+    </div>
+    <div class="header-right" id="user-header" style="display:none">
+      <div id="logged-user-badge">Logged in as: <strong id="disp-username">—</strong></div>
+      <div style="margin-top:4px">Forms submitted: <strong id="disp-count">0</strong> &nbsp;|&nbsp; <a href="#" onclick="showAdmin()" style="color:#93b3e8;font-size:11px">Admin</a></div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════ LOGIN OVERLAY ═══════════════════════════════ -->
+<div id="login-overlay">
+  <div class="login-box">
+    <div class="login-header">
+      <svg class="emblem-lg" viewBox="0 0 70 70" fill="none">
+        <circle cx="35" cy="35" r="34" fill="#0e2456" stroke="#f59e0b" stroke-width="2"/>
+        <circle cx="35" cy="35" r="22" fill="none" stroke="#f59e0b" stroke-width="1"/>
+        <path d="M35 17 L38 27 L48 27 L40 33 L43 43 L35 37 L27 43 L30 33 L22 27 L32 27Z" fill="#f59e0b"/>
+        <text x="35" y="58" text-anchor="middle" fill="#aac0e8" font-size="7" font-family="sans-serif">RSOS</text>
+      </svg>
+      <h2>RSOS Admission Portal</h2>
+      <p>Training Mode – Educate Girls</p>
+    </div>
+    <div class="login-body">
+      <div class="alert alert-error show" id="login-err" style="display:none">Please enter your username to continue.</div>
+      <label for="inp-username">Your Name / Username <span class="req">*</span></label>
+      <input type="text" id="inp-username" placeholder="Enter your full name or ID" autocomplete="off" onkeydown="if(event.key==='Enter')doLogin()">
+      <div class="login-note">ℹ️ This is a dummy training portal. Any name you enter will be stored with your form submissions for tracking purposes.</div>
+      <button class="btn-login" onclick="doLogin()">Login &amp; Start ➜</button>
+      <div style="text-align:center;margin-top:12px">
+        <span class="admin-link" onclick="showAdminLogin()">🔐 Admin Dashboard</span>
+      </div>
+    </div>
+    <div class="login-footer">Educate Girls – Internal Training Portal &nbsp;|&nbsp; Session 2024-25</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ ADMIN OVERLAY ═══════════════════════════════ -->
+<div id="admin-overlay">
+  <div class="admin-box">
+    <div class="admin-header">
+      <h2>🛡 Admin Dashboard – RSOS Training Tracker</h2>
+      <button class="btn-close-admin" onclick="closeAdmin()">✕ Close</button>
+    </div>
+    <div id="admin-login-area" style="padding:30px;text-align:center">
+      <p style="color:#555;margin-bottom:14px;font-size:13px">Enter admin password to continue</p>
+      <input type="password" id="admin-pass" placeholder="Admin Password" style="border:1.5px solid #ccc;border-radius:6px;padding:9px 14px;font-size:14px;width:240px;margin-bottom:10px" onkeydown="if(event.key==='Enter')checkAdmin()">
+      <br><button onclick="checkAdmin()" style="background:#0b2e6e;color:#fff;border:none;padding:10px 24px;border-radius:6px;cursor:pointer;font-size:14px">Enter</button>
+      <p style="font-size:11px;color:#999;margin-top:10px">Default: admin123</p>
+    </div>
+    <div id="admin-dash" style="display:none">
+      <div class="admin-body">
+        <div class="admin-stats" id="admin-stats"></div>
+        <button id="admin-refresh" onclick="loadAdminData()">🔄 Refresh Data</button>
+        <button class="export-btn" onclick="exportCSV()">⬇ Export CSV</button>
+        <div class="admin-table-wrap">
+          <table class="admin-table" id="admin-table">
+            <thead><tr>
+              <th>#</th><th>Username</th><th>Learner Name</th><th>DOB</th>
+              <th>Course</th><th>AI Center</th><th>Mobile</th>
+              <th>Status</th><th>Payment</th><th>Timestamp</th>
+            </tr></thead>
+            <tbody id="admin-tbody"></tbody>
+          </table>
+        </div>
+        <div style="margin-top:16px;padding:12px;background:#fffbeb;border-radius:6px;font-size:11px;color:#78350f">
+          <strong>Note:</strong> Data is fetched from Google Sheets. To update Accuracy Scores, open the linked Google Sheet directly and add scores in the "Accuracy" column.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ MAIN PORTAL ═══════════════════════════════ -->
+<div id="main-portal">
+  <div class="portal-body">
+
+    <!-- SIDEBAR -->
+    <nav class="steps-sidebar">
+      <h3>Admission Steps</h3>
+      <div id="step-nav"></div>
+    </nav>
+
+    <!-- FORM AREA -->
+    <div class="form-area">
+      <div id="alert-global" class="alert alert-error"></div>
+      <div class="submission-count" id="sub-count-bar">
+        <span class="cnt" id="sub-cnt">0</span>
+        <div>Forms submitted this session<br><small style="color:#78350f">You can submit up to 5 learner forms</small></div>
+      </div>
+
+      <!-- ══ STEP 2: AI Center ══════════════════════════════════════ -->
+      <div class="step-panel" id="step-2">
+        <div class="step-header"><h2>📍 AI Center Selection</h2><span class="step-badge">Step 1 of 10</span></div>
+        <div class="step-body">
+          <div class="info-box">Select the AI Center where the learner will appear for exams. Choose District → Block → Center.</div>
+          <div class="form-row cols-3">
+            <div class="form-group">
+              <label>District <span class="req">*</span></label>
+              <select id="sel-district" onchange="onDistrictChange()"><option value="">-- Select District --</option></select>
+              <span class="err-msg" id="err-district">Please select a district.</span>
+            </div>
+            <div class="form-group">
+              <label>Block / Tehsil <span class="req">*</span></label>
+              <select id="sel-block" onchange="onBlockChange()" disabled><option value="">-- Select Block --</option></select>
+              <span class="err-msg" id="err-block">Please select a block.</span>
+            </div>
+            <div class="form-group">
+              <label>AI Center <span class="req">*</span></label>
+              <select id="sel-center" disabled><option value="">-- Select AI Center --</option></select>
+              <span class="err-msg" id="err-center">Please select an AI center.</span>
+            </div>
+          </div>
+          <div class="form-nav">
+            <span></span>
+            <button class="btn-next" onclick="goNext(2)">Next: Course Selection ➜</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ STEP 3: Course Selection ══════════════════════════════ -->
+      <div class="step-panel" id="step-3">
+        <div class="step-header"><h2>📚 Course & Stream Selection</h2><span class="step-badge">Step 2 of 10</span></div>
+        <div class="step-body">
+          <div class="form-row cols-3">
+            <div class="form-group">
+              <label>Course <span class="req">*</span></label>
+              <select id="sel-course" onchange="onCourseChange()">
+                <option value="">-- Select Course --</option>
+                <option value="10th">Secondary (10th)</option>
+                <option value="12th">Sr. Secondary (12th)</option>
+              </select>
+              <span class="err-msg" id="err-course">Please select a course.</span>
+            </div>
+            <div class="form-group" id="stream-group" style="display:none">
+              <label>Stream <span class="req">*</span></label>
+              <select id="sel-stream">
+                <option value="">-- Select Stream --</option>
+                <option value="Stream I (Arts)">Stream I (Arts)</option>
+                <option value="Stream II (Science/Commerce)">Stream II (Sci/Commerce)</option>
+              </select>
+              <span class="err-msg" id="err-stream">Please select a stream.</span>
+            </div>
+            <div class="form-group">
+              <label>Admission Type</label>
+              <select id="sel-admtype">
+                <option value="General">General</option>
+                <option value="Ex-Regular">Ex-Regular</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-nav">
+            <button class="btn-prev" onclick="goPrev(3)">◀ Back</button>
+            <button class="btn-next" onclick="goNext(3)">Next: Personal Details ➜</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ STEP 4: Personal Details ══════════════════════════════ -->
+      <div class="step-panel" id="step-4">
+        <div class="step-header"><h2>👤 Personal Details</h2><span class="step-badge">Step 3 of 10</span></div>
+        <div class="step-body">
+          <p class="required-note"><span class="req">*</span> marked fields are mandatory</p>
+
+          <div class="form-section">
+            <div class="form-section-title">Basic Information</div>
+            <div class="form-row cols-3">
+              <div class="form-group">
+                <label>Learner's Full Name <span class="req">*</span></label>
+                <input type="text" id="inp-name" placeholder="As per Aadhaar Card">
+                <span class="err-msg" id="err-name">Name is required.</span>
+              </div>
+              <div class="form-group">
+                <label>Father's Name <span class="req">*</span></label>
+                <input type="text" id="inp-father" placeholder="Father's Full Name">
+                <span class="err-msg" id="err-father">Father's name is required.</span>
+              </div>
+              <div class="form-group">
+                <label>Mother's Name <span class="req">*</span></label>
+                <input type="text" id="inp-mother" placeholder="Mother's Full Name">
+                <span class="err-msg" id="err-mother">Mother's name is required.</span>
+              </div>
+            </div>
+            <div class="form-row cols-3">
+              <div class="form-group">
+                <label>Date of Birth <span class="req">*</span></label>
+                <input type="date" id="inp-dob" max="">
+                <span class="err-msg" id="err-dob">Valid DOB required.</span>
+              </div>
+              <div class="form-group">
+                <label>Gender <span class="req">*</span></label>
+                <select id="sel-gender">
+                  <option value="">-- Select --</option>
+                  <option>Male</option><option>Female</option><option>Transgender</option>
+                </select>
+                <span class="err-msg" id="err-gender">Select gender.</span>
+              </div>
+              <div class="form-group">
+                <label>Category <span class="req">*</span></label>
+                <select id="sel-category">
+                  <option value="">-- Select --</option>
+                  <option>General</option><option>OBC</option><option>SC</option><option>ST</option><option>EWS</option>
+                </select>
+                <span class="err-msg" id="err-category">Select category.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">Identity Documents</div>
+            <div class="form-row cols-2">
+              <div class="form-group">
+                <label>Aadhaar Number <span class="req">*</span></label>
+                <input type="text" id="inp-aadhaar" placeholder="XXXX XXXX XXXX" maxlength="14" oninput="maskAadhaar(this)">
+                <span class="hint">12-digit number (will be masked as XXXX-XXXX-XXXX)</span>
+                <span class="err-msg" id="err-aadhaar">Enter valid 12-digit Aadhaar.</span>
+              </div>
+              <div class="form-group">
+                <label>Jan Aadhaar Number</label>
+                <input type="text" id="inp-jan-aadhaar" placeholder="Jan Aadhaar ID">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">Other Details</div>
+            <div class="form-row cols-3">
+              <div class="form-group">
+                <label>Religion <span class="req">*</span></label>
+                <select id="sel-religion">
+                  <option value="">-- Select --</option>
+                  <option>Hindu</option><option>Muslim</option><option>Christian</option>
+                  <option>Sikh</option><option>Jain</option><option>Buddhist</option><option>Other</option>
+                </select>
+                <span class="err-msg" id="err-religion">Select religion.</span>
+              </div>
+              <div class="form-group">
+                <label>Nationality <span class="req">*</span></label>
+                <select id="sel-nationality">
+                  <option value="Indian">Indian</option><option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Rajasthan Resident <span class="req">*</span></label>
+                <select id="sel-raj-resident">
+                  <option value="">-- Select --</option>
+                  <option value="Yes">Yes</option><option value="No">No</option>
+                </select>
+                <span class="err-msg" id="err-raj-resident">Required.</span>
+              </div>
+            </div>
+            <div class="form-row cols-3">
+              <div class="form-group">
+                <label>Rural / Urban</label>
+                <select id="sel-rural-urban">
+                  <option value="Rural">Rural</option><option value="Urban">Urban</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Disability</label>
+                <select id="sel-disability">
+                  <option value="None">None</option>
+                  <option value="Visual">Visual Impairment</option>
+                  <option value="Hearing">Hearing Impairment</option>
+                  <option value="Physical">Physical Disability</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="inp-email" placeholder="email@example.com">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">Mobile Verification</div>
+            <div class="form-row cols-2">
+              <div class="form-group">
+                <label>Mobile Number <span class="req">*</span></label>
+                <div class="otp-row">
+                  <input type="tel" id="inp-mobile" placeholder="10-digit mobile" maxlength="10">
+                  <button class="btn-otp" id="btn-send-otp" onclick="sendOTP()">Send OTP</button>
+                </div>
+                <div class="otp-info" id="otp-info">✅ OTP sent! Use: <strong>1234</strong> (simulation)</div>
+                <span class="err-msg" id="err-mobile">Enter valid 10-digit mobile.</span>
+              </div>
+              <div class="form-group" id="otp-verify-group" style="display:none">
+                <label>Enter OTP <span class="req">*</span></label>
+                <div class="otp-row">
+                  <input type="text" id="inp-otp" placeholder="Enter 4-digit OTP" maxlength="4">
+                  <button class="btn-otp" id="btn-verify-otp" onclick="verifyOTP()">Verify</button>
+                </div>
+                <div class="otp-info" id="otp-verified" style="color:var(--success)"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-nav">
+            <button class="btn-prev" onclick="goPrev(4)">◀ Back</button>
+            <button class="btn-next" onclick="goNext(4)">Next: Academic Details ➜</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ STEP 5: Academic Details ══════════════════════════════ -->
+      <div class="step-panel" id="step-5">
+        <div class="step-header"><h2>🎓 Academic Details</h2><span class="step-badge">Step 4 of 10</span></div>
+        <div class="step-body">
+          <div class="form-row cols-2">
+            <div class="form-group">
+              <label>Previous Qualification <span class="req">*</span></label>
+              <select id="sel-prev-qual">
+                <option value="">-- Select --</option>
+                <option>Class 8 Pass</option><option>Class 9 Fail</option>
+                <option>Class 9 Pass</option><option>Class 10 Pass</option>
+                <option>Class 10 Fail</option><option>Class 11 Pass</option>
+                <option>Class 11 Fail</option><option>Class 12 Fail</option>
+                <option>Other</option>
+              </select>
+              <span class="err-msg" id="err-prev-qual">Required.</span>
+            </div>
+            <div class="form-group">
+              <label>Medium of Instruction <span class="req">*</span></label>
+              <select id="sel-medium">
+                <option value="">-- Select --</option>
+                <option value="Hindi">Hindi</option>
+                <option value="English">English</option>
+              </select>
+              <span class="err-msg" id="err-medium">Required.</span>
+            </div>
+          </div>
+          <div class="form-row cols-2">
+            <div class="form-group">
+              <label>Name of Last School / Institution</label>
+              <input type="text" id="inp-last-school" placeholder="School name">
+            </div>
+            <div class="form-group">
+              <label>Year of Passing</label>
+              <input type="number" id="inp-pass-year" placeholder="e.g. 2022" min="1990" max="2025">
+            </div>
+          </div>
+          <div class="form-nav">
+            <button class="btn-prev" onclick="goPrev(5)">◀ Back</button>
+            <button class="btn-next" onclick="goNext(5)">Next: Subject Selection ➜</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ STEP 6: Subject Selection ═════════════════════════════ -->
+      <div class="step-panel" id="step-6">
+        <div class="step-header"><h2>📋 Subject Selection</h2><span class="step-badge">Step 5 of 10</span></div>
+        <div class="step-body">
+          <div class="info-box" id="subject-info">Select exactly <strong>5 subjects</strong>. Subjects shown based on your selected course and stream.</div>
+          <div id="subject-alert" class="alert alert-error">Please select exactly 5 subjects.</div>
+          <div class="check-group" id="subjects-list"></div>
+          <div style="margin-top:12px;font-size:12px;color:var(--muted)">Selected: <strong id="sel-count">0</strong> / 5</div>
+          <div class="form-nav">
+            <button class="btn-prev" onclick="goPrev(6)">◀ Back</button>
+            <button class="btn-next" onclick="goNext(6)">Next: Bank Details ➜</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ STEP 7: Bank Details ═══════════════════════════════════ -->
+      <div class="step-panel" id="step-7">
+        <div class="step-header"><h2>🏦 Bank Account Details</h2><span class="step-badge">Step 6 of 10</span></div>
+        <div class="step-body">
+          <div class="info-box">Bank details are required for fee refund if applicable. Please enter accurate information.</div>
+          <div class="form-row cols-2">
+            <div class="form-group">
+              <label>Account Holder Name <span class="req">*</span></label>
+              <input type="text" id="inp-bank-name" placeholder="As per bank records">
+              <span class="err-msg" id="err-bank-name">Required.</span>
+            </div>
+            <div class="form-group">
+              <label>Bank Name <span class="req">*</span></label>
+              <input type="text" id="inp-bank-bank" placeholder="e.g. State Bank of India">
+              <span class="err-msg" id="err-bank-bank">Required.</span>
+            </div>
+          </div>
+          <div class="form-row cols-2">
+            <div class="form-group">
+              <label>Branch Name</label>
+              <input type="text" id="inp-bank-branch" placeholder="Branch name">
+            </div>
+            <div class="form-group">
+              <label>Account Number <span class="req">*</span></label>
+              <input type="text" id="inp-bank-acc" placeholder="Account number" maxlength="18">
+              <span class="err-msg" id="err-bank-acc">Required.</span>
+            </div>
+          </div>
+          <div class="form-row cols-2">
+            <div class="form-group">
+              <label>IFSC Code <span class="req">*</span></label>
+              <input type="text" id="inp-bank-ifsc" placeholder="e.g. SBIN0001234" maxlength="11" oninput="this.value=this.value.toUpperCase()">
+              <span class="err-msg" id="err-bank-ifsc">Required.</span>
+            </div>
+            <div class="form-group">
+              <label>Linked Mobile</label>
+              <input type="tel" id="inp-bank-mobile" placeholder="Mobile linked to account" maxlength="10">
+            </div>
+          </div>
+          <div class="form-nav">
+            <button class="btn-prev" onclick="goPrev(7)">◀ Back</button>
+            <button class="btn-next" onclick="goNext(7)">Next: Address Details ➜</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ STEP 8: Address ════════════════════════════════════════ -->
+      <div class="step-panel" id="step-8">
+        <div class="step-header"><h2>🏠 Address Details</h2><span class="step-badge">Step 7 of 10</span></div>
+        <div class="step-body">
+          <div class="form-section">
+            <div class="form-section-title">Permanent Address</div>
+            <div class="form-row cols-1">
+              <div class="form-group">
+                <label>Address Line <span class="req">*</span></label>
+                <input type="text" id="inp-perm-addr" placeholder="House No., Street, Locality">
+                <span class="err-msg" id="err-perm-addr">Required.</span>
+              </div>
+            </div>
+            <div class="form-row cols-3">
+              <div class="form-group">
+                <label>District <span class="req">*</span></label>
+                <select id="sel-perm-dist">
+                  <option value="">-- Select --</option>
+                </select>
+                <span class="err-msg" id="err-perm-dist">Required.</span>
+              </div>
+              <div class="form-group">
+                <label>Block / Tehsil</label>
+                <input type="text" id="inp-perm-block" placeholder="Block / Tehsil">
+              </div>
+              <div class="form-group">
+                <label>Village / City <span class="req">*</span></label>
+                <input type="text" id="inp-perm-village" placeholder="Village or City name">
+                <span class="err-msg" id="err-perm-village">Required.</span>
+              </div>
+            </div>
+            <div class="form-row cols-2">
+              <div class="form-group">
+                <label>Pincode <span class="req">*</span></label>
+                <input type="text" id="inp-perm-pin" placeholder="6-digit pincode" maxlength="6">
+                <span class="err-msg" id="err-perm-pin">Enter valid 6-digit pincode.</span>
+              </div>
+              <div class="form-group" style="justify-content:flex-end;padding-bottom:4px">
+                <label style="visibility:hidden">Same</label>
+                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;text-transform:none;letter-spacing:0">
+                  <input type="checkbox" id="same-address" onchange="copyAddress()"> Same as correspondence address
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section" id="corr-section">
+            <div class="form-section-title">Correspondence Address</div>
+            <div class="form-row cols-1">
+              <div class="form-group">
+                <label>Address Line</label>
+                <input type="text" id="inp-corr-addr" placeholder="House No., Street, Locality">
+              </div>
+            </div>
+            <div class="form-row cols-3">
+              <div class="form-group">
+                <label>District</label>
+                <select id="sel-corr-dist"><option value="">-- Select --</option></select>
+              </div>
+              <div class="form-group">
+                <label>Block / Tehsil</label>
+                <input type="text" id="inp-corr-block" placeholder="Block / Tehsil">
+              </div>
+              <div class="form-group">
+                <label>Village / City</label>
+                <input type="text" id="inp-corr-village" placeholder="Village or City name">
+              </div>
+            </div>
+            <div class="form-row cols-2">
+              <div class="form-group">
+                <label>Pincode</label>
+                <input type="text" id="inp-corr-pin" placeholder="6-digit pincode" maxlength="6">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-nav">
+            <button class="btn-prev" onclick="goPrev(8)">◀ Back</button>
+            <button class="btn-next" onclick="goNext(8)">Next: Document Upload ➜</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ STEP 9: Documents ══════════════════════════════════════ -->
+      <div class="step-panel" id="step-9">
+        <div class="step-header"><h2>📎 Document Upload</h2><span class="step-badge">Step 8 of 10</span></div>
+        <div class="step-body">
+          <div class="info-box">⚠️ <strong>Training Mode:</strong> Actual file upload is not required. Click on each box to simulate document upload.</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-top:14px">
+            <div class="upload-box" id="up-photo" onclick="simulateUpload('up-photo','📷','Photo Uploaded')">
+              <div class="icon">📷</div>
+              <div class="name">Passport Photo<br><small>JPG, max 50KB</small></div>
+            </div>
+            <div class="upload-box" id="up-sign" onclick="simulateUpload('up-sign','✍️','Signature Uploaded')">
+              <div class="icon">✍️</div>
+              <div class="name">Signature<br><small>JPG, max 30KB</small></div>
+            </div>
+            <div class="upload-box" id="up-aadhaar" onclick="simulateUpload('up-aadhaar','🪪','Aadhaar Uploaded')">
+              <div class="icon">🪪</div>
+              <div class="name">Aadhaar Card<br><small>PDF/JPG, max 200KB</small></div>
+            </div>
+            <div class="upload-box" id="up-marksheet" onclick="simulateUpload('up-marksheet','📜','Marksheet Uploaded')">
+              <div class="icon">📜</div>
+              <div class="name">Marksheet<br><small>PDF/JPG, max 200KB</small></div>
+            </div>
+          </div>
+          <div id="doc-alert" class="alert alert-error" style="margin-top:12px">Please upload all required documents (Photo, Signature, Aadhaar).</div>
+          <div class="form-nav">
+            <button class="btn-prev" onclick="goPrev(9)">◀ Back</button>
+            <button class="btn-next" onclick="goNext(9)">Next: Preview & Declaration ➜</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ STEP 10: Preview & Declaration ════════════════════════ -->
+      <div class="step-panel" id="step-10">
+        <div class="step-header"><h2>👁 Preview &amp; Declaration</h2><span class="step-badge">Step 9 of 10</span></div>
+        <div class="step-body">
+          <div class="info-box">Please review all details carefully. Once locked and submitted, no changes can be made.</div>
+          <div id="preview-content"></div>
+          <div class="declaration-box">
+            <p>मैं घोषणा करता/करती हूँ कि उपरोक्त दी गई समस्त सूचनाएं मेरी जानकारी और विश्वास के अनुसार सत्य हैं।<br>
+            <em>I hereby declare that the information provided above is true and correct to the best of my knowledge and belief. I understand that this is a training simulation conducted by Educate Girls.</em></p>
+            <label class="decl-check"><input type="checkbox" id="decl-check"> I confirm all details are correct and accept the declaration above.</label>
+          </div>
+          <div id="decl-alert" class="alert alert-error">Please accept the declaration to proceed.</div>
+          <div class="form-nav">
+            <button class="btn-prev" onclick="goPrev(10)">◀ Back</button>
+            <button class="btn-submit" onclick="lockAndSubmit()">🔒 Lock &amp; Submit Form</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ STEP 11: Payment ═══════════════════════════════════════ -->
+      <div class="step-panel" id="step-11">
+        <div class="step-header"><h2>💳 Fee Payment</h2><span class="step-badge">Step 10 of 10</span></div>
+        <div class="step-body">
+          <div class="payment-card">
+            <h3 style="font-size:15px;color:var(--gov-blue);margin-bottom:10px">Fee Details</h3>
+            <table class="fee-table">
+              <tr><td>Registration Fee</td><td>₹ 350</td></tr>
+              <tr><td>Examination Fee (per subject × 5)</td><td>₹ 500</td></tr>
+              <tr><td>Practical Fee</td><td>₹ 50</td></tr>
+              <tr class="total"><td>Total Amount</td><td>₹ 900</td></tr>
+            </table>
+            <p style="font-size:11px;color:var(--muted);margin-bottom:10px">⚠️ Training Mode – No real payment will be processed</p>
+            <h4 style="font-size:12px;color:var(--muted);margin-bottom:8px">Select Payment Method:</h4>
+            <div class="payment-methods">
+              <div class="pay-method" onclick="selectPayMethod(this,'UPI')" id="pm-upi">
+                <div class="icon">📱</div>
+                <div class="name">UPI / QR Code</div>
+              </div>
+              <div class="pay-method" onclick="selectPayMethod(this,'Card')" id="pm-card">
+                <div class="icon">💳</div>
+                <div class="name">Debit / Credit Card</div>
+              </div>
+            </div>
+            <button class="btn-pay" id="btn-pay" onclick="processPayment()">Pay ₹900 (Simulation)</button>
+            <div class="pay-success" id="pay-success">
+              <div class="tick">✅</div>
+              <h3>Payment Successful!</h3>
+              <p style="color:var(--muted);font-size:13px">Transaction ID: <strong id="txn-id"></strong></p>
+              <p style="color:var(--muted);font-size:12px;margin-top:4px">Amount: ₹900 | Method: <span id="pay-method-disp"></span></p>
+              <button class="btn-next" style="margin-top:14px;width:100%;justify-content:center" onclick="generateReceipt()">Generate Receipt ➜</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ RECEIPT ═════════════════════════════════════════════════ -->
+      <div id="receipt-panel">
+        <div class="receipt-container" id="receipt-content">
+          <div class="receipt-header">
+            <svg width="50" height="50" viewBox="0 0 56 56" fill="none">
+              <circle cx="28" cy="28" r="27" fill="#0e2456" stroke="#f59e0b" stroke-width="2"/>
+              <path d="M28 14 L30 22 L38 22 L32 27 L34 35 L28 30 L22 35 L24 27 L18 22 L26 22Z" fill="#f59e0b"/>
+            </svg>
+            <div>
+              <h2>राजस्थान राज्य ओपन स्कूल – Admission Acknowledgment</h2>
+              <p>This is a TRAINING receipt generated by Educate Girls portal simulation</p>
+            </div>
+          </div>
+          <div class="receipt-ack">
+            <div><span class="ack-lbl">Acknowledgment Number</span><span class="ack-num" id="ack-num">—</span></div>
+            <div><span class="ack-lbl">Submission Date &amp; Time</span><span style="font-weight:600" id="ack-date">—</span></div>
+            <div><span class="ack-lbl">Payment Status</span><span class="status-badge">✅ PAID (Simulated)</span></div>
+            <div><span class="ack-lbl">Form Status</span><span class="status-badge">📋 SUBMITTED</span></div>
+          </div>
+          <div class="receipt-body" id="receipt-body"></div>
+          <div class="receipt-footer">
+            This is a computer-generated acknowledgment from the RSOS Training Portal (Educate Girls). | Not a real government document.
+          </div>
+        </div>
+        <div class="receipt-actions">
+          <button class="btn-print" onclick="window.print()">🖨 Print Receipt</button>
+          <button class="btn-new" onclick="startNewForm()">➕ New Learner Form</button>
+        </div>
+      </div>
+
+    </div><!-- /form-area -->
+  </div><!-- /portal-body -->
+</div><!-- /main-portal -->
+
+<div id="save-indicator">✓ Progress Saved</div>
+
+<!-- ═══════════════════════════════ SCRIPT ═══════════════════════════════════ -->
+<script>
+/* ════════════════════════════════════════════════════════════════
+   CONFIGURATION — UPDATE GOOGLE SHEET URL HERE
+   ════════════════════════════════════════════════════════════════ */
+const CONFIG = {
+  SHEET_URL: 'https://script.google.com/macros/s/AKfycbywfview5g6aJU1IMwJ8wX6lQJFcTq_YZxMmqMqTBklv0RNxTKG8SuPhiX5urhJHwsXPQ/exec', // Replace with your deployed URL
+  ADMIN_PASS: 'admin123',
+  MAX_FORMS: 5
+};
+
+/* ════════════════════════════════════════════════════════════════
+   AI CENTER DATA — Rajasthan Districts → Blocks → Centers
+   ════════════════════════════════════════════════════════════════ */
+const centerData = {
+  "Ajmer": {
+    "Ajmer": ["30001 - GSSS Naya Bazaar, Ajmer","30002 - GSSS Girls Vaishali Nagar, Ajmer","30003 - Govt Model School Civil Lines, Ajmer","30004 - GSSS Adarsh Nagar, Ajmer"],
+    "Beawar": ["30005 - GSSS Boys Beawar","30006 - GSSS Girls Beawar","30007 - Govt School Masuda"],
+    "Kishangarh": ["30008 - GSSS Kishangarh","30009 - Govt Model School Kishangarh","30010 - GSSS Rupangarh"],
+    "Nasirabad": ["30011 - GSSS Nasirabad","30012 - Govt School Kekri"]
+  },
+  "Alwar": {
+    "Alwar": ["31001 - GSSS Boys Alwar","31002 - GSSS Girls Alwar","31003 - Govt School Civil Lines Alwar"],
+    "Bahror": ["31004 - GSSS Bahror","31005 - Govt School Shahjahanpur"],
+    "Bhiwadi": ["31006 - GSSS Bhiwadi","31007 - Govt School Tapukara"],
+    "Rajgarh": ["31008 - GSSS Rajgarh","31009 - GSSS Laxmangarh"],
+    "Thanagazi": ["31010 - GSSS Thanagazi","31011 - Govt School Umrain"]
+  },
+  "Banswara": {
+    "Banswara": ["32001 - GSSS Boys Banswara","32002 - GSSS Girls Banswara"],
+    "Bagidora": ["32003 - GSSS Bagidora","32004 - Govt School Arthuna"],
+    "Kushalgarh": ["32005 - GSSS Kushalgarh","32006 - Govt School Ghatol"]
+  },
+  "Barmer": {
+    "Barmer": ["33001 - GSSS Boys Barmer","33002 - GSSS Girls Barmer","33003 - Govt Model School Barmer"],
+    "Balotra": ["33004 - GSSS Balotra","33005 - Govt School Sindhari"],
+    "Sheo": ["33006 - GSSS Sheo","33007 - Govt School Ramsar"],
+    "Chohtan": ["33008 - GSSS Chohtan","33009 - Govt School Dhorimanna"]
+  },
+  "Bharatpur": {
+    "Bharatpur": ["34001 - GSSS Boys Bharatpur","34002 - GSSS Girls Bharatpur","34003 - Govt School Nagar"],
+    "Deeg": ["34004 - GSSS Deeg","34005 - Govt School Kaman"],
+    "Weir": ["34006 - GSSS Weir","34007 - Govt School Nadbai"],
+    "Rupbas": ["34008 - GSSS Rupbas"]
+  },
+  "Bhilwara": {
+    "Bhilwara": ["35001 - GSSS Boys Bhilwara","35002 - GSSS Girls Bhilwara","35003 - Govt Model School Bhilwara"],
+    "Shahpura": ["35004 - GSSS Shahpura","35005 - Govt School Kotri"],
+    "Asind": ["35006 - GSSS Asind","35007 - Govt School Jahazpur"],
+    "Gangapur": ["35008 - GSSS Gangapur","35009 - Govt School Mandalgarh"]
+  },
+  "Bikaner": {
+    "Bikaner": ["36001 - GSSS Boys Bikaner","36002 - GSSS Girls Bikaner","36003 - Govt Model School Bikaner","36004 - GSSS Shri Dungargarh"],
+    "Nokha": ["36005 - GSSS Nokha","36006 - Govt School Kolayat"],
+    "Lunkaransar": ["36007 - GSSS Lunkaransar","36008 - Govt School Pugal"],
+    "Khajuwala": ["36009 - GSSS Khajuwala"]
+  },
+  "Bundi": {
+    "Bundi": ["37001 - GSSS Boys Bundi","37002 - GSSS Girls Bundi"],
+    "Nainwa": ["37003 - GSSS Nainwa","37004 - Govt School Indragarh"],
+    "Hindoli": ["37005 - GSSS Hindoli","37006 - Govt School Keshoraipatan"]
+  },
+  "Chittorgarh": {
+    "Chittorgarh": ["38001 - GSSS Boys Chittorgarh","38002 - GSSS Girls Chittorgarh","38003 - Govt Model School Chittorgarh"],
+    "Bari Sadri": ["38004 - GSSS Bari Sadri","38005 - Govt School Begun"],
+    "Nimbahera": ["38006 - GSSS Nimbahera","38007 - Govt School Rawatbhata"],
+    "Kapasan": ["38008 - GSSS Kapasan","38009 - Govt School Gangrar"]
+  },
+  "Churu": {
+    "Churu": ["39001 - GSSS Boys Churu","39002 - GSSS Girls Churu"],
+    "Ratangarh": ["39003 - GSSS Ratangarh","39004 - Govt School Sujangarh"],
+    "Sardarshahar": ["39005 - GSSS Sardarshahar","39006 - Govt School Bidasar"],
+    "Taranagar": ["39007 - GSSS Taranagar","39008 - Govt School Rajgarh"]
+  },
+  "Dausa": {
+    "Dausa": ["40001 - GSSS Boys Dausa","40002 - GSSS Girls Dausa"],
+    "Lalsot": ["40003 - GSSS Lalsot","40004 - Govt School Nangal Rajawatan"],
+    "Sikrai": ["40005 - GSSS Sikrai","40006 - Govt School Bandikui"],
+    "Mahwa": ["40007 - GSSS Mahwa"]
+  },
+  "Dholpur": {
+    "Dholpur": ["41001 - GSSS Boys Dholpur","41002 - GSSS Girls Dholpur"],
+    "Rajakheda": ["41003 - GSSS Rajakheda","41004 - Govt School Sirmathura"],
+    "Bari": ["41005 - GSSS Bari","41006 - Govt School Baseri"]
+  },
+  "Dungarpur": {
+    "Dungarpur": ["42001 - GSSS Boys Dungarpur","42002 - GSSS Girls Dungarpur"],
+    "Sagwara": ["42003 - GSSS Sagwara","42004 - Govt School Simalwara"],
+    "Bichhiwara": ["42005 - GSSS Bichhiwara","42006 - Govt School Aspur"]
+  },
+  "Hanumangarh": {
+    "Hanumangarh": ["43001 - GSSS Boys Hanumangarh","43002 - GSSS Girls Hanumangarh","43003 - Govt Model School Hanumangarh Jn"],
+    "Sangaria": ["43004 - GSSS Sangaria","43005 - Govt School Tibbi"],
+    "Nohar": ["43006 - GSSS Nohar","43007 - Govt School Bhadra"],
+    "Pilibanga": ["43008 - GSSS Pilibanga","43009 - Govt School Rawatsar"]
+  },
+  "Jaipur": {
+    "Jaipur (Urban)": ["44001 - GSSS Boys Ramganj Mandi Jaipur","44002 - GSSS Girls Subhash Nagar Jaipur","44003 - Govt Model School Jhalana Jaipur","44004 - GSSS Sanganer","44005 - GSSS Mansarovar, Jaipur"],
+    "Amber": ["44006 - GSSS Amber","44007 - Govt School Jamwa Ramgarh","44008 - Govt School Shahpura Jaipur"],
+    "Chaksu": ["44009 - GSSS Chaksu","44010 - Govt School Malpura"],
+    "Phulera": ["44011 - GSSS Phulera","44012 - Govt School Renwal"],
+    "Kotputli": ["44013 - GSSS Kotputli","44014 - Govt School Viratnagar"],
+    "Bassi": ["44015 - GSSS Bassi","44016 - Govt School Chomu"]
+  },
+  "Jaisalmer": {
+    "Jaisalmer": ["45001 - GSSS Boys Jaisalmer","45002 - GSSS Girls Jaisalmer"],
+    "Pokhran": ["45003 - GSSS Pokhran","45004 - Govt School Fatehgarh"],
+    "Sam": ["45005 - Govt School Sam","45006 - Govt School Nachna"]
+  },
+  "Jalore": {
+    "Jalore": ["46001 - GSSS Boys Jalore","46002 - GSSS Girls Jalore"],
+    "Sanchore": ["46003 - GSSS Sanchore","46004 - Govt School Raniwara"],
+    "Bhinmal": ["46005 - GSSS Bhinmal","46006 - Govt School Ahore"]
+  },
+  "Jhalawar": {
+    "Jhalawar": ["47001 - GSSS Boys Jhalawar","47002 - GSSS Girls Jhalawar"],
+    "Khanpur": ["47003 - GSSS Khanpur","47004 - Govt School Jhalarapatan"],
+    "Manoharthana": ["47005 - GSSS Manoharthana","47006 - Govt School Pirawa"]
+  },
+  "Jhunjhunu": {
+    "Jhunjhunu": ["48001 - GSSS Boys Jhunjhunu","48002 - GSSS Girls Jhunjhunu"],
+    "Pilani": ["48003 - GSSS Pilani","48004 - Govt School Bissau"],
+    "Chirawa": ["48005 - GSSS Chirawa","48006 - Govt School Nawalgarh"],
+    "Udaipurwati": ["48007 - GSSS Udaipurwati","48008 - Govt School Khetri"]
+  },
+  "Jodhpur": {
+    "Jodhpur (Urban)": ["49001 - GSSS Boys Jodhpur","49002 - GSSS Girls Jodhpur","49003 - Govt Model School Sardarpura, Jodhpur","49004 - GSSS Shastri Nagar Jodhpur"],
+    "Phalodi": ["49005 - GSSS Phalodi","49006 - Govt School Lohawat"],
+    "Osian": ["49007 - GSSS Osian","49008 - Govt School Bilara"],
+    "Shergarh": ["49009 - GSSS Shergarh","49010 - Govt School Bhopalgarh"]
+  },
+  "Karauli": {
+    "Karauli": ["50001 - GSSS Boys Karauli","50002 - GSSS Girls Karauli"],
+    "Hindaun": ["50003 - GSSS Hindaun City","50004 - Govt School Sapotra"],
+    "Nadauti": ["50005 - GSSS Nadauti","50006 - Govt School Todabhim"]
+  },
+  "Kota": {
+    "Kota (Urban)": ["51001 - GSSS Boys Kota","51002 - GSSS Girls Kota","51003 - Govt Model School Dadwara Kota","51004 - GSSS Vigyan Nagar Kota"],
+    "Ramganjmandi": ["51005 - GSSS Ramganjmandi","51006 - Govt School Anta"],
+    "Ladpura": ["51007 - GSSS Ladpura","51008 - Govt School Kanwas"]
+  },
+  "Nagaur": {
+    "Nagaur": ["52001 - GSSS Boys Nagaur","52002 - GSSS Girls Nagaur"],
+    "Merta": ["52003 - GSSS Merta City","52004 - Govt School Jayal"],
+    "Didwana": ["52005 - GSSS Didwana","52006 - Govt School Kuchaman City"],
+    "Makrana": ["52007 - GSSS Makrana","52008 - Govt School Parbatsar"],
+    "Degana": ["52009 - GSSS Degana","52010 - Govt School Nawa"]
+  },
+  "Pali": {
+    "Pali": ["53001 - GSSS Boys Pali","53002 - GSSS Girls Pali"],
+    "Sojat": ["53003 - GSSS Sojat City","53004 - Govt School Jaitaran"],
+    "Marwar Jn": ["53005 - GSSS Marwar Junction","53006 - Govt School Bali"],
+    "Sumerpur": ["53007 - GSSS Sumerpur","53008 - Govt School Rohat"]
+  },
+  "Pratapgarh": {
+    "Pratapgarh": ["54001 - GSSS Boys Pratapgarh","54002 - GSSS Girls Pratapgarh"],
+    "Arnod": ["54003 - GSSS Arnod","54004 - Govt School Peepalkhunt"],
+    "Chhoti Sadri": ["54005 - GSSS Chhoti Sadri","54006 - Govt School Dhariyawad"]
+  },
+  "Rajsamand": {
+    "Rajsamand": ["55001 - GSSS Boys Rajsamand","55002 - GSSS Girls Rajsamand"],
+    "Nathdwara": ["55003 - GSSS Nathdwara","55004 - Govt School Kankroli"],
+    "Bhim": ["55005 - GSSS Bhim","55006 - Govt School Deogarh"],
+    "Amet": ["55007 - GSSS Amet","55008 - Govt School Railmagra"]
+  },
+  "Sawai Madhopur": {
+    "Sawai Madhopur": ["56001 - GSSS Boys Sawai Madhopur","56002 - GSSS Girls Sawai Madhopur"],
+    "Gangapur City": ["56003 - GSSS Gangapur City","56004 - Govt School Bonli"],
+    "Bamanwas": ["56005 - GSSS Bamanwas","56006 - Govt School Karauli-Wazirpur"],
+    "Wazirpur": ["56007 - GSSS Wazirpur"]
+  },
+  "Sikar": {
+    "Sikar": ["57001 - GSSS Boys Sikar","57002 - GSSS Girls Sikar","57003 - Govt Model School Sikar"],
+    "Fatehpur": ["57004 - GSSS Fatehpur Shekhawati","57005 - Govt School Lachhmangarh"],
+    "Neem ka Thana": ["57006 - GSSS Neem ka Thana","57007 - Govt School Srimadhopur"],
+    "Sri Madhopur": ["57008 - GSSS Sri Madhopur","57009 - Govt School Khandela"]
+  },
+  "Sirohi": {
+    "Sirohi": ["58001 - GSSS Boys Sirohi","58002 - GSSS Girls Sirohi"],
+    "Abu Road": ["58003 - GSSS Abu Road","58004 - Govt School Mount Abu"],
+    "Pindwara": ["58005 - GSSS Pindwara","58006 - Govt School Reodar"],
+    "Sheoganj": ["58007 - GSSS Sheoganj","58008 - Govt School Posalia"]
+  },
+  "Sri Ganganagar": {
+    "Sri Ganganagar": ["59001 - GSSS Boys Sri Ganganagar","59002 - GSSS Girls Sri Ganganagar","59003 - Govt Model School Sri Ganganagar"],
+    "Suratgarh": ["59004 - GSSS Suratgarh","59005 - Govt School Raisinghnagar"],
+    "Anupgarh": ["59006 - GSSS Anupgarh","59007 - Govt School Gharsana"],
+    "Padampur": ["59008 - GSSS Padampur","59009 - Govt School Sangaria Ganganagar"],
+    "Karanpur": ["59010 - GSSS Karanpur"]
+  },
+  "Tonk": {
+    "Tonk": ["60001 - GSSS Boys Tonk","60002 - GSSS Girls Tonk"],
+    "Uniara": ["60003 - GSSS Uniara","60004 - Govt School Malpura"],
+    "Deoli": ["60005 - GSSS Deoli","60006 - Govt School Niwai"],
+    "Peeplu": ["60007 - GSSS Peeplu","60008 - Govt School Todaraisingh"]
+  },
+  "Udaipur": {
+    "Udaipur (Urban)": ["61001 - GSSS Boys Udaipur","61002 - GSSS Girls Udaipur","61003 - Govt Model School Udaipur","61004 - GSSS Sukhadia Nagar Udaipur"],
+    "Girwa": ["61005 - GSSS Girwa","61006 - Govt School Bambora"],
+    "Mavli": ["61007 - GSSS Mavli","61008 - Govt School Vallabhnagar"],
+    "Salumbar": ["61009 - GSSS Salumbar","61010 - Govt School Sarada"],
+    "Gogunda": ["61011 - GSSS Gogunda","61012 - Govt School Jhadol"]
+  }
+};
+
+/* ════════════════════════════════════════════════════════════════
+   SUBJECT DATA
+   ════════════════════════════════════════════════════════════════ */
+const subjectData = {
+  "10th": [
+    {code:"001", name:"Hindi"},
+    {code:"002", name:"English"},
+    {code:"003", name:"Mathematics"},
+    {code:"004", name:"Science"},
+    {code:"005", name:"Social Science"},
+    {code:"006", name:"Sanskrit"},
+    {code:"007", name:"Urdu"},
+    {code:"008", name:"Sindhi"},
+    {code:"009", name:"Punjabi"},
+    {code:"010", name:"Drawing & Painting"}
+  ],
+  "12th-Stream I (Arts)": [
+    {code:"101", name:"Hindi (Compulsory)"},
+    {code:"102", name:"English"},
+    {code:"103", name:"History"},
+    {code:"104", name:"Geography"},
+    {code:"105", name:"Political Science"},
+    {code:"106", name:"Economics"},
+    {code:"107", name:"Sociology"},
+    {code:"108", name:"Psychology"},
+    {code:"109", name:"Philosophy"},
+    {code:"110", name:"Sanskrit"},
+    {code:"111", name:"Urdu"},
+    {code:"112", name:"Rajasthani"},
+    {code:"113", name:"Drawing & Painting"},
+    {code:"114", name:"Home Science"}
+  ],
+  "12th-Stream II (Science/Commerce)": [
+    {code:"201", name:"Hindi (Compulsory)"},
+    {code:"202", name:"English"},
+    {code:"203", name:"Physics"},
+    {code:"204", name:"Chemistry"},
+    {code:"205", name:"Mathematics"},
+    {code:"206", name:"Biology"},
+    {code:"207", name:"Accountancy"},
+    {code:"208", name:"Business Studies"},
+    {code:"209", name:"Economics"},
+    {code:"210", name:"Computer Science"}
+  ]
+};
+
+/* ════════════════════════════════════════════════════════════════
+   STATE
+   ════════════════════════════════════════════════════════════════ */
+let currentUser = '';
+let currentStep = 2;
+let otpSent = false;
+let otpVerified = false;
+let uploadedDocs = {photo:false, sign:false, aadhaar:false, marksheet:false};
+let selectedPayMethod = '';
+let submissionCount = 0;
+let allSubmissions = [];
+const STEPS = [
+  {id:2, label:"AI Center"},
+  {id:3, label:"Course Selection"},
+  {id:4, label:"Personal Details"},
+  {id:5, label:"Academic Details"},
+  {id:6, label:"Subject Selection"},
+  {id:7, label:"Bank Details"},
+  {id:8, label:"Address"},
+  {id:9, label:"Documents"},
+  {id:10, label:"Preview & Declare"},
+  {id:11, label:"Payment"}
+];
+
+/* ════════════════════════════════════════════════════════════════
+   INIT
+   ════════════════════════════════════════════════════════════════ */
+window.addEventListener('DOMContentLoaded', () => {
+  populateDistrictDropdowns();
+  buildStepNav();
+  loadFromStorage();
+  document.getElementById('inp-dob').max = new Date().toISOString().split('T')[0];
+});
+
+function populateDistrictDropdowns() {
+  const districts = Object.keys(centerData).sort();
+  ['sel-district','sel-perm-dist','sel-corr-dist'].forEach(id => {
+    const el = document.getElementById(id);
+    if(!el) return;
+    districts.forEach(d => {
+      const o = document.createElement('option');
+      o.value = d; o.textContent = d;
+      el.appendChild(o);
+    });
+  });
+}
+
+function buildStepNav() {
+  const nav = document.getElementById('step-nav');
+  nav.innerHTML = '';
+  STEPS.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'step-item todo'; div.id = 'snav-'+s.id;
+    div.innerHTML = `<div class="step-num">${i+1}</div><div class="step-lbl">${s.label}</div>`;
+    div.addEventListener('click', () => { if(div.classList.contains('done')) goToStep(s.id); });
+    nav.appendChild(div);
+    if(i < STEPS.length-1) {
+      const conn = document.createElement('div'); conn.className='step-conn'; nav.appendChild(conn);
+    }
+  });
+}
+
+/* ════════════════════════════════════════════════════════════════
+   LOGIN
+   ════════════════════════════════════════════════════════════════ */
+function doLogin() {
+  const u = document.getElementById('inp-username').value.trim();
+  if(!u) {
+    const e = document.getElementById('login-err');
+    e.style.display='flex'; e.classList.add('show');
+    return;
+  }
+  currentUser = u;
+  document.getElementById('login-overlay').style.display = 'none';
+  document.getElementById('main-portal').style.display = 'block';
+  document.getElementById('user-header').style.display = 'block';
+  document.getElementById('disp-username').textContent = u;
+  document.getElementById('sub-cnt').textContent = submissionCount;
+  goToStep(2);
+  updateStepNav();
+}
+
+/* ════════════════════════════════════════════════════════════════
+   STEP NAVIGATION
+   ════════════════════════════════════════════════════════════════ */
+function goToStep(n) {
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('receipt-panel').style.display = 'none';
+  const panel = document.getElementById('step-'+n);
+  if(panel) { panel.classList.add('active'); }
+  currentStep = n;
+  updateStepNav();
+  window.scrollTo({top:80, behavior:'smooth'});
+  if(n === 6) renderSubjects();
+  if(n === 10) renderPreview();
+  autoSave();
+}
+
+function goPrev(from) { const idx = STEPS.findIndex(s=>s.id===from); if(idx>0) goToStep(STEPS[idx-1].id); }
+
+function goNext(from) {
+  if(!validateStep(from)) return;
+  const idx = STEPS.findIndex(s=>s.id===from);
+  STEPS[idx] && markStepDone(from);
+  if(idx < STEPS.length-1) goToStep(STEPS[idx+1].id);
+}
+
+function markStepDone(id) {
+  const el = document.getElementById('snav-'+id);
+  if(el) { el.classList.remove('active','todo'); el.classList.add('done'); }
+}
+
+function updateStepNav() {
+  STEPS.forEach(s => {
+    const el = document.getElementById('snav-'+s.id);
+    if(!el) return;
+    if(s.id === currentStep) { el.classList.remove('done','todo'); el.classList.add('active'); }
+    else if(!el.classList.contains('done')) { el.classList.remove('active'); el.classList.add('todo'); }
+    else { el.classList.remove('active'); }
+  });
+}
+
+/* ════════════════════════════════════════════════════════════════
+   DROPDOWNS
+   ════════════════════════════════════════════════════════════════ */
+function onDistrictChange() {
+  const dist = document.getElementById('sel-district').value;
+  const blockSel = document.getElementById('sel-block');
+  const centerSel = document.getElementById('sel-center');
+  blockSel.innerHTML = '<option value="">-- Select Block --</option>';
+  centerSel.innerHTML = '<option value="">-- Select AI Center --</option>';
+  blockSel.disabled = true; centerSel.disabled = true;
+  if(!dist) return;
+  Object.keys(centerData[dist]).sort().forEach(b => {
+    const o = document.createElement('option'); o.value=b; o.textContent=b; blockSel.appendChild(o);
+  });
+  blockSel.disabled = false;
+}
+
+function onBlockChange() {
+  const dist = document.getElementById('sel-district').value;
+  const block = document.getElementById('sel-block').value;
+  const centerSel = document.getElementById('sel-center');
+  centerSel.innerHTML = '<option value="">-- Select AI Center --</option>';
+  centerSel.disabled = true;
+  if(!dist || !block) return;
+  (centerData[dist][block] || []).forEach(c => {
+    const o = document.createElement('option'); o.value=c; o.textContent=c; centerSel.appendChild(o);
+  });
+  centerSel.disabled = false;
+}
+
+function onCourseChange() {
+  const course = document.getElementById('sel-course').value;
+  document.getElementById('stream-group').style.display = course==='12th' ? 'flex' : 'none';
+}
+
+/* ════════════════════════════════════════════════════════════════
+   OTP SIMULATION
+   ════════════════════════════════════════════════════════════════ */
+function sendOTP() {
+  const m = document.getElementById('inp-mobile').value;
+  if(!/^\d{10}$/.test(m)) {
+    showErr('err-mobile','Enter valid 10-digit mobile number.'); return;
+  }
+  clearErr('err-mobile');
+  otpSent = true;
+  document.getElementById('otp-info').style.display = 'block';
+  document.getElementById('otp-verify-group').style.display = 'flex';
+  document.getElementById('btn-send-otp').textContent = 'Resend OTP';
+}
+
+function verifyOTP() {
+  const otp = document.getElementById('inp-otp').value;
+  const vEl = document.getElementById('otp-verified');
+  if(otp === '1234') {
+    otpVerified = true;
+    vEl.style.display = 'block';
+    vEl.textContent = '✅ Mobile number verified successfully!';
+    vEl.style.color = 'var(--success)';
+    document.getElementById('btn-verify-otp').disabled = true;
+    document.getElementById('btn-verify-otp').textContent = 'Verified ✓';
+  } else {
+    vEl.style.display = 'block';
+    vEl.textContent = '❌ Invalid OTP. Use 1234 (simulation)';
+    vEl.style.color = 'var(--error)';
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   AADHAAR MASK
+   ════════════════════════════════════════════════════════════════ */
+function maskAadhaar(inp) {
+  let v = inp.value.replace(/\D/g,'').slice(0,12);
+  const parts = [v.slice(0,4), v.slice(4,8), v.slice(8,12)].filter(Boolean);
+  inp.value = parts.join(' ');
+}
+
+/* ════════════════════════════════════════════════════════════════
+   SUBJECTS
+   ════════════════════════════════════════════════════════════════ */
+function renderSubjects() {
+  const course = document.getElementById('sel-course').value;
+  const stream = document.getElementById('sel-stream')?.value || '';
+  let key = course;
+  if(course === '12th' && stream) key = `12th-${stream}`;
+  else if(course === '12th') key = '12th-Stream I (Arts)';
+  const subjects = subjectData[key] || subjectData['10th'];
+  const list = document.getElementById('subjects-list');
+  const prevSelected = Array.from(list.querySelectorAll('.check-item.selected')).map(el=>el.dataset.code);
+  list.innerHTML = '';
+  subjects.forEach(s => {
+    const item = document.createElement('label');
+    item.className = 'check-item' + (prevSelected.includes(s.code)?' selected':'');
+    item.dataset.code = s.code;
+    item.innerHTML = `<input type="checkbox" value="${s.code}" ${prevSelected.includes(s.code)?'checked':''}> ${s.name} <span class="sub-code">Code: ${s.code}</span>`;
+    item.querySelector('input').addEventListener('change', updateSubjectCount);
+    list.appendChild(item);
+    if(prevSelected.includes(s.code)) item.classList.add('selected');
+    item.querySelector('input').addEventListener('change', function(){
+      item.classList.toggle('selected', this.checked);
+    });
+  });
+  updateSubjectCount();
+}
+
+function updateSubjectCount() {
+  const checked = document.querySelectorAll('#subjects-list input:checked').length;
+  document.getElementById('sel-count').textContent = checked;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   UPLOAD SIMULATION
+   ════════════════════════════════════════════════════════════════ */
+function simulateUpload(id, icon, label) {
+  const box = document.getElementById(id);
+  box.classList.add('uploaded');
+  box.innerHTML = `<div class="icon">${icon}</div><div class="name">${label}<br><small style="color:var(--success)">✓ Simulated</small></div>`;
+  const key = id.replace('up-','');
+  if(key==='photo') uploadedDocs.photo=true;
+  else if(key==='sign') uploadedDocs.sign=true;
+  else if(key==='aadhaar') uploadedDocs.aadhaar=true;
+  else if(key==='marksheet') uploadedDocs.marksheet=true;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   ADDRESS COPY
+   ════════════════════════════════════════════════════════════════ */
+function copyAddress() {
+  const same = document.getElementById('same-address').checked;
+  const sec = document.getElementById('corr-section');
+  if(same) {
+    document.getElementById('inp-corr-addr').value = document.getElementById('inp-perm-addr').value;
+    document.getElementById('inp-corr-block').value = document.getElementById('inp-perm-block').value;
+    document.getElementById('inp-corr-village').value = document.getElementById('inp-perm-village').value;
+    document.getElementById('inp-corr-pin').value = document.getElementById('inp-perm-pin').value;
+    const pd = document.getElementById('sel-perm-dist').value;
+    document.getElementById('sel-corr-dist').value = pd;
+    sec.style.opacity = '0.5'; sec.style.pointerEvents='none';
+  } else {
+    sec.style.opacity='1'; sec.style.pointerEvents='auto';
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   PREVIEW
+   ════════════════════════════════════════════════════════════════ */
+function renderPreview() {
+  const d = collectFormData();
+  const pc = document.getElementById('preview-content');
+  pc.innerHTML = `
+    <div class="preview-section">
+      <h3>📍 AI Center Details</h3>
+      <div class="preview-grid">
+        ${pItem('District', d.district)}${pItem('Block', d.block)}${pItem('AI Center', d.center)}
+      </div>
+    </div>
+    <div class="preview-section">
+      <h3>📚 Course Details</h3>
+      <div class="preview-grid">
+        ${pItem('Course', d.course)}${pItem('Stream', d.stream||'N/A')}${pItem('Admission Type', d.admtype)}
+        ${pItem('Medium', d.medium)}
+      </div>
+    </div>
+    <div class="preview-section">
+      <h3>👤 Personal Details</h3>
+      <div class="preview-grid">
+        ${pItem('Learner Name', d.name)}${pItem("Father's Name", d.father)}${pItem("Mother's Name", d.mother)}
+        ${pItem('Date of Birth', d.dob)}${pItem('Gender', d.gender)}${pItem('Category', d.category)}
+        ${pItem('Aadhaar', d.aadhaar)}${pItem('Religion', d.religion)}${pItem('Nationality', d.nationality)}
+        ${pItem('Rajasthan Resident', d.rajResident)}${pItem('Mobile', d.mobile)}${pItem('Email', d.email||'—')}
+        ${pItem('Disability', d.disability)}${pItem('Rural/Urban', d.ruralUrban)}
+      </div>
+    </div>
+    <div class="preview-section">
+      <h3>🎓 Academic & Subjects</h3>
+      <div class="preview-grid">
+        ${pItem('Previous Qualification', d.prevQual)}${pItem('Passing Year', d.passYear||'—')}
+        ${pItem('Last School', d.lastSchool||'—')}
+        ${pItem('Subjects Selected', d.subjects.join(', '))}
+      </div>
+    </div>
+    <div class="preview-section">
+      <h3>🏦 Bank Details</h3>
+      <div class="preview-grid">
+        ${pItem('Account Holder', d.bankName)}${pItem('Bank', d.bankBank)}
+        ${pItem('Account No.', d.bankAcc)}${pItem('IFSC', d.bankIfsc)}
+      </div>
+    </div>
+    <div class="preview-section">
+      <h3>🏠 Address</h3>
+      <div class="preview-grid">
+        ${pItem('Permanent Address', d.permAddr)}${pItem('District', d.permDist)}
+        ${pItem('Village/City', d.permVillage)}${pItem('Pincode', d.permPin)}
+      </div>
+    </div>`;
+}
+
+function pItem(l,v){ return `<div class="preview-item"><span class="lbl">${l}</span><span class="val">${v||'—'}</span></div>`; }
+
+/* ════════════════════════════════════════════════════════════════
+   COLLECT FORM DATA
+   ════════════════════════════════════════════════════════════════ */
+function collectFormData() {
+  const subjects = Array.from(document.querySelectorAll('#subjects-list input:checked')).map(cb => {
+    const label = cb.parentElement.childNodes[1]?.textContent?.trim() || cb.value;
+    return `${label}(${cb.value})`;
+  });
+  return {
+    username: currentUser,
+    district: document.getElementById('sel-district').value,
+    block: document.getElementById('sel-block').value,
+    center: document.getElementById('sel-center').value,
+    course: document.getElementById('sel-course').value,
+    stream: document.getElementById('sel-stream')?.value || '',
+    admtype: document.getElementById('sel-admtype').value,
+    name: document.getElementById('inp-name').value.trim(),
+    father: document.getElementById('inp-father').value.trim(),
+    mother: document.getElementById('inp-mother').value.trim(),
+    dob: document.getElementById('inp-dob').value,
+    gender: document.getElementById('sel-gender').value,
+    category: document.getElementById('sel-category').value,
+    aadhaar: document.getElementById('inp-aadhaar').value,
+    janAadhaar: document.getElementById('inp-jan-aadhaar').value,
+    religion: document.getElementById('sel-religion').value,
+    nationality: document.getElementById('sel-nationality').value,
+    rajResident: document.getElementById('sel-raj-resident').value,
+    ruralUrban: document.getElementById('sel-rural-urban').value,
+    disability: document.getElementById('sel-disability').value,
+    mobile: document.getElementById('inp-mobile').value,
+    email: document.getElementById('inp-email').value,
+    prevQual: document.getElementById('sel-prev-qual').value,
+    medium: document.getElementById('sel-medium').value,
+    lastSchool: document.getElementById('inp-last-school').value,
+    passYear: document.getElementById('inp-pass-year').value,
+    subjects: subjects,
+    bankName: document.getElementById('inp-bank-name').value,
+    bankBank: document.getElementById('inp-bank-bank').value,
+    bankBranch: document.getElementById('inp-bank-branch').value,
+    bankAcc: document.getElementById('inp-bank-acc').value,
+    bankIfsc: document.getElementById('inp-bank-ifsc').value,
+    bankMobile: document.getElementById('inp-bank-mobile').value,
+    permAddr: document.getElementById('inp-perm-addr').value,
+    permDist: document.getElementById('sel-perm-dist').value,
+    permBlock: document.getElementById('inp-perm-block').value,
+    permVillage: document.getElementById('inp-perm-village').value,
+    permPin: document.getElementById('inp-perm-pin').value,
+    corrAddr: document.getElementById('inp-corr-addr').value,
+    corrDist: document.getElementById('sel-corr-dist').value,
+    corrVillage: document.getElementById('inp-corr-village').value,
+    corrPin: document.getElementById('inp-corr-pin').value,
+    payStatus: 'Pending',
+    timestamp: new Date().toISOString()
+  };
+}
+
+/* ════════════════════════════════════════════════════════════════
+   VALIDATION
+   ════════════════════════════════════════════════════════════════ */
+function validateStep(step) {
+  let ok = true;
+  const show = (id) => { const e=document.getElementById(id); if(e){e.classList.add('show');} ok=false; };
+  const hide = (id) => { const e=document.getElementById(id); if(e){e.classList.remove('show');} };
+  const req = (fieldId, errId) => {
+    const f = document.getElementById(fieldId);
+    if(!f) return;
+    if(!f.value || f.value.trim()==='') { f.classList.add('error'); show(errId); }
+    else { f.classList.remove('error'); hide(errId); }
+  };
+
+  if(step===2) {
+    if(!document.getElementById('sel-district').value){show('err-district');ok=false;}else hide('err-district');
+    if(!document.getElementById('sel-block').value){show('err-block');ok=false;}else hide('err-block');
+    if(!document.getElementById('sel-center').value){show('err-center');ok=false;}else hide('err-center');
+  }
+  if(step===3) {
+    if(!document.getElementById('sel-course').value){show('err-course');ok=false;}else hide('err-course');
+    if(document.getElementById('sel-course').value==='12th'){
+      if(!document.getElementById('sel-stream').value){show('err-stream');ok=false;}else hide('err-stream');
+    }
+  }
+  if(step===4) {
+    req('inp-name','err-name'); req('inp-father','err-father'); req('inp-mother','err-mother');
+    req('inp-dob','err-dob'); req('sel-gender','err-gender'); req('sel-category','err-category');
+    req('sel-religion','err-religion'); req('sel-raj-resident','err-raj-resident');
+    const mob = document.getElementById('inp-mobile').value;
+    if(!/^\d{10}$/.test(mob)){show('err-mobile');ok=false;}else hide('err-mobile');
+    const aadh = document.getElementById('inp-aadhaar').value.replace(/\s/g,'');
+    if(!/^\d{12}$/.test(aadh)){show('err-aadhaar');ok=false;}else hide('err-aadhaar');
+  }
+  if(step===5) {
+    req('sel-prev-qual','err-prev-qual'); req('sel-medium','err-medium');
+  }
+  if(step===6) {
+    const cnt = document.querySelectorAll('#subjects-list input:checked').length;
+    const a = document.getElementById('subject-alert');
+    if(cnt < 5){ a.classList.add('show'); ok=false; } else { a.classList.remove('show'); }
+  }
+  if(step===7) {
+    req('inp-bank-name','err-bank-name'); req('inp-bank-bank','err-bank-bank');
+    req('inp-bank-acc','err-bank-acc'); req('inp-bank-ifsc','err-bank-ifsc');
+  }
+  if(step===8) {
+    req('inp-perm-addr','err-perm-addr'); req('sel-perm-dist','err-perm-dist');
+    req('inp-perm-village','err-perm-village');
+    const pin = document.getElementById('inp-perm-pin').value;
+    if(!/^\d{6}$/.test(pin)){show('err-perm-pin');ok=false;}else hide('err-perm-pin');
+  }
+  if(step===9) {
+    const docAlert = document.getElementById('doc-alert');
+    if(!uploadedDocs.photo || !uploadedDocs.sign || !uploadedDocs.aadhaar){
+      docAlert.classList.add('show'); ok=false;
+    } else { docAlert.classList.remove('show'); }
+  }
+  if(!ok) window.scrollTo({top:document.querySelector('.step-panel.active')?.offsetTop||0, behavior:'smooth'});
+  return ok;
+}
+
+function showErr(id,msg){const e=document.getElementById(id);if(e){e.textContent=msg;e.classList.add('show');}}
+function clearErr(id){const e=document.getElementById(id);if(e)e.classList.remove('show');}
+
+/* ════════════════════════════════════════════════════════════════
+   LOCK & SUBMIT
+   ════════════════════════════════════════════════════════════════ */
+function lockAndSubmit() {
+  if(!document.getElementById('decl-check').checked) {
+    document.getElementById('decl-alert').classList.add('show'); return;
+  }
+  document.getElementById('decl-alert').classList.remove('show');
+  goToStep(11);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   PAYMENT
+   ════════════════════════════════════════════════════════════════ */
+function selectPayMethod(el, method) {
+  document.querySelectorAll('.pay-method').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedPayMethod = method;
+}
+
+function processPayment() {
+  const btn = document.getElementById('btn-pay');
+  btn.textContent = '⏳ Processing...';
+  btn.disabled = true;
+  setTimeout(() => {
+    const txnId = 'TXN' + Date.now().toString().slice(-10);
+    document.getElementById('txn-id').textContent = txnId;
+    document.getElementById('pay-method-disp').textContent = selectedPayMethod || 'UPI';
+    document.getElementById('pay-success').style.display = 'block';
+    document.querySelector('.payment-card > *:not(#pay-success)') && null;
+    // hide all but success
+    const card = document.querySelector('.payment-card');
+    Array.from(card.children).forEach(c => {
+      if(c.id !== 'pay-success') c.style.display='none';
+    });
+    document.getElementById('pay-success').style.display='block';
+    submitToSheet(txnId);
+  }, 2000);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   SUBMIT TO GOOGLE SHEETS
+   ════════════════════════════════════════════════════════════════ */
+async function submitToSheet(txnId) {
+  const data = collectFormData();
+  data.payStatus = 'Paid (Simulated)';
+  data.txnId = txnId;
+  data.timestamp = new Date().toISOString();
+  // Store locally
+  data.ackNum = 'RSOS-2024-' + Math.floor(10000000 + Math.random()*90000000);
+  allSubmissions.push(data);
+  submissionCount++;
+  document.getElementById('disp-count').textContent = submissionCount;
+  document.getElementById('sub-cnt').textContent = submissionCount;
+  saveToStorage(data);
+  showSaveIndicator();
+
+  // Send to Google Sheets
+  if(CONFIG.SHEET_URL && CONFIG.SHEET_URL !== 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
+    try {
+      const payload = {
+        username: data.username,
+        learnerName: data.name,
+        dob: data.dob,
+        course: data.course + (data.stream?' - '+data.stream:''),
+        aiCenter: data.center,
+        district: data.district,
+        mobile: data.mobile,
+        subjects: data.subjects.join(' | '),
+        payStatus: data.payStatus,
+        txnId: txnId,
+        ackNum: data.ackNum,
+        timestamp: data.timestamp,
+        gender: data.gender,
+        category: data.category,
+        medium: data.medium
+      };
+      await fetch(CONFIG.SHEET_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+    } catch(e) { console.warn('Sheet submission failed:', e); }
+  }
+  return data.ackNum;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   RECEIPT GENERATION
+   ════════════════════════════════════════════════════════════════ */
+function generateReceipt() {
+  const sub = allSubmissions[allSubmissions.length - 1];
+  if(!sub) return;
+  document.querySelectorAll('.step-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('receipt-panel').style.display = 'block';
+  document.getElementById('ack-num').textContent = sub.ackNum;
+  document.getElementById('ack-date').textContent = new Date(sub.timestamp).toLocaleString('en-IN');
+
+  const body = document.getElementById('receipt-body');
+  body.innerHTML = `
+    <div class="receipt-section">
+      <h4>Admission Details</h4>
+      <div class="receipt-grid">
+        ${rItem('AI Center',sub.center)} ${rItem('District',sub.district)} ${rItem('Block',sub.block)}
+        ${rItem('Course',sub.course)} ${rItem('Stream',sub.stream||'N/A')} ${rItem('Medium',sub.medium)}
+        ${rItem('Admission Type',sub.admtype)}
+      </div>
+    </div>
+    <div class="receipt-section">
+      <h4>Learner Details</h4>
+      <div class="receipt-grid">
+        ${rItem('Full Name',sub.name)} ${rItem("Father's Name",sub.father)} ${rItem("Mother's Name",sub.mother)}
+        ${rItem('Date of Birth',sub.dob)} ${rItem('Gender',sub.gender)} ${rItem('Category',sub.category)}
+        ${rItem('Mobile',sub.mobile)} ${rItem('Religion',sub.religion)} ${rItem('Nationality',sub.nationality)}
+        ${rItem('Aadhaar',sub.aadhaar)} ${rItem('Rural/Urban',sub.ruralUrban)}
+      </div>
+    </div>
+    <div class="receipt-section">
+      <h4>Subjects Selected</h4>
+      <div class="receipt-grid">
+        ${sub.subjects.map((s,i)=>rItem('Subject '+(i+1),s)).join('')}
+      </div>
+    </div>
+    <div class="receipt-section">
+      <h4>Payment Details</h4>
+      <div class="receipt-grid">
+        ${rItem('Amount Paid','₹900')} ${rItem('Transaction ID',sub.txnId)} ${rItem('Status',sub.payStatus)}
+      </div>
+    </div>
+    <div class="receipt-section">
+      <h4>Address</h4>
+      <div class="receipt-grid">
+        ${rItem('Address',sub.permAddr)} ${rItem('District',sub.permDist)} 
+        ${rItem('Village/City',sub.permVillage)} ${rItem('Pincode',sub.permPin)}
+      </div>
+    </div>
+    <div class="receipt-section">
+      <h4>Submitted By</h4>
+      <div class="receipt-grid">
+        ${rItem('Operator / Username',sub.username)} ${rItem('Submission Time',new Date(sub.timestamp).toLocaleString('en-IN'))}
+      </div>
+    </div>`;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function rItem(l,v){return `<div class="receipt-item"><div class="rl">${l}</div><div class="rv">${v||'—'}</div></div>`;}
+
+/* ════════════════════════════════════════════════════════════════
+   NEW FORM
+   ════════════════════════════════════════════════════════════════ */
+function startNewForm() {
+  if(submissionCount >= CONFIG.MAX_FORMS) {
+    alert(`You have reached the maximum limit of ${CONFIG.MAX_FORMS} forms for this session.`); return;
+  }
+  // Reset form fields
+  const inputs = document.querySelectorAll('#main-portal input:not([type=checkbox]):not([type=radio]), #main-portal select, #main-portal textarea');
+  inputs.forEach(i => { i.value=''; i.classList.remove('error'); });
+  document.querySelectorAll('.err-msg').forEach(e=>e.classList.remove('show'));
+  document.querySelectorAll('.check-item').forEach(c=>c.classList.remove('selected'));
+  document.querySelectorAll('#subjects-list input[type=checkbox]').forEach(c=>c.checked=false);
+  document.getElementById('decl-check').checked = false;
+  document.getElementById('otp-info').style.display='none';
+  document.getElementById('otp-verify-group').style.display='none';
+  document.getElementById('otp-verified').style.display='none';
+  document.getElementById('same-address').checked=false;
+  // Reset step nav
+  STEPS.forEach(s=>{
+    const el=document.getElementById('snav-'+s.id);
+    if(el){el.className='step-item todo';}
+  });
+  // Reset doc uploads
+  uploadedDocs = {photo:false,sign:false,aadhaar:false,marksheet:false};
+  ['up-photo','up-sign','up-aadhaar','up-marksheet'].forEach(id=>{
+    const box=document.getElementById(id);
+    if(box){box.classList.remove('uploaded');box.innerHTML='<div class="icon">'+({
+      'up-photo':'📷','up-sign':'✍️','up-aadhaar':'🪪','up-marksheet':'📜'}[id])+'</div><div class="name">'+
+      ({'up-photo':'Passport Photo<br><small>JPG, max 50KB</small>',
+        'up-sign':'Signature<br><small>JPG, max 30KB</small>',
+        'up-aadhaar':'Aadhaar Card<br><small>PDF/JPG, max 200KB</small>',
+        'up-marksheet':'Marksheet<br><small>PDF/JPG, max 200KB</small>'}[id])+'</div>';}
+  });
+  // Reset payment
+  selectedPayMethod=''; otpSent=false; otpVerified=false;
+  document.getElementById('receipt-panel').style.display='none';
+  document.querySelector('.payment-card') && resetPaymentCard();
+  document.getElementById('sel-block').innerHTML='<option value="">-- Select Block --</option>';
+  document.getElementById('sel-block').disabled=true;
+  document.getElementById('sel-center').innerHTML='<option value="">-- Select AI Center --</option>';
+  document.getElementById('sel-center').disabled=true;
+  document.getElementById('stream-group').style.display='none';
+  goToStep(2);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function resetPaymentCard(){
+  const card=document.querySelector('.payment-card');
+  if(!card) return;
+  card.innerHTML=`
+    <h3 style="font-size:15px;color:var(--gov-blue);margin-bottom:10px">Fee Details</h3>
+    <table class="fee-table">
+      <tr><td>Registration Fee</td><td>₹ 350</td></tr>
+      <tr><td>Examination Fee (per subject × 5)</td><td>₹ 500</td></tr>
+      <tr><td>Practical Fee</td><td>₹ 50</td></tr>
+      <tr class="total"><td>Total Amount</td><td>₹ 900</td></tr>
+    </table>
+    <p style="font-size:11px;color:var(--muted);margin-bottom:10px">⚠️ Training Mode – No real payment will be processed</p>
+    <h4 style="font-size:12px;color:var(--muted);margin-bottom:8px">Select Payment Method:</h4>
+    <div class="payment-methods">
+      <div class="pay-method" onclick="selectPayMethod(this,'UPI')" id="pm-upi"><div class="icon">📱</div><div class="name">UPI / QR Code</div></div>
+      <div class="pay-method" onclick="selectPayMethod(this,'Card')" id="pm-card"><div class="icon">💳</div><div class="name">Debit / Credit Card</div></div>
+    </div>
+    <button class="btn-pay" id="btn-pay" onclick="processPayment()">Pay ₹900 (Simulation)</button>
+    <div class="pay-success" id="pay-success" style="display:none">
+      <div class="tick">✅</div><h3>Payment Successful!</h3>
+      <p style="color:var(--muted);font-size:13px">Transaction ID: <strong id="txn-id"></strong></p>
+      <p style="color:var(--muted);font-size:12px;margin-top:4px">Amount: ₹900 | Method: <span id="pay-method-disp"></span></p>
+      <button class="btn-next" style="margin-top:14px;width:100%;justify-content:center" onclick="generateReceipt()">Generate Receipt ➜</button>
+    </div>`;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   ADMIN
+   ════════════════════════════════════════════════════════════════ */
+function showAdmin() {
+  document.getElementById('admin-overlay').style.display='flex';
+}
+function showAdminLogin(){
+  document.getElementById('login-overlay').style.display='none';
+  document.getElementById('admin-overlay').style.display='flex';
+}
+function closeAdmin(){
+  document.getElementById('admin-overlay').style.display='none';
+  if(!currentUser) document.getElementById('login-overlay').style.display='flex';
+}
+function checkAdmin(){
+  const p=document.getElementById('admin-pass').value;
+  if(p===CONFIG.ADMIN_PASS){
+    document.getElementById('admin-login-area').style.display='none';
+    document.getElementById('admin-dash').style.display='block';
+    loadAdminData();
+  } else { alert('Incorrect password. Default: admin123'); }
+}
+
+function loadAdminData(){
+  const tbody=document.getElementById('admin-tbody');
+  tbody.innerHTML='';
+  // Load from localStorage
+  const stored=JSON.parse(localStorage.getItem('rsos_submissions')||'[]');
+  const combined=[...stored,...allSubmissions.filter(s=>!stored.find(st=>st.ackNum===s.ackNum))];
+
+  // Stats
+  const users={};
+  combined.forEach(s=>{ users[s.username]=(users[s.username]||0)+1; });
+  const statsEl=document.getElementById('admin-stats');
+  statsEl.innerHTML=`
+    <div class="stat-card"><div class="num">${combined.length}</div><div class="lbl">Total Submissions</div></div>
+    <div class="stat-card"><div class="num">${Object.keys(users).length}</div><div class="lbl">Active Users</div></div>
+    <div class="stat-card"><div class="num">${combined.filter(s=>s.payStatus&&s.payStatus.includes('Paid')).length}</div><div class="lbl">Payments Done</div></div>
+    <div class="stat-card"><div class="num">${(combined.length/Math.max(Object.keys(users).length,1)).toFixed(1)}</div><div class="lbl">Avg Forms/User</div></div>`;
+
+  combined.forEach((s,i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${i+1}</td><td><strong>${s.username}</strong></td>
+      <td>${s.name||'—'}</td><td>${s.dob||'—'}</td>
+      <td>${s.course||'—'}</td><td style="max-width:160px;overflow:hidden;text-overflow:ellipsis">${s.center||'—'}</td>
+      <td>${s.mobile||'—'}</td>
+      <td><span class="badge badge-submitted">Submitted</span></td>
+      <td><span class="badge ${s.payStatus&&s.payStatus.includes('Paid')?'badge-paid':'badge-pending'}">${s.payStatus||'Pending'}</span></td>
+      <td>${s.timestamp?new Date(s.timestamp).toLocaleString('en-IN'):'—'}</td>`;
+    tbody.appendChild(tr);
+  });
+  if(combined.length===0) tbody.innerHTML='<tr><td colspan="10" style="text-align:center;color:#999;padding:20px">No submissions yet.</td></tr>';
+}
+
+function exportCSV(){
+  const stored=JSON.parse(localStorage.getItem('rsos_submissions')||'[]');
+  const combined=[...stored,...allSubmissions.filter(s=>!stored.find(st=>st.ackNum===s.ackNum))];
+  if(!combined.length){alert('No data to export.');return;}
+  const headers=['Username','Learner Name','DOB','Course','AI Center','District','Mobile','Subjects','Pay Status','Ack No','Timestamp'];
+  const rows=combined.map(s=>[s.username,s.name,s.dob,s.course,s.center,s.district,s.mobile,(s.subjects||[]).join(';'),s.payStatus,s.ackNum,s.timestamp]);
+  const csv=[headers,...rows].map(r=>r.map(v=>'"'+(v||'').toString().replace(/"/g,'""')+'"').join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='rsos_submissions.csv'; a.click();
+}
+
+/* ════════════════════════════════════════════════════════════════
+   LOCALSTORAGE
+   ════════════════════════════════════════════════════════════════ */
+function saveToStorage(submission){
+  const key='rsos_submissions';
+  const existing=JSON.parse(localStorage.getItem(key)||'[]');
+  existing.push(submission);
+  localStorage.setItem(key,JSON.stringify(existing));
+  localStorage.setItem('rsos_user',currentUser);
+  localStorage.setItem('rsos_count',submissionCount);
+}
+
+function loadFromStorage(){
+  const user=localStorage.getItem('rsos_user');
+  const count=parseInt(localStorage.getItem('rsos_count')||'0');
+  if(user && count>0){ submissionCount=count; }
+  const submissions=JSON.parse(localStorage.getItem('rsos_submissions')||'[]');
+  allSubmissions=submissions;
+}
+
+function autoSave(){
+  const data = {
+    district: document.getElementById('sel-district')?.value,
+    block: document.getElementById('sel-block')?.value,
+    center: document.getElementById('sel-center')?.value,
+    course: document.getElementById('sel-course')?.value,
+    name: document.getElementById('inp-name')?.value,
+    currentStep
+  };
+  localStorage.setItem('rsos_current',JSON.stringify(data));
+  showSaveIndicator();
+}
+
+function showSaveIndicator(){
+  const el=document.getElementById('save-indicator');
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2000);
+}
+
+// Auto-save on input changes
+document.addEventListener('input', ()=>{ clearTimeout(window._saveTimer); window._saveTimer=setTimeout(autoSave,1500); });
+</script>
+</body>
+</html>
