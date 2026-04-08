@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RSOS Admission Portal – Training Mode | Educate Girls</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0b2e6e;--navy2:#1a4494;--navy3:#091f4a;
+  --saffron:#e67e00;--saffron-l:#fff3e0;
+  --green:#1a6e36;--success:#16a34a;--error:#dc2626;--warn:#d97706;
+  --bg:#eef2f7;--card:#fff;--border:#c8d3e8;--text:#1e2d47;--muted:#5b6e8c;
+  --font:'Noto Sans',sans-serif;--r:6px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px}
+
+/* ── BANNER ── */
+#banner{background:#7f1d1d;color:#fff;text-align:center;padding:5px 12px;font-size:11.5px;font-weight:600;position:sticky;top:0;z-index:9999}
+#banner span{background:#fca5a5;color:#7f1d1d;padding:1px 8px;border-radius:99px;margin-right:6px;font-weight:700}
+
+/* ── HEADER ── */
+header{background:var(--navy);color:#fff;position:sticky;top:27px;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.35)}
+.hdr-top{background:var(--navy3);padding:4px 16px;display:flex;justify-content:space-between;font-size:11px;color:#aac0e8}
+.hdr-main{display:flex;align-items:center;gap:14px;padding:8px 18px}
+.logo-svg{width:50px;height:50px;flex-shrink:0}
+.ptitle h1{font-family:'Noto Serif',serif;font-size:17px;font-weight:700}
+.ptitle h1 em{font-style:normal;font-size:12px;font-family:var(--font);font-weight:400;display:block;color:#b8d0f8;margin-top:1px}
+.ptitle p{font-size:10.5px;color:#93b3e8;margin-top:2px}
+.hdr-r{margin-left:auto;display:flex;align-items:center;gap:8px}
+.upill{background:var(--navy2);border:1px solid #4a73c0;border-radius:20px;padding:4px 14px;font-size:11.5px;color:#b8d0f8}
+.upill strong{color:#fff}
+.btn-lo{background:#991b1b;color:#fff;border:none;padding:5px 12px;border-radius:4px;font-size:11px;cursor:pointer;font-family:var(--font);font-weight:600}
+.btn-lo:hover{background:#7f1d1d}
+
+/* ── AUTH ── */
+#auth-screen{position:fixed;inset:0;background:linear-gradient(135deg,#091f4a,#0b2e6e 50%,#1a4494);z-index:9998;display:flex;align-items:center;justify-content:center;padding:20px}
+.auth-card{background:#fff;border-radius:12px;width:420px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.6)}
+.auth-tabs{display:flex}
+.auth-tab{flex:1;padding:13px;text-align:center;font-size:12.5px;font-weight:600;cursor:pointer;color:var(--muted);transition:.2s;border:none;background:#f8faff;font-family:var(--font);border-bottom:3px solid transparent}
+.auth-tab.active{color:var(--navy);border-bottom-color:var(--navy);background:#fff}
+.auth-hdr{background:var(--navy);padding:20px;text-align:center}
+.auth-hdr h2{color:#fff;font-family:'Noto Serif',serif;font-size:16px;margin-top:8px}
+.auth-hdr p{color:#93b3e8;font-size:11px;margin-top:3px}
+.auth-body{padding:22px}
+.auth-body label{font-size:11px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+.auth-body input{width:100%;border:1.5px solid var(--border);border-radius:var(--r);padding:9px 12px;font-size:13.5px;font-family:var(--font);outline:none;transition:.2s;margin-bottom:12px}
+.auth-body input:focus{border-color:var(--navy2);background:#f5f8ff;box-shadow:0 0 0 3px rgba(26,68,148,.1)}
+.btn-auth{width:100%;background:var(--navy);color:#fff;border:none;padding:11px;border-radius:var(--r);font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font);transition:.2s}
+.btn-auth:hover{background:var(--navy2)}
+.auth-err{background:#fef2f2;border:1px solid #fca5a5;color:#991b1b;padding:8px 12px;border-radius:var(--r);font-size:12px;margin-bottom:12px;display:none}
+.auth-foot{background:#f8faff;padding:9px 22px;text-align:center;font-size:11px;color:var(--muted);border-top:1px solid #eee}
+.cred-hint{background:#f0fdf4;border:1px solid #86efac;border-radius:4px;padding:8px 10px;font-size:11px;color:#166534;margin-bottom:12px}
+
+/* ── ADMIN ── */
+#admin-screen{display:none;min-height:100vh;background:var(--bg)}
+.adm-nav{background:#1a0533;padding:10px 20px;display:flex;align-items:center;justify-content:space-between}
+.adm-nav h2{color:#fff;font-size:15px}
+.adm-wrap{padding:18px;max-width:1200px;margin:0 auto}
+.adm-tabs-bar{display:flex;gap:2px;margin-bottom:14px;border-bottom:2px solid #e2e8f0}
+.atab{padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;color:var(--muted);border:none;background:transparent;font-family:var(--font);border-bottom:3px solid transparent;margin-bottom:-2px}
+.atab.active{color:var(--navy);border-bottom-color:var(--navy)}
+.apane{display:none}.apane.active{display:block}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:18px}
+.sc{background:#fff;border-radius:8px;padding:13px;text-align:center;border:1px solid var(--border)}
+.sc .n{font-size:24px;font-weight:700;color:var(--navy)}.sc .l{font-size:11px;color:var(--muted);margin-top:1px}
+.tbl-wrap{overflow-x:auto;background:#fff;border-radius:8px;border:1px solid var(--border)}
+.dtbl{width:100%;border-collapse:collapse;font-size:12px}
+.dtbl th{background:var(--navy);color:#fff;padding:8px 11px;text-align:left;white-space:nowrap;font-size:11px}
+.dtbl td{padding:7px 11px;border-bottom:1px solid #f1f5f9;vertical-align:middle}
+.dtbl tr:hover td{background:#f8faff}
+.tbl-acts{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.bsm{border:none;padding:7px 14px;border-radius:4px;font-size:12px;cursor:pointer;font-weight:600;font-family:var(--font)}
+.b-ref{background:var(--navy2);color:#fff}.b-exp{background:var(--green);color:#fff}
+.b-add{background:var(--saffron);color:#fff}.b-del{background:#fef2f2;color:#dc2626;border:1px solid #fca5a5}
+.badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:600}
+.bp{background:#dcfce7;color:#16a34a}.bn{background:#fef3c7;color:#b45309}.bs{background:#dbeafe;color:#1d4ed8}
+.add-user-box{background:#fff;border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:14px}
+.add-user-box h4{font-size:13px;color:var(--navy);margin-bottom:10px}
+.aur{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;align-items:end}
+.aur input,.aur select{border:1.5px solid var(--border);border-radius:var(--r);padding:7px 9px;font-size:13px;font-family:var(--font);outline:none;width:100%}
+
+/* DOC MODAL */
+#docmodal{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}
+.dmbox{background:#fff;border-radius:10px;padding:18px;max-width:660px;width:100%;max-height:90vh;overflow-y:auto}
+.dmbox h3{font-size:13px;color:var(--navy);margin-bottom:10px}
+#dimg{max-width:100%;border-radius:6px;display:block;margin:0 auto}
+.dm-close{float:right;background:#dc2626;color:#fff;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px}
+
+/* ── PORTAL ── */
+#portal{display:none}
+.p-body{display:flex;min-height:calc(100vh - 78px)}
+.sidebar{width:195px;flex-shrink:0;background:#0e2456;padding:12px 0;position:sticky;top:78px;align-self:flex-start;min-height:calc(100vh - 78px);overflow-y:auto}
+.sidebar h3{color:#7a9fd8;font-size:9.5px;letter-spacing:1px;text-transform:uppercase;padding:0 12px 8px;border-bottom:1px solid #1a3a7a;margin-bottom:6px}
+.sitem{display:flex;align-items:center;gap:8px;padding:6px 12px;cursor:default;transition:.15s}
+.sitem.done{cursor:pointer}.sitem.done:hover{background:#162d63}
+.snum{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.sitem.todo .snum{background:#1a3670;color:#7a9fd8;border:2px solid #2a4d8a}
+.sitem.active .snum{background:var(--saffron);color:#fff;box-shadow:0 0 8px rgba(230,126,0,.5)}
+.sitem.done .snum{background:var(--success);color:#fff}
+.slbl{font-size:10.5px;color:#7a9fd8;line-height:1.3}
+.sitem.active .slbl{color:#fff;font-weight:600}
+.sitem.done .slbl{color:#86efac}
+.sconn{width:2px;height:7px;background:#1a3670;margin-left:23px}
+.farea{flex:1;padding:16px;min-width:0}
+.spanel{display:none}.spanel.active{display:block}
+.shdr{background:var(--navy);color:#fff;padding:11px 16px;border-radius:var(--r) var(--r) 0 0;display:flex;align-items:center;gap:10px}
+.shdr h2{font-size:15px;font-weight:600}
+.sbadge{background:var(--saffron);color:#fff;padding:2px 9px;border-radius:99px;font-size:10px;font-weight:700;margin-left:auto}
+.sbody{background:#fff;border:1px solid var(--border);border-top:none;border-radius:0 0 var(--r) var(--r);padding:20px}
+
+/* FORM FIELDS */
+.fsec{margin-bottom:20px}
+.ftitle{font-size:10.5px;font-weight:700;color:var(--navy2);text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid #e8f0fc;padding-bottom:5px;margin-bottom:12px}
+.frow{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:11px}
+.frow.c1{grid-template-columns:1fr}.frow.c2{grid-template-columns:1fr 1fr}.frow.c3{grid-template-columns:1fr 1fr 1fr}
+.fg{display:flex;flex-direction:column;gap:3px}
+.fg label{font-size:10.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.fg label .req{color:var(--error);margin-left:2px}
+.fg input,.fg select,.fg textarea{border:1.5px solid var(--border);border-radius:var(--r);padding:7px 9px;font-size:13px;font-family:var(--font);color:var(--text);outline:none;background:#fff;transition:.2s;width:100%}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--navy2);background:#f5f8ff;box-shadow:0 0 0 3px rgba(26,68,148,.08)}
+.fg input.err,.fg select.err{border-color:var(--error);background:#fff5f5}
+.fg .hint{font-size:10px;color:var(--muted)}.fg .em{font-size:10px;color:var(--error);display:none}.fg .em.show{display:block}
+.fg textarea{resize:vertical;min-height:60px}
+
+/* RADIO CARDS */
+.radio-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.rcard{border:2px solid var(--border);border-radius:8px;padding:14px;cursor:pointer;transition:.2s;display:flex;align-items:flex-start;gap:10px}
+.rcard:hover{border-color:var(--navy2);background:#f5f8ff}
+.rcard.sel{border-color:var(--navy);background:#eff6ff}
+.rcard input[type=radio]{margin-top:2px;accent-color:var(--navy);flex-shrink:0}
+.rcard .rc-title{font-size:13px;font-weight:600;color:var(--text)}
+.rcard .rc-sub{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* OTP */
+.otp-row{display:flex;gap:8px;align-items:flex-start}
+.otp-row input{flex:1}
+.btn-otp{background:var(--navy2);color:#fff;border:none;padding:8px 12px;border-radius:var(--r);font-size:11px;cursor:pointer;white-space:nowrap;font-family:var(--font);flex-shrink:0}
+.otp-ok{font-size:11px;color:var(--success);font-weight:600;margin-top:3px;display:none}
+.otp-ok.show{display:block}
+
+/* SUBJECTS */
+.sub-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.subi{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1.5px solid var(--border);border-radius:var(--r);cursor:pointer;transition:.15s}
+.subi:hover{border-color:var(--navy2);background:#f5f8ff}
+.subi.sel{border-color:var(--navy);background:#eff6ff}
+.subi input[type=checkbox]{accent-color:var(--navy);flex-shrink:0}
+.scode{font-size:10px;color:var(--muted);display:block}
+
+/* UPLOAD */
+.up-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:10px}
+.ucard{border:2px dashed var(--border);border-radius:8px;padding:12px;text-align:center;cursor:pointer;transition:.2s;background:#fafcff;position:relative;min-height:110px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ucard:hover{border-color:var(--navy2);background:#f0f4ff}
+.ucard.has{border-color:var(--success);background:#f0fdf4;border-style:solid}
+.ucard input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.ucard .ui{font-size:26px;margin-bottom:4px}
+.ucard .un{font-size:11px;font-weight:600;color:var(--text)}
+.ucard .us{font-size:9.5px;color:var(--muted);margin-top:1px}
+.ucard .uprev{width:100%;height:72px;object-fit:cover;border-radius:4px;margin-top:6px;display:none;border:1px solid #ccc}
+.ucard.has .uprev{display:block}
+.ucard .uok{font-size:10px;color:var(--success);font-weight:600;margin-top:4px}
+.ucard .usz{font-size:9px;color:var(--muted)}
+.ucard .ureq{font-size:9px;color:var(--error);font-weight:600}
+
+/* STUDY MATERIAL */
+.mat-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mcard{border:2px solid var(--border);border-radius:8px;padding:14px;cursor:pointer;transition:.2s;display:flex;gap:10px;align-items:center}
+.mcard:hover{border-color:var(--navy2);background:#f5f8ff}
+.mcard.sel{border-color:var(--navy);background:#eff6ff}
+.mcard input[type=radio]{accent-color:var(--navy);flex-shrink:0}
+.mcard .mc-icon{font-size:28px;flex-shrink:0}
+.mcard .mc-t{font-size:13px;font-weight:600}.mcard .mc-s{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* PREVIEW */
+.prev-sec{margin-bottom:16px}
+.prev-sec h3{font-size:11.5px;font-weight:700;color:var(--navy);background:#e8f0fc;padding:7px 12px;border-left:4px solid var(--navy);margin-bottom:8px;border-radius:0 4px 4px 0}
+.prev-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:5px}
+.pi{padding:7px 9px;background:#f8faff;border-radius:4px}
+.pi .pl{font-size:9.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+.pi .pv{font-size:12.5px;color:var(--text);font-weight:500;margin-top:1px}
+.prev-docs{display:flex;gap:10px;flex-wrap:wrap;padding:10px;background:#f8faff;border-radius:4px}
+.pdoc{text-align:center}
+.pdoc img{width:56px;height:56px;object-fit:cover;border:1px solid #ccc;border-radius:4px}
+.pdoc span{display:block;font-size:9.5px;color:var(--muted);margin-top:2px}
+.decl-box{background:#fff8e1;border:1px solid #fcd34d;border-radius:var(--r);padding:13px;margin:12px 0}
+.decl-box p{font-size:11.5px;color:#78350f;line-height:1.6;margin-bottom:8px}
+.dchk{display:flex;align-items:flex-start;gap:8px;font-size:12px}
+.dchk input{margin-top:3px;accent-color:var(--navy)}
+
+/* NAV BUTTONS */
+.fnav{display:flex;justify-content:space-between;margin-top:20px;padding-top:13px;border-top:1px solid #eee;gap:10px;flex-wrap:wrap}
+.btn-prev{background:#fff;color:var(--navy);border:1.5px solid var(--navy);padding:9px 20px;border-radius:var(--r);font-size:13px;cursor:pointer;font-family:var(--font);font-weight:600}
+.btn-prev:hover{background:#e8f0fc}
+.btn-next{background:var(--navy);color:#fff;border:none;padding:9px 22px;border-radius:var(--r);font-size:13px;cursor:pointer;font-family:var(--font);font-weight:600;display:flex;align-items:center;gap:6px}
+.btn-next:hover{background:var(--navy2)}
+.btn-lock{background:#dc2626;color:#fff;border:none;padding:9px 22px;border-radius:var(--r);font-size:13px;cursor:pointer;font-family:var(--font);font-weight:700;display:flex;align-items:center;gap:6px}
+.btn-lock:hover{background:#b91c1c}
+.btn-lock:disabled{background:#aaa;cursor:not-allowed}
+
+/* FEE */
+.fee-card{background:#fff;border:1px solid var(--border);border-radius:8px;padding:18px;max-width:440px}
+.fee-tbl{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+.fee-tbl td{padding:7px 10px;border-bottom:1px solid #eee}
+.fee-tbl td:last-child{text-align:right;font-weight:600}
+.fee-tbl tr.tot td{background:#e8f0fc;font-weight:700;font-size:14px;color:var(--navy)}
+
+/* PAYMENT */
+.pay-methods{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.popt{border:2px solid var(--border);border-radius:6px;padding:12px;text-align:center;cursor:pointer;transition:.2s}
+.popt:hover,.popt.sel{border-color:var(--navy);background:#eff6ff}
+.popt .poi{font-size:22px;margin-bottom:4px}.popt .pon{font-size:12px;font-weight:600}
+.btn-pay{background:var(--saffron);color:#fff;border:none;padding:11px 28px;border-radius:var(--r);font-size:14px;cursor:pointer;font-family:var(--font);font-weight:700;width:100%}
+.btn-pay:hover{background:#cc6f00}
+.pay-ok{text-align:center;padding:18px;display:none}
+.pay-ok .tick{font-size:48px;animation:pop .4s ease}
+.pay-ok h3{color:var(--success);font-size:16px;margin:8px 0}
+@keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.2)}100%{transform:scale(1)}}
+
+/* RECEIPT */
+#receipt-panel{display:none}
+.rwrap{background:#fff;border:2px solid var(--navy);border-radius:8px;max-width:720px;margin:0 auto;overflow:hidden}
+.rhdr{background:var(--navy);color:#fff;padding:13px 20px;display:flex;align-items:center;gap:14px}
+.rhdr h2{font-family:'Noto Serif',serif;font-size:15px}
+.rhdr p{font-size:10px;color:#93b3e8;margin-top:2px}
+.rack{background:#fff8e1;border-bottom:2px solid #fcd34d;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.rack .anum{font-size:16px;font-weight:700;color:var(--navy);font-family:'Noto Serif',serif}
+.rack .albl{font-size:10px;color:var(--muted);display:block}
+.rok{background:#dcfce7;color:#16a34a;padding:3px 12px;border-radius:99px;font-size:11px;font-weight:700;border:1px solid #86efac}
+.rbody{padding:16px 20px}
+.rsec{margin-bottom:14px}
+.rsec h4{font-size:10.5px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;padding-bottom:3px;border-bottom:1px solid #e2e8f0}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:5px}
+.ri .rl{font-size:9.5px;color:var(--muted);font-weight:600;text-transform:uppercase}
+.ri .rv{font-size:12px;color:var(--text);font-weight:500;margin-top:1px}
+.rfoot{background:#f1f5f9;padding:10px 20px;font-size:10px;color:var(--muted);text-align:center;border-top:1px solid #e2e8f0}
+.racts{display:flex;gap:10px;margin-top:14px;justify-content:center;flex-wrap:wrap}
+.btn-print{background:var(--navy);color:#fff;border:none;padding:9px 20px;border-radius:var(--r);cursor:pointer;font-family:var(--font);font-weight:600;font-size:12.5px}
+.btn-new{background:var(--green);color:#fff;border:none;padding:9px 20px;border-radius:var(--r);cursor:pointer;font-family:var(--font);font-weight:600;font-size:12.5px}
+.btn-dl-form{background:var(--saffron);color:#fff;border:none;padding:9px 20px;border-radius:var(--r);cursor:pointer;font-family:var(--font);font-weight:600;font-size:12.5px}
+
+/* MISC */
+.alert{padding:9px 12px;border-radius:var(--r);margin-bottom:9px;font-size:12px;display:none;align-items:center;gap:8px}
+.alert.show{display:flex}
+.alert-e{background:#fef2f2;border:1px solid #fca5a5;color:#991b1b}
+.alert-s{background:#f0fdf4;border:1px solid #86efac;color:#166534}
+.alert-w{background:#fffbeb;border:1px solid #fcd34d;color:#92400e}
+.ibox{background:#eff6ff;border:1px solid #bfdbfe;border-radius:var(--r);padding:9px 12px;font-size:11.5px;color:#1e3a8a;margin-bottom:12px}
+.scbar{background:var(--saffron-l);border:1px solid #fcd34d;border-radius:6px;padding:8px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px}
+.scbar .cn{font-size:20px;font-weight:700;color:var(--saffron)}
+#toast{position:fixed;bottom:16px;right:16px;background:var(--success);color:#fff;padding:7px 16px;border-radius:99px;font-size:11px;font-weight:600;opacity:0;transition:.3s;z-index:999;pointer-events:none}
+#toast.show{opacity:1}
+.req{color:var(--error);margin-left:2px}
+.confirm-tbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.confirm-tbl th{background:#374151;color:#fff;padding:8px 12px;text-align:left}
+.confirm-tbl td{padding:8px 12px;border-bottom:1px solid #eee}
+.confirm-tbl td:last-child{text-align:center}
+.btn-remove-sub{background:#fef2f2;color:#dc2626;border:1px solid #fca5a5;padding:3px 8px;border-radius:3px;cursor:pointer;font-size:11px}
+
+@media print{#banner,header,.sidebar,.fnav,.racts,#toast{display:none!important}body{background:#fff}.rwrap{border:2px solid #000;max-width:100%}}
+@media(max-width:768px){.sidebar{display:none}.frow.c2,.frow.c3{grid-template-columns:1fr}.aur{grid-template-columns:1fr}.pay-methods,.mat-cards,.radio-cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div id="banner"><span>⚠ TRAINING ONLY</span>यह Educate Girls का प्रशिक्षण पोर्टल है — NOT a real government portal | Session 2026-27</div>
+
+<header>
+  <div class="hdr-top"><span>राजस्थान सरकार | Government of Rajasthan</span><span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="047076656d6a6d6a634461607167657061636d7668772a6b7663">[email&#160;protected]</a></span></div>
+  <div class="hdr-main">
+    <svg class="logo-svg" viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="27" fill="#0e2456" stroke="#f59e0b" stroke-width="2"/><circle cx="28" cy="28" r="18" fill="none" stroke="#f59e0b" stroke-width="1"/><path d="M28 14L30 22L38 22L32 27L34 35L28 30L22 35L24 27L18 22L26 22Z" fill="#f59e0b"/><text x="28" y="46" text-anchor="middle" fill="#aac0e8" font-size="5.5" font-family="sans-serif">RSOS</text></svg>
+    <div class="ptitle">
+      <h1>राजस्थान राज्य ओपन स्कूल <em>Rajasthan State Open School (RSOS) – Session 2026-27</em></h1>
+      <p>ऑनलाइन प्रवेश पोर्टल | Online Admission Portal &nbsp;|&nbsp; <strong style="color:#fca5a5">TRAINING SIMULATION – Educate Girls</strong></p>
+    </div>
+    <div class="hdr-r" id="uhdr" style="display:none">
+      <div class="upill">👤 <strong id="dispname">—</strong> &nbsp;|&nbsp; Forms: <strong id="dispcnt">0</strong></div>
+      <button class="btn-lo" onclick="doLogout()">Logout</button>
+    </div>
+    <div class="hdr-r" id="ahdr" style="display:none">
+      <div class="upill">🛡 <strong>Admin</strong></div>
+      <button class="btn-lo" onclick="doAdminLogout()">Logout</button>
+    </div>
+  </div>
+</header>
+
+<!-- ════ AUTH ════ -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-hdr">
+      <svg width="52" height="52" viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="27" fill="#0e2456" stroke="#f59e0b" stroke-width="2"/><path d="M28 14L30 22L38 22L32 27L34 35L28 30L22 35L24 27L18 22L26 22Z" fill="#f59e0b"/></svg>
+      <h2>RSOS Admission Portal</h2>
+      <p>Educate Girls – Training Mode | Session 2026-27</p>
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-user" onclick="switchTab('user')">👤 User Login</button>
+      <button class="auth-tab" id="tab-admin" onclick="switchTab('admin')">🛡 Admin Login</button>
+    </div>
+    <div id="user-pane" class="auth-body">
+      <div class="auth-err" id="uerr"></div>
+      <div class="cred-hint">ℹ️ Login with your SSO ID and password issued by your coordinator.</div>
+      <label>SSO ID <span class="req">*</span></label>
+      <input type="text" id="ul-email" placeholder="Enter your SSO ID" autocomplete="username" onkeydown="if(event.key==='Enter')uLogin()">
+      <label>Password <span class="req">*</span></label>
+      <input type="password" id="ul-pass" placeholder="Your password" onkeydown="if(event.key==='Enter')uLogin()">
+      <button class="btn-auth" onclick="uLogin()">Login & Start ➜</button>
+    </div>
+    <div id="admin-pane" class="auth-body" style="display:none">
+      <div class="auth-err" id="aerr"></div>
+      <div class="cred-hint">🔐 Admin access only. Contact IT team for admin credentials.</div>
+      <label>Admin Email <span class="req">*</span></label>
+      <input type="email" id="al-email" placeholder="admin@educategirls.org" onkeydown="if(event.key==='Enter')aLogin()">
+      <label>Admin Password <span class="req">*</span></label>
+      <input type="password" id="al-pass" placeholder="Admin password" onkeydown="if(event.key==='Enter')aLogin()">
+      <button class="btn-auth" onclick="aLogin()">Admin Login ➜</button>
+    </div>
+    <div class="auth-foot">Not registered? Contact your <strong>Educate Girls coordinator</strong> for login credentials.</div>
+  </div>
+</div>
+
+<!-- ════ ADMIN ════ -->
+<div id="admin-screen">
+  <div class="adm-nav"><h2>🛡 Admin Dashboard – RSOS Training Portal</h2><div class="hdr-r"><span id="adm-name" style="color:#aaa;font-size:12px"></span><button class="btn-lo" onclick="doAdminLogout()">Logout</button></div></div>
+  <div class="adm-wrap">
+    <div class="adm-tabs-bar">
+      <button class="atab active" onclick="admTab('submissions',this)">📋 Submissions</button>
+      <button class="atab" onclick="admTab('users',this)">👥 Users</button>
+      <button class="atab" onclick="admTab('summary',this)">📊 Summary</button>
+    </div>
+    <div class="apane active" id="ap-submissions">
+      <div class="stats-row" id="adm-stats"></div>
+      <div class="tbl-acts">
+        <button class="bsm b-ref" onclick="loadAdmin()">🔄 Refresh</button>
+        <button class="bsm b-exp" onclick="exportCSV()">⬇ Export CSV</button>
+      </div>
+      <div class="tbl-wrap">
+        <table class="dtbl">
+          <thead><tr><th>#</th><th>User</th><th>Learner Name</th><th>DOB</th><th>Course</th><th>AI Center</th><th>District</th><th>Mobile</th><th>Category</th><th>Documents</th><th>Payment</th><th>Accuracy</th><th>Time</th></tr></thead>
+          <tbody id="sub-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="apane" id="ap-users">
+      <div class="add-user-box">
+        <h4>➕ Add New User</h4>
+        <div class="aur" style="grid-template-columns:1fr 1fr 1fr 1fr auto">
+          <div class="fg"><label>Full Name</label><input type="text" id="nu-n" placeholder="Full Name"></div>
+          <div class="fg"><label>SSO ID <span class="req">*</span></label><input type="text" id="nu-sso" placeholder="SSO ID (login username)"></div>
+          <div class="fg"><label>Email (optional)</label><input type="email" id="nu-e" placeholder="email@example.com"></div>
+          <div class="fg"><label>Password</label><input type="password" id="nu-p" placeholder="Set password"></div>
+          <div class="fg"><label>&nbsp;</label><button class="bsm b-add" onclick="addUser()" style="width:100%;padding:8px">Add</button></div>
+        </div>
+        <div id="au-msg" class="alert" style="margin-top:8px"></div>
+      </div>
+      <div class="tbl-wrap">
+        <table class="dtbl">
+          <thead><tr><th>#</th><th>Name</th><th>SSO ID</th><th>Email</th><th>Forms</th><th>Last Active</th><th>Action</th></tr></thead>
+          <tbody id="user-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="apane" id="ap-summary">
+      <div class="stats-row" id="sum-stats"></div>
+      <div class="tbl-wrap">
+        <table class="dtbl"><thead><tr><th>Email</th><th>Name</th><th>Total Forms</th><th>Paid</th><th>Last Submission</th></tr></thead>
+        <tbody id="sum-tbody"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="docmodal"><div class="dmbox"><button class="dm-close" onclick="document.getElementById('docmodal').style.display='none'">✕ Close</button><h3 id="dmtitle">Document</h3><img id="dimg" src="" alt="doc"><div style="text-align:center;margin-top:12px"><a id="dmdl" href="#" download style="background:var(--navy);color:#fff;text-decoration:none;padding:8px 18px;border-radius:4px;font-size:12px;font-weight:600">⬇ Download</a></div></div></div>
+
+<!-- ════ MAIN PORTAL ════ -->
+<div id="portal">
+  <div class="p-body">
+    <nav class="sidebar"><h3>Form Steps</h3><div id="snav"></div></nav>
+    <div class="farea">
+      <div class="alert alert-e" id="galert"></div>
+      <div class="scbar" id="scbar"><span class="cn" id="scnt">0</span><div>Forms submitted today<br><small style="color:#78350f">Max 5 per session</small></div></div>
+
+      <!-- S1: AI CENTER -->
+      <div class="spanel" id="sp-1">
+        <div class="shdr"><h2>📍 AI Center Selection</h2><span class="sbadge">Step 1 of 15</span></div>
+        <div class="sbody">
+          <div class="ibox">Select the Authorized Inspection (AI) Center where the learner will appear for examination.</div>
+          <div class="frow c3">
+            <div class="fg"><label>District <span class="req">*</span></label>
+              <select id="s1-dist" onchange="onDist()"><option value="">-- Select District --</option></select>
+              <span class="em" id="e1-dist">Select district.</span></div>
+            <div class="fg"><label>Tehsil / Block <span class="req">*</span></label>
+              <select id="s1-block" onchange="onBlock()" disabled><option value="">-- Select Tehsil --</option></select>
+              <span class="em" id="e1-block">Select tehsil.</span></div>
+            <div class="fg"><label>AI Center <span class="req">*</span></label>
+              <select id="s1-center" disabled><option value="">-- Select Center --</option></select>
+              <span class="em" id="e1-center">Select AI center.</span></div>
+          </div>
+          <div id="center-confirm" style="display:none;margin-top:14px;background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 14px">
+            <div style="font-size:11px;color:var(--muted);font-weight:600;margin-bottom:4px">SELECTED CENTER</div>
+            <div id="center-display" style="font-size:13.5px;font-weight:600;color:var(--navy)"></div>
+          </div>
+          <div class="fnav"><span></span><button class="btn-next" onclick="goN(1)">Next: Student Category ➜</button></div>
+        </div>
+      </div>
+
+      <!-- S2: STUDENT CATEGORY -->
+      <div class="spanel" id="sp-2">
+        <div class="shdr"><h2>🏫 Student Category</h2><span class="sbadge">Step 2 of 15</span></div>
+        <div class="sbody">
+          <div class="ibox">Select your student category based on your residency. This determines the type of ID document required.</div>
+          <div class="radio-cards" id="student-cat">
+            <label class="rcard" onclick="selRcard(this,'cat','raj');onCatChange('raj')">
+              <input type="radio" name="cat" value="raj"> 
+              <div><div class="rc-title">🏡 Student from Rajasthan</div><div class="rc-sub">Jan Aadhaar required • Fees waived (nil) on submission</div></div>
+            </label>
+            <label class="rcard" onclick="selRcard(this,'cat','other');onCatChange('other')">
+              <input type="radio" name="cat" value="other">
+              <div><div class="rc-title">🌍 Student from Other State</div><div class="rc-sub">Aadhaar card required • Jan Aadhaar not needed • Normal fees apply</div></div>
+            </label>
+          </div>
+          <div class="em show" id="e2-cat" style="display:none;margin-top:8px">Please select a student category.</div>
+          <div class="fnav">
+            <button class="btn-prev" onclick="goP(2)">◀ Back</button>
+            <button class="btn-next" onclick="goN(2)">Next: Aadhaar Verification ➜</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- S3: AADHAAR -->
+      <div class="spanel" id="sp-3">
+        <div class="shdr"><h2>🪪 Aadhaar / Jan Aadhaar Verification</h2><span class="sbadge">Step 3 of 15</span></div>
+        <div class="sbody">
+          <div id="jan-aadh-sec">
+            <div class="ibox" id="aadh-infobox">Enter your Jan Aadhaar Number for OTP verification.</div>
+            <div id="jan-aadh-fields">
+              <div class="frow c2">
+                <div class="fg"><label id="aadh-label">Jan Aadhaar Number <span class="req">*</span></label>
+                  <input type="text" inputmode="numeric" pattern="[0-9]*" id="s3-janaadh" placeholder="Enter Jan Aadhaar ID (numeric)" maxlength="12" oninput="this.value=this.value.replace(/\D/g,'')">
+                  <span class="em" id="e3-janaadh">Required.</span></div>
+                <div class="fg"><label>Aadhaar Number (12-digit) <span class="req">*</span></label>
+                  <input type="text" inputmode="numeric" id="s3-aadh" placeholder="XXXX XXXX XXXX" maxlength="14" oninput="maskAadh(this)">
+                  <span class="em" id="e3-aadh">Valid 12-digit Aadhaar required.</span></div>
+              </div>
+              <div class="frow c2" style="margin-top:12px">
+                <div class="fg"><label>OTP Verification <span class="req">*</span></label>
+                  <div class="otp-row">
+                    <input type="text" inputmode="numeric" id="s3-otp" placeholder="Enter 4-digit OTP" maxlength="4" oninput="this.value=this.value.replace(/\D/g,'')">
+                    <button class="btn-otp" id="btn-send-aadh-otp" onclick="sendAadhOTP()">Send OTP</button>
+                  </div>
+                  <div class="otp-ok" id="aadh-otp-sent">✅ OTP sent! Use: <strong>1234</strong> (simulation)</div>
+                  <span class="em" id="e3-otp">OTP verification required.</span>
+                </div>
+                <div class="fg"><label>&nbsp;</label>
+                  <button class="btn-otp" id="btn-verify-aadh" onclick="verifyAadhOTP()" style="align-self:flex-start;padding:9px 16px;background:var(--green)">Verify OTP</button>
+                  <div class="otp-ok" id="aadh-verified"></div>
+                </div>
+              </div>
+            </div>
+            <!-- Other State: only Aadhaar needed -->
+            <div id="other-state-aadh-fields" style="display:none">
+              <div class="frow c2">
+                <div class="fg"><label>Aadhaar Number (12-digit) <span class="req">*</span></label>
+                  <input type="text" inputmode="numeric" id="s3-aadh-other" placeholder="XXXX XXXX XXXX" maxlength="14" oninput="maskAadh(this)">
+                  <span class="em" id="e3-aadh-other">Valid 12-digit Aadhaar required.</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="fnav">
+            <button class="btn-prev" onclick="goP(3)">◀ Back</button>
+            <button class="btn-next" onclick="goN(3)">Next: Stream & Admission Type ➜</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- S4: STREAM & ADMISSION -->
+      <div class="spanel" id="sp-4">
+        <div class="shdr"><h2>📚 Stream & Admission Type</h2><span class="sbadge">Step 4 of 15</span></div>
+        <div class="sbody">
+          <div class="frow c3">
+            <div class="fg"><label>Class <span class="req">*</span></label>
+              <select id="s4-class" onchange="onClass()">
+                <option value="">-- Select Class --</option>
+                <option value="10th">Secondary (10th)</option>
+                <option value="12th">Sr. Secondary (12th)</option>
+              </select><span class="em" id="e4-class">Select class.</span></div>
+            <div class="fg" id="s4-stream-grp" style="display:none"><label>Stream <span class="req">*</span></label>
+              <select id="s4-stream">
+                <option value="">-- Select Stream --</option>
+                <option value="Stream 1 (Arts)">Stream 1 – Arts</option>
+                <option value="Stream 2 (Science/Commerce)">Stream 2 – Science / Commerce</option>
+              </select><span class="em" id="e4-stream">Select stream.</span></div>
+            <div class="fg"><label>Admission Type <span class="req">*</span></label>
+              <select id="s4-admtype">
+                <option value="">-- Select --</option>
+                <option>Stream 1 Admission</option>
+                <option>Stream 2 Admission</option>
+                <option>Improvement</option>
+                <option>General Re-admission</option>
+                <option>Part Admission</option>
+                <option>Ex-Regular / Failed</option>
+                <option>Migration</option>
+                <option>Additional Subject</option>
+              </select><span class="em" id="e4-admtype">Select admission type.</span></div>
+          </div>
+          <div class="fnav">
+            <button class="btn-prev" onclick="goP(4)">◀ Back</button>
+            <button class="btn-next" onclick="goN(4)">Next: Mobile Verification ➜</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- S5: MOBILE OTP -->
+      <div class="spanel" id="sp-5">
+        <div class="shdr"><h2>📱 Mobile Number Verification</h2><span class="sbadge">Step 5 of 15</span></div>
+        <div class="sbody">
+          <div class="ibox">Enter the learner's active mobile number. An OTP will be sent for verification.</div>
+          <div class="frow c2">
+            <div class="fg"><label>Mobile Number <span class="req">*</span></label>
+              <div class="otp-row">
+                <input type="tel" inputmode="numeric" id="s5-mobile" placeholder="10-digit mobile" maxlength="10" oninput="this.value=this.value.replace(/\D/g,'')">
+                <button class="btn-otp" id="btn-mob-otp" onclick="sendMobOTP()">Send OTP</button>
+              </div>
+              <div class="otp-ok" id="mob-otp-sent">✅ OTP sent! Use: <strong>1234</strong></div>
+              <span class="em" id="e5-mobile">Valid 10-digit mobile required.</span>
+            </div>
+            <div class="fg" id="mob-otp-grp" style="display:none"><label>Enter OTP <span class="req">*</span></label>
+              <div class="otp-row">
+                <input type="text" id="s5-otp" placeholder="4-digit OTP" maxlength="4">
+                <button class="btn-otp" onclick="verifyMobOTP()" id="btn-verify-mob" style="background:var(--green)">Verify</button>
+              </div>
+              <div class="otp-ok" id="mob-verified"></div>
+            </div>
+          </div>
+          <div class="fnav">
+            <button class="btn-prev" onclick="goP(5)">◀ Back</button>
+            <button class="btn-next" onclick="goN(5)">Next: Personal Details ➜</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- S6: PERSONAL DETAILS -->
+      <div class="spanel" id="sp-6">
+        <div class="shdr"><h2>👤 Personal Details</h2><span class="sbadge">Step 6 of 15</span></div>
+        <div class="sbody">
+          <div class="fsec">
+            <div class="ftitle">Name (as per Aadhaar Card)</div>
+            <div class="frow c3">
+              <div class="fg"><label>First Name <span class="req">*</span></label>
+                <input type="text" id="s6-fname" placeholder="First Name"><span class="em" id="e6-fname">Required.</span></div>
+              <div class="fg"><label>Middle Name</label>
+                <input type="text" id="s6-mname" placeholder="Middle Name (optional)"></div>
+              <div class="fg"><label>Last Name / Surname</label>
+                <input type="text" id="s6-lname" placeholder="Last Name (optional)"><span class="em" id="e6-lname">Required.</span></div>
+            </div>
+            <div class="frow c2">
+              <div class="fg"><label>Father's Full Name <span class="req">*</span></label>
+                <input type="text" id="s6-father"><span class="em" id="e6-father">Required.</span></div>
+              <div class="fg"><label>Mother's Full Name <span class="req">*</span></label>
+                <input type="text" id="s6-mother"><span class="em" id="e6-mother">Required.</span></div>
+            </div>
+          </div>
+          <div class="fsec">
+            <div class="ftitle">Basic Info</div>
+            <div class="frow c3">
+              <div class="fg"><label>Date of Birth <span class="req">*</span></label>
+                <input type="date" id="s6-dob" max=""><span class="em" id="e6-dob">Valid DOB required.</span></div>
+              <div class="fg"><label>Gender <span class="req">*</span></label>
+                <select id="s6-gender"><option value="">-- Select --</option>
+                  <option>Male</option><option>Female</option><option>Transgender</option></select>
+                <span class="em" id="e6-gender">Required.</span></div>
+              <div class="fg"><label>Category <span class="req">*</span></label>
+                <select id="s6-cat"><option value="">-- Select --</option>
+                  <option>General</option><option>OBC</option><option>SC</option><option>ST</option><option>EWS</option><option>OBC (Creamy Layer)</option></select>
+                <span class="em" id="e6-cat">Required.</span></div>
+            </div>
+            <div class="frow c3">
+              <div class="fg"><label>Religion <span class="req">*</span></label>
+                <select id="s6-religion"><option value="">-- Select --</option>
+                  <option>Hindu</option><option>Muslim</option><option>Christian</option><option>Sikh</option><option>Jain</option><option>Buddhist</option><option>Other</option></select>
+                <span class="em" id="e6-religion">Required.</span></div>
+              <div class="fg"><label>Nationality <span class="req">*</span></label>
+                <select id="s6-nation"><option value="Indian">Indian</option><option value="Other">Other</option></select></div>
+              <div class="fg"><label>Area <span class="req">*</span></label>
+                <select id="s6-area"><option value="">-- Select --</option>
+                  <option value="Rural">Rural (ग्रामीण)</option><option value="Urban">Urban (शहरी)</option></select>
+                <span class="em" id="e6-area">Required.</span></div>
+            </div>
+            <div class="frow c3">
+              <div class="fg"><label>Employment Status</label>
+                <select id="s6-employ">
+                  <option value="Unemployed">Unemployed</option>
+                  <option value="Self-Employed">Self-Employed</option>
+                  <option value="Private Job">Private Job</option>
+                  <option value="Govt. Service">Govt. Service</option>
+                  <option value="Agriculture">Agriculture</option>
+                  <option value="Student">Student</option>
+                </select></div>
+              <div class="fg"><label>Disability</label>
+                <select id="s6-disab">
+                  <option value="None">None</option>
+                  <option value="Visual Impairment">Visual Impairment</option>
+                  <option value="Hearing Impairment">Hearing Impairment</option>
+                  <option value="Physical Disability">Physical Disability</option>
+                  <option value="Intellectual Disability">Intellectual Disability</option>
+                  <option value="Other">Other</option>
+                </select></div>
+              <div class="fg" id="disab-pct-grp" style="display:none"><label>Disability %</label>
+                <input type="number" id="s6-disab-pct" placeholder="e.g. 40" min="0" max="100"></div>
+            </div>
+          </div>
+          <div class="fsec">
+            <div class="ftitle">Previous Qualification</div>
+            <div class="frow c2">
+              <div class="fg"><label>Last Qualification <span class="req">*</span></label>
+                <select id="s6-qual">
+                  <option value="">-- Select --</option>
+                  <option>Never Enrolled (Illiterate)</option>
+                  <option>Class 1 Pass</option><option>Class 2 Pass</option><option>Class 3 Pass</option>
+                  <option>Class 4 Pass</option><option>Class 5 Pass</option><option>Class 6 Pass</option>
+                  <option>Class 7 Pass</option><option>Class 8 Pass</option><option>Class 9 Pass</option>
+                  <option>Class 9 Fail</option><option>Class 10 Fail / Compartment</option>
+                  <option>Class 10 Pass (for 12th)</option><option>Class 11 Pass</option>
+                  <option>Class 11 Fail</option><option>Class 12 Fail / Compartment</option><option>Other</option>
+                </select><span class="em" id="e6-qual">Required.</span></div>
+              <div class="fg"><label>Medium of Instruction <span class="req">*</span></label>
+                <select id="s6-medium"><option value="">-- Select --</option>
+                  <option value="Hindi">Hindi (हिन्दी)</option><option value="English">English</option></select>
+                <span class="em" id="e6-medium">Required.</span></div>
+            </div>
+          </div>
+          <div class="fnav">
+            <button class="btn-prev" onclick="goP(6)">◀ Back</button>
+            <button class="btn-next" onclick="goN(6)">Next: Address Details ➜</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- S7: ADDRESS -->
+      <div class="spanel" id="sp-7">
+        <div class="shdr"><h2>🏠 Address Details</h2><span class="sbadge">Step 7 of 15</span></div>
+        <div class="sbody">
+          <div class="fsec">
+            <div class="ftitle">Permanent Address (as per Aadhaar)</div>
+            <div class="frow c1"><div class="fg"><label>Full Address <span class="req">*</span></label>
+              <textarea id="s7-paddr" placeholder="House No., Street, Locality" rows="2"></textarea>
+              <span class="em" id="e7-paddr">Required.</span></div></div>
+            <div class="frow c3">
+              <div class="fg"><label>Pincode <span class="req">*</span></label>
+                <input type="text" inputmode="numeric" id="s7-ppin" maxlength="6" placeholder="6-digit pincode" oninput="this.value=this.value.replace(/\D/g,'')">
+                <span class="em" id="e7-ppin">Valid 6-digit pincode.</span></div>
+              <div class="fg"><label>Tehsil / Block <span class="req">*</span></label>
+                <input type="text" id="s7-ptehsil" placeholder="Tehsil name">
+                <span class="em" id="e7-ptehsil">Required.</span></div>
+              <div class="fg"><label>Village / City <span class="req">*</span></label>
+                <input type="text" id="s7-pvill" placeholder="Village or City">
+                <span class="em" id="e7-pvill">Required.</span></div>
+            </div>
+            <div class="frow c2">
+              <div class="fg"><label>District <span class="req">*</span></label>
+                <select id="s7-pdist"><option value="">-- Select --</option></select>
+                <span class="em" id="e7-pdist">Required.</span></div>
+              <div class="fg" style="justify-content:flex-end;padding-bottom:2px">
+                <label style="visibility:hidden">x</label>
+                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12.5px;text-transform:none;letter-spacing:0;color:var(--text)">
+                  <input type="checkbox" id="same-addr" onchange="copyAddr()"> Same as correspondence address
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="fsec" id="corr-sec">
+            <div class="ftitle">Correspondence Address</div>
+            <div class="frow c1"><div class="fg"><label>Full Address</label>
+              <textarea id="s7-caddr" placeholder="House No., Street, Locality" rows="2"></textarea></div></div>
+            <div class="frow c3">
+              <div class="fg"><label>Pincode</label><input type="text" id="s7-cpin" maxlength="6"></div>
+              <div class="fg"><label>Tehsil / Block</label><input type="text" id="s7-ctehsil"></div>
+              <div class="fg"><label>Village / City</label><input type="text" id="s7-cvill"></div>
+            </div>
+            <div class="frow c2">
+              <div class="fg"><label>District</label><select id="s7-cdist"><option value="">-- Select --</option></select></div>
+            </div>
+          </div>
+          <div class="fnav">
+            <button class="btn-prev" onclick="goP(7)">◀ Back</button>
+            <button class="btn-next" onclick="goN(7)">Next: Bank Details ➜</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- S8: BANK -->
+      <div class="spanel" id="sp-8">
+        <div class="shdr"><h2>🏦 Bank Account Details</h2><span class="sbadge">Step 8 of 15</span></div>
+        <div class="sbody">
+          <div class="ibox">Required for fee refund if applicable. Enter accurate bank information.</div>
+          <div class="frow c2">
+            <div class="fg"><label>Account Holder Name <span class="req">*</span></label>
+              <input type="text" id="s8-name" placeholder="As per bank passbook"><span class="em" id="e8-name">Required.</span></div>
+            <div class="fg"><label>Account Number <span class="req">*</span></label>
+              <input type="text" inputmode="numeric" id="s8-acc" maxlength="18" oninput="this.value=this.value.replace(/\D/g,'')"><span class="em" id="e8-acc">Required.</span></div>
+          </div>
+          <div class="frow c3">
+            <div class="fg"><label>Bank Name <span class="req">*</span></label>
+              <input type="text" id="s8-bank" placeholder="e.g. State Bank of India"><span class="em" id="e8-bank">Required.</span></div>
+            <div class="fg"><label>State</label>
+              <select id="s8-state"><option value="Rajasthan">Rajasthan</option><option value="Other">Other State</option></select></div>
+            <div class="fg"><label>IFSC Code <span class="req">*</span></label>
+              <input type="text" id="s8-ifsc" maxlength="11" oninput="this.value=this.value.toUpperCase()" placeholder="SBIN0001234">
+              <span class="em" id="e8-ifsc">Required.</span></div>
+          </div>
+          <div class="frow c3">
+            <div class="fg"><label>Branch Name</label><input type="text" id="s8-branch" placeholder="Branch name"></div>
+            <div class="fg"><label>MICR Code</label><input type="text" id="s8-micr" maxlength="9" placeholder="9-digit MICR"></div>
+            <div class="fg"><label>Branch Address</label><input type="text" id="s8-baddr" placeholder="Branch address"></div>
+          </div>
+          <div class="fnav">
+            <button class="btn-prev" onclick="goP(8)">◀ Back</button>
+            <button class="btn-next" onclick="goN(8)">Next: Document Upload ➜</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- S9: DOCUMENTS -->
+      <div class="spanel" id="sp-9">
+        <div class="shdr"><h2>📎 Document Upload</h2><span class="sbadge">Step 9 of 15</span></div>
+        <div class="sbody">
+          <div class="ibox">Upload actual files. Supported: JPG, PNG, PDF. Max 500KB per file. Documents are visible to admin for review.</div>
+          <div class="alert alert-e" id="doc-alert">Please upload all mandatory documents (Photo, Signature, DOB Proof, Aadhaar).</div>
+          <div class="up-grid">
+            <div class="ucard" id="uc-photo"><input type="file" accept="image/*" id="fi-photo" onchange="doUpload(this,'photo')">
+              <div class="ui">📷</div><div class="un">Passport Photo <span class="req">*</span></div><div class="us">JPG/PNG, max 500KB</div>
+              <img class="uprev" id="upr-photo"><div class="uok" id="uok-photo"></div><div class="usz" id="usz-photo"></div></div>
+            <div class="ucard" id="uc-sign"><input type="file" accept="image/*" id="fi-sign" onchange="doUpload(this,'sign')">
+              <div class="ui">✍️</div><div class="un">Signature <span class="req">*</span></div><div class="us">JPG/PNG, max 500KB</div>
+              <img class="uprev" id="upr-sign"><div class="uok" id="uok-sign"></div><div class="usz" id="usz-sign"></div></div>
+            <div class="ucard" id="uc-dob"><input type="file" accept="image/*,.pdf" id="fi-dob" onchange="doUpload(this,'dob')">
+              <div class="ui">📄</div><div class="un">DOB Proof <span class="req">*</span></div><div class="us">Marksheet/Birth Cert | max 500KB</div>
+              <img class="uprev" id="upr-dob"><div class="uok" id="uok-dob"></div><div class="usz" id="usz-dob"></div></div>
+            <div class="ucard" id="uc-aadhaar"><input type="file" accept="image/*,.pdf" id="fi-aadhaar" onchange="doUpload(this,'aadhaar')">
+              <div class="ui">🪪</div><div class="un">Aadhaar Card <span class="req">*</span></div><div class="us">JPG/PNG/PDF, max 500KB</div>
+              <img class="uprev" id="upr-aadhaar"><div class="uok" id="uok-aadhaar"></div><div class="usz" id="usz-aadhaar"></div></div>
+            <div class="ucard" id="uc-prevqual"><input type="file" accept="image/*,.pdf" id="fi-prevqual" onchange="doUpload(this,'prevqual')">
+              <div class="ui">📜</div><div class="un">Prev. Qualification Cert.</div><div class="us">JPG/PNG/PDF, max 500KB</div>
+              <img class="uprev" id="upr-prevqual"><div class="uok" id="uok-prevqual"></div><div class="usz" id="usz-prevqual"></div></div>
+            <div class="ucard" id="uc-caste"><input type="file" accept="image/*,.pdf" id="fi-caste" onchange="doUpload(this,'caste')">
+              <div class="ui">📑</div><div class="un">Caste Certificate</div><div class="us">If applicable | max 500KB</div>
+              <img class="uprev" id="upr-caste"><div class="uok" id="uok-caste"></div><div class="usz" id="usz-caste"></div></div>
+            <div class="ucard" id="uc-disabcert"><input type="file" accept="image/*,.pdf" id="fi-disabcert" onchange="doUpload(this,'disabcert')">
+              <div class="ui">♿</div><div class="un">Disability Certificate</div><div class="us">If applicable | max 500KB</div>
+              <img class="uprev" id="upr-disabcert"><div class="uok" id="uok-disabcert"></div><div class="usz" id="usz-disabcert"></div></div>
+          </div>
+          <div class="fnav">
+            <button class="btn-prev" onclick="goP(9)">◀ Back</button>
+            <button class="btn-next" onclick="goN(9)">Next: Study Material ➜</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- S10: STUDY MATERIAL -->
+      <div class="spanel" id="sp-10">
+        <div class="shdr"><h2>📚 Study Material Selection</h2><span class="sbadge">Step 10 of 15</span></div>
+        <div class="sbody">
+          <div class="ibox">Select your preferred mode of study material. This is for your reference and learning convenience.</div>
+          <div class="mat-cards" id="mat-cards">
+            <label class="mcard" onclick="selRcard(this,'mat','econtent')">
+              <input type="radio" name="mat" value="econtent">
+              <div class="mc-icon">💻</div>
+              <div><div class="mc-t">E-Content (Digital)</div><div class="mc-s">Access study material online via mobile/computer. Eco-friendly option.</div></div>
+            </label>
+            <label class="mcard" onclick="selRcard(this,'mat','books')">
+              <input type="radio" name="mat" value="books">
+              <div class="mc-icon">📖</div>
+              <div><div class="mc-t">Physical Books</div><div class="mc-s">Printed textbooks will be provided. Suitable for areas with poor internet.</div></div>
+            </label>
+          </div>
+          <div class="em" id="e10-mat" style="margin-top:8px">Please select a study material type.</div>
+          <div class="fnav">
+            <button class="btn-prev" onclick="goP(10)">◀ Back</button>
+            <button class="btn-next" onclick="goN(10)">Next: Subject Selection ➜</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- S11: SUBJECTS -->
+      <div class="spanel" id="sp-11">
+        <div class="shdr"><h2>📋 Subject Selection</h2><span class="sbadge">Step 11 of 15</span></div>
+        <div class="sbody">
+          <div class="ibox" id="subj-info">Select <strong>5 main subjects</strong> for your course. You may add 1 extra subject if needed.</div>
+          <div class="alert alert-e" id="subj-alert">Please select exactly 5 subjects.</div>
+          <div class="sub-grid" id="subj-list"></div>
+          <div style="margin-top:10px;font-size:12px;color:var(--muted)">Main subjects selected: <strong id="sub-cnt">0</strong> / 5</div>
+          <hr style="margin:14px 0;border:none;border-top:1px solid #e2e8f0">
+          <div class="ftitle">Extra Subject (Optional)</div>
+          <div class="frow c2">
+            <div class="fg"><label>Additional Subject</label>
+              <select id="s11-extra"><option value="">-- None --</option></select></div>
+            <div class="fg"><label>Reason for Extra Subject</label>
+              <input type="text" id="s11-extra-reason" placeholder="e.g. Change career, personal interest"></div>
+          </div>
+          <div class="fnav">
+            <button class="btn-prev" onclick="goP(11)">◀ Back</button>
+            <button class="btn-next" onclick="goN(11)">Next: Confirm Subjects ➜</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- S12: EXAM SUBJECT CONFIRM -->
+      <div class="spanel" id="sp-12">
+        <div class="shdr"><h2>✅ Exam Subject Confirmation</h2><span class="sbadge">Step 12 of 15</span></div>
+        <div class="sbody">
+          <div class="ibox">Review your selected exam subjects. Remove any unwanted subject before proceeding. You cannot change subjects after locking.</div>
+          <div class="tbl-wrap" style="margin-bottom:14px">
+            <table class="confirm-tbl" id="sub-confirm-tbl">
+              <thead><tr><th>#</th><th>Subject Name</th><th>Code</th><th>Type</th><th>Action</th></tr></thead>
+              <tbody id="sub-confirm-tbody"></tbody>
+            </table>
+          </div>
+          <div class="alert alert-e" id="sub-confirm-alert">Minimum 5 subjects required. Please go back and select subjects.</div>
+          <div class="fnav">
+            <button class="btn-prev" onclick="goP(12)">◀ Back / Change</button>
+            <button class="btn-next" onclick="goN(12)">Next: Fee Details ➜</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- S13: FEE -->
+      <div class="spanel" id="sp-13">
+        <div class="shdr"><h2>💰 Fee Details</h2><span class="sbadge">Step 13 of 15</span></div>
+        <div class="sbody">
+          <div class="fee-card" id="fee-card">
+            <h3 style="font-size:14px;color:var(--navy);margin-bottom:10px">Fee Structure – Session 2026-27</h3>
+            <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Category: <strong id="fee-cat-disp">General</strong></div>
+            <table class="fee-tbl" id="fee-tbl"></table>
+            <p style="font-size:11px;color:var(--muted);margin-top:10px">⚠️ Training Mode – No real payment will be processed.</p>
+          </div>
+          <div class="fnav">
+            <button class="btn-prev" onclick="goP(13)">◀ Back</button>
+            <button class="btn-next" onclick="goN(13)">Next: Form Review ➜</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- S14: REVIEW & SUBMIT -->
+      <div class="spanel" id="sp-14">
+        <div class="shdr"><h2>👁 Form Review & Declaration</h2><span class="sbadge">Step 14 of 15</span></div>
+        <div class="sbody">
+          <div class="ibox">⚠️ Review ALL details carefully. After locking the form, no changes can be made. You can still go back to edit.</div>
+          <div id="prev-content"></div>
+          <div class="decl-box">
+            <p>मैं घोषणा करता/करती हूँ कि उपरोक्त दी गई समस्त सूचनाएं मेरी जानकारी व विश्वास के अनुसार सत्य व सही हैं।<br>
+            <em>I hereby declare that all information provided above is true and correct to the best of my knowledge and belief. This is an Educate Girls training simulation.</em></p>
+            <label class="dchk"><input type="checkbox" id="decl-chk"> I confirm all details are correct and accept the above declaration.</label>
+          </div>
+          <div class="alert alert-e" id="decl-alert">Please accept the declaration to lock the form.</div>
+          <div class="fnav">
+            <button class="btn-prev" onclick="goP(14)">◀ Back & Edit</button>
+            <button class="btn-lock" id="lock-btn" onclick="lockSubmit()">🔒 Lock & Submit Form</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- S15: PAYMENT -->
+      <div class="spanel" id="sp-15">
+        <div class="shdr"><h2>💳 Payment & Form Download</h2><span class="sbadge">Step 15 of 15</span></div>
+        <div class="sbody">
+          <div id="pay-inner">
+            <div style="display:flex;gap:20px;flex-wrap:wrap">
+              <div class="fee-card" style="flex:1;min-width:280px">
+                <h3 style="font-size:14px;color:var(--navy);margin-bottom:8px">Payment Summary</h3>
+                <table class="fee-tbl" id="pay-fee-tbl"></table>
+                <p style="font-size:11px;color:var(--muted);margin-top:8px">Training Mode – Simulation only</p>
+                <h4 style="font-size:11px;color:var(--muted);margin:12px 0 8px">Select Payment Method:</h4>
+                <div class="pay-methods">
+                  <div class="popt" onclick="selPay(this,'PhonePe')"><div class="poi">📲</div><div class="pon">PhonePe</div></div>
+                  <div class="popt" onclick="selPay(this,'Google Pay')"><div class="poi">🔵</div><div class="pon">Google Pay</div></div>
+                  <div class="popt" onclick="selPay(this,'Debit Card')"><div class="poi">💳</div><div class="pon">Debit Card</div></div>
+                  <div class="popt" onclick="selPay(this,'Net Banking')"><div class="poi">🏦</div><div class="pon">Net Banking</div></div>
+                </div>
+                <button class="btn-pay" id="btn-pay" onclick="doPay()">Pay (Simulation) ➜</button>
+              </div>
+            </div>
+            <div class="pay-ok" id="pay-ok">
+              <div class="tick">✅</div>
+              <h3>Payment Successful!</h3>
+              <p style="color:var(--muted);font-size:12px">TXN ID: <strong id="txnid"></strong></p>
+              <p style="color:var(--muted);font-size:12px;margin-top:4px">Method: <span id="paymeth"></span></p>
+              <button class="btn-next" style="margin-top:14px;justify-content:center" onclick="genReceipt()">Generate Receipt & Download Form ➜</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RECEIPT -->
+      <div id="receipt-panel">
+        <div class="rwrap" id="rcpt-content">
+          <div class="rhdr">
+            <svg width="44" height="44" viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="27" fill="#0e2456" stroke="#f59e0b" stroke-width="2"/><path d="M28 14L30 22L38 22L32 27L34 35L28 30L22 35L24 27L18 22L26 22Z" fill="#f59e0b"/></svg>
+            <div><h2>राजस्थान राज्य ओपन स्कूल – Admission Acknowledgment</h2><p>Training Portal – Educate Girls | NOT a real government document</p></div>
+          </div>
+          <div class="rack">
+            <div><span class="albl">Acknowledgment No.</span><span class="anum" id="rack-num">—</span></div>
+            <div><span class="albl">Date & Time</span><strong id="rack-date">—</strong></div>
+            <div><span class="rok">✅ PAID (Simulated)</span></div>
+            <div><span class="rok">📋 SUBMITTED</span></div>
+          </div>
+          <div class="rbody" id="rcpt-body"></div>
+          <div class="rfoot">Training portal – Educate Girls | Session 2026-27 | NOT a real government acknowledgment.</div>
+        </div>
+        <div class="racts">
+          <button class="btn-print" onclick="window.print()">🖨 Print Receipt</button>
+          <button class="btn-dl-form" onclick="dlForm()">⬇ Download Filled Form</button>
+          <button class="btn-new" onclick="newForm()">➕ New Learner Form</button>
+        </div>
+      </div>
+
+    </div><!-- /farea -->
+  </div>
+</div>
+
+<div id="toast">✓ Progress Saved</div>
+
+<script>
+/* ════════════════════════════════════════════════════════
+   CONFIG
+   ════════════════════════════════════════════════════════ */
+const CFG = {
+  SHEET_URL: 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE',
+  MAX_FORMS: 5
+};
+const ADMIN_USERS = [
+  {email:'admin@educategirls.org', password:'Admin@EG2024', name:'EG Admin'}
+];
+const SEED_USERS = [
+  {ssoId:'priya.sharma',email:'priya.sharma@educategirls.org', password:'Priya@123', name:'Priya Sharma'},
+  {ssoId:'sunita.meena',email:'sunita.meena@educategirls.org', password:'Sunita@123', name:'Sunita Meena'},
+  {ssoId:'kavita.joshi',email:'kavita.joshi@educategirls.org', password:'Kavita@123', name:'Kavita Joshi'},
+  {ssoId:'anita.gupta',email:'anita.gupta@educategirls.org', password:'Anita@123', name:'Anita Gupta'},
+  {ssoId:'rekha.patel',email:'rekha.patel@educategirls.org', password:'Rekha@123', name:'Rekha Patel'},
+  {ssoId:'mamta.singh',email:'mamta.singh@educategirls.org', password:'Mamta@123', name:'Mamta Singh'},
+  {ssoId:'geeta.yadav',email:'geeta.yadav@educategirls.org', password:'Geeta@123', name:'Geeta Yadav'},
+  {ssoId:'pooja.kumari',email:'pooja.kumari@educategirls.org', password:'Pooja@123', name:'Pooja Kumari'}
+];
+
+/* ════════════════════════════════════════════════════════
+   AI CENTER DATA — Real centers from RSOS 2026-27 PDF
+   41 Districts | 8-10 centers each | District → Tehsil → Centers
+   ════════════════════════════════════════════════════════ */
+const CD = {
+  "Ajmer":{
+    "Ajmer City / Nasirabad":["01001 - Govt. Sr. Sec. School, Topadada, Ajmer","01006 - Govt. Javahar Sr. Sec. School, Ajmer","01018 - Savitri Govt. Girls Sr. Sec. School, Ajmer","01020 - Govt. Kendriya Balika Sr. Sec. School, Purani Mandi, Ajmer","01027 - Govt. Vyaparik Sr. Sec. School, Nasirabad","01104 - Major Kamalesh Prasad Govt. Sr. Sec. School, Nasirabad"],
+    "Kishangarh / Pisangan":["01033 - Govt. Sr. Sec. School, Kishangarh","01045 - Govt. Sr. Sec. School, Arai","01065 - Govt. Sr. Sec. School, Pisangan","01076 - Govt. Girls Sr. Sec. School, Kishangarh","01079 - Govt. Girls Sr. Sec. School, Adarsh Nagar, Ajmer"]
+  },
+  "Alwar":{
+    "Alwar City / Ramgarh":["02001 - Govt. Yashavant Sr. Sec. School, Alwar","02002 - Govt. Naveen Sr. Sec. School, Alwar","02019 - Govt. Girls Sr. Sec. School, Alwar","02035 - GSSS Ramgarh, Alwar","02065 - Govt. Sr. Sec. School, Malakheda"],
+    "Rajgarh / Thanagaji / Laxmangarh":["02096 - Govt. Sr. Sec. School, Raini","02109 - Govt. Sr. Sec. School, Thanagaji","02116 - Govt. Sr. Sec. School, Laxmangarh","02131 - Shri Pyare Lal Gupta Govt. Sr. Sec. School, Rajgarh","02147 - Govt. Sr. Sec. School, Govindgarh"]
+  },
+  "Banswara":{
+    "Banswara / Bagidora":["03001 - GSSS Nutan Banswara","03002 - GSSS Nagar Banswara","03004 - Govt. Girls Sr. Sec. School, Chandrapol Gate, Banswara","03028 - Govt. Sr. Sec. School, Bagidora","03052 - Govt. Sec. Sr. School, Arthuna"],
+    "Kushalgarh / Garhi":["03037 - Govt. Sr. Sec. School, Kushalagarh","03041 - Govt. Sr. Sec. School, Ghatol","03046 - Govt. Sr. Sec. School, Garhi","03050 - Govind Guru Govt. Sr. School, Anandpuri","03056 - Govt. Sec. Sr. School, Talwara"]
+  },
+  "Barmer":{
+    "Barmer City / Chauhatan":["04001 - Mu. Bhi. Govt. Sr. Sec. School, Gandhi Chauk, Barmer","04002 - Govt. Sr. Sec. School, Station Road, Barmer","04006 - Govt. Girls Sr. Sec. School, Barmer","04032 - Govt. Sr. Sec. School, Chauhatan","04067 - Govt. Sr. Sec. School, Gudamalani"],
+    "Shiv / Dhaurimanna / Balotra Area":["04034 - Govt. Sr. Sec. School, Dhaurimanna","04045 - Govt. Sr. Sec. School, Shiv","04059 - Govt. Sr. Sec. School, Kundanpura","04063 - Govt. Sr. Sec. School, Gadara Road, Barmer","04075 - Govt. Sen. Sec. School, Barmer Agore"]
+  },
+  "Bharatpur":{
+    "Bharatpur / Nadbai":["05016 - S.B.K. Govt. Girls Sr. Sec. School, Bharatpur","05099 - Maharaj Badan Singh Govt. Sr. Sec. School, Bharatpur","05037 - Govt. Sr. Sec. School, Bayana","05100 - Kapuri Devi Surjmal Jagwain Govt. Girls HSS, Nadbai","05104 - Govt. Sr. Sec. School, Naroli"],
+    "Vair / Roopavas":["05076 - Govt. Sr. Sec. School, Roopavas","05098 - Govt. Sr. Sec. School, Vair","05107 - Govt. Girls Sr. Sec. School, Dehgaon","05108 - Govt. Sr. Sec. School, Veerampura","05110 - Mahatma Gandhi Govt. School, Aghapur"]
+  },
+  "Bhilwara":{
+    "Bhilwara City / Asind":["06002 - S.M.D.M. Govt. Girls Sr. Sec. School, Bhilwara","06006 - Govt. Sr. Sec. School, Pratapanagar, Bhilwara","06010 - Govt. Sr. Sec. School, Asind","06078 - Govt. Sr. Sec. School, Rajendra Marg, Bhilwara","06082 - Govt. Sr. Sec. School, Bagaur"],
+    "Mandalgarh / Gangapur / Mandal":["06014 - GSSS Mandalgarh","06019 - Govt. Sr. Sec. School, Mandal","06060 - GSSS Bijoliya","06061 - Govt. Sr. Sec. School, Gangapur","06065 - Govt. Sr. Sec. School, Kareda","06094 - Govt. Sr. Sec. School, Hameergarh"]
+  },
+  "Bikaner":{
+    "Bikaner City / Nokha":["07001 - Govt. Chopra Sr. Sec. School, Bikaner","07003 - Govt. Sadul Sr. Sec. School, Bikaner","07009 - Shahid Major James Thomas Govt. Sr. Sec. School, Bikaner","07019 - Govt. Maharani Girls Sr. Sec. School, Bikaner","07044 - Govt. Baba Chhotunath Ji Sr. Sec. School, Nokha"],
+    "Lunkaransar / Kolayat / Khajuwala":["07033 - Govt. Sr. Sec. School, Loonkaransar","07063 - Govt. Sr. Sec. School, Shri Doongaragarh","07065 - Shaheed Om Prakash Bishnoi Govt. Sr. Sec. School, Khajuwala","07069 - G.S.S.S. Kolayat, Bikaner","07075 - Govt. Sr. Sec. School, Mahajan"]
+  },
+  "Bundi":{
+    "Bundi City / Nainwa":["08003 - Govt. Sr. Sec. School, Bundi","08008 - Maharani Govt. Girls Sr. Sec. School, Bundi","08017 - Govt. Sr. Sec. School, Keshavaray Patan","08019 - Govt. Sr. Sec. School, Dei, Bundi","08020 - S.K. Govt. Sr. Sec. School, Nainwa"],
+    "Hindauli / Taleda":["08018 - Govt. Sr. Sec. School, Karavar, Bundi","08022 - Govt. Sr. Sec. School, Taleda, Bundi","08034 - Govt. Sr. Sec. School, Hindauli","08035 - Govt. Sr. Sec. School, Matunda","08036 - Govt. Sr. Sec. School, Badodiya"]
+  },
+  "Chittorgarh":{
+    "Chittorgarh / Gangrar / Kapasan":["09001 - Govt. Sr. Sec. School, Chittorgarh","09006 - GGSSS Chittorgarh","09024 - Govt. Sr. Sec. School, Gangrar","09049 - Govt. Maharan Sr. Sec. School, Kapasan","09052 - Govt. Girls Sr. Sec. School, Station, Chittorgarh"],
+    "Nimbaheda / Bhadesar / Badi Saddi":["09009 - Govt. Sr. Sec. School, Bhainsarodagarh","09017 - Govt. Sr. Sec. School, Nimbaheda","09014 - Shri M.L.V. Govt. Sr. Sec. School, Bhadesar","09044 - Govt. Sr. Sec. School, Badi Sadadi","09061 - Govt. Sr. Sec. School, Bassi"]
+  },
+  "Churu":{
+    "Churu City / Sujangarh":["10001 - Govt. Bagala Sr. Sec. School, Churu","10003 - Govt. Goyanaka Sr. Sec. School, Churu","10025 - Govt. P.C.B. Sr. Sec. School, Sujangarh","10027 - Govt. Sr. Sec. School, Sardarshahar","10073 - Seth Dulichand Sethiya Govt. Sec. Bidasar"],
+    "Ratangarh / Taranagar / Rajgarh":["10034 - Govt. Sr. Sec. School, Rajgarh","10047 - Govt. Sr. Sec. School, Taranagar","10066 - Seth B.D.J. Govt. Sr. Sec. School, Ratangarh","10071 - Govt. Sec. Sr. School, Bhaleri Taranagar","10076 - Govt. Sr. Sec. School, Badsar"]
+  },
+  "Dausa":{
+    "Dausa / Bandikui":["28001 - Shriramakaran Joshi Govt. Sr. Sec. School, Dausa","28010 - Anand Sharma Govt. Balika Sr. Sec. School, Dausa","28026 - Govt. Sr. School, Bandikui","28084 - GGSSS Bandikui","28094 - Govt. Sr. Sec. School, Gumanpura"],
+    "Lalsot / Sikrai / Mahwa":["28041 - Govt. Sr. Sec. School, Lalsot","28067 - Govt. Sr. Sec. School, Mahawa","28082 - Govt. Sr. Sec. School, Sikrai","28083 - Govt. Girls Sr. Sec. School, Lalsot","28096 - Pmshri Govt. Sr. Sec. School, Nangal Rajawtan"]
+  },
+  "Dholpur":{
+    "Dholpur / Bari / Rajakheda":["27005 - Govt. Sr. Sec. School, City Kotwali, Dholpur","27014 - Govt. Sr. Sec. School, Rajakheda","27015 - Govt. Sr. Sec. School, Sepau","27016 - Govt. Sr. Sec. School, Basedi","27017 - Govt. Sr. Sec. School, Badi, Dholpur"],
+    "Sarmathura / Other":["27018 - Govt. Sr. Sec. School, Ajitpura","27019 - Govt. Sr. Sec. School, Anandapura","27021 - Govt. Sr. Sec. School, Dulhara","27022 - Govt. Sr. Sec. School, Kotra","27025 - Govt. Sr. Sec. School, Mahua Kheda"]
+  },
+  "Dungarpur":{
+    "Dungarpur / Sagwara":["11001 - Govt. Maharaval Sr. Sec. School, Dungarpur","11037 - Govt. Mahipal Sr. Sec. School, Sagwara","11044 - Govt. Sr. Sec. School, Asapur","11045 - Sant Mavaji G.G.S., Sabla","11046 - Govt. Girls Sr. Sec. School, Dungarpur"],
+    "Bichhiwada / Simalwada":["11014 - Govt. Sr. Sec. School, Bichchhivada","11021 - Govt. Sr. Sec. School, Simalwada","11040 - Late. Revashankar Pandya Adrash Govt. Sr. Sec. School, Dhambola","11050 - Shri Kishan Lal Garg Govt. Sr. Sec. School, Dungarpur","11052 - Smt. Manibain Pandya Govt. Girls Sr. Sec. School, Simalwada"]
+  },
+  "Hanumangarh":{
+    "Hanumangarh / Sangaria":["31001 - Govt. Sr. Sec. School, Hanumangarh Town","31006 - Govt. Sr. Sec. School, Satipura, Hanumangarh","31008 - Govt. Girls Sr. Sec. School, Hanumangarh","31053 - G.S.S.S. Pilibanga","31057 - Govt. Sr. Sec. School, Sangaria"],
+    "Bhadra / Nohar / Rawatsar":["31032 - Govt. Sr. Sec. School, Bhadra","31050 - Govt. Sr. Sec. School, Nohar","31055 - Govt. Sr. Sec. School, Rawatsar","31059 - Govt. Sr. Sec. School, Talwara Jhil","31062 - Govt. Sr. Sec. School, Bhirani"]
+  },
+  "Jaipur":{
+    "Jaipur City":["12003 - Govt. Sr. Sec. School, Khatipura, Jaipur","12011 - Govt. Sr. Sec. School, Mankachauk, Jaipur","12046 - Govt. Adarsh Nagar Sr. Sec. School, Jaipur","12058 - Govt. Raja Ramadev Poddar Sr. Sec. School, Jaipur","12079 - Maharaj Balika Govt. Girls Sr. Sec. School, Jaipur","12298 - Govt. Sr. Sec. School, Vidhyadhar Nagar"],
+    "Sanganer / Amer":["12103 - Govt. Girls Sr. Sec. School, Gandhi Nagar, Jaipur","12110 - Govt. Sr. Sec. School, Sanganer","12113 - Govt. Sr. Sec. School, Amer","12220 - GSSS Harmara, Jaipur","12289 - SHREE M.R.BHORA Govt. Girls HSS, Vatika Sanganer","12302 - Govt. Sr. Sec. School, Sodala"]
+  },
+  "Jaisalmer":{
+    "Jaisalmer / Pokhran":["13001 - Amar Shahid Sagaramal Gopa Ji Govt. Sr. Sec. School, Jaisalmer","13003 - Govt. Girls Sr. Sec. School, Jaisalmer","13004 - Shahid Rajendra Singh Govt. Sr. Sec. School, Shri Mohangarh","13007 - Govt. Sr. Sec. School, Pokaran","13010 - Govt. Sr. Sec. School, Ramagarh, Jaisalmer"],
+    "Fatehgarh / Nachna / Bhaniyana":["13005 - Govt. Girls Sr. Sec. School, Nachna","13006 - Govt. Sr. Sec. School, Bhaniyana","13011 - Govt. HSS, Fatehgarh Block Sum","13013 - Govt. Sr. Sec. School, Gomat","13014 - Govt. Sr. Sec. School, Raghawa"]
+  },
+  "Jalore":{
+    "Jalore / Bhinmal":["14001 - Govt. Sr. Sec. School, Jalore","14002 - Govt. Sr. Sec. School, Shahari, Jalore","14007 - Govt. Sr. Sec. School, Bhinamal","14026 - Govt. Girls Sr. Sec. School, Jasavantpura, Jalore","14028 - Govt. Girls Sr. Sec. School, Bhinamal"],
+    "Sanchore / Ahor / Ramseen":["14022 - Govt. Sr. Sec. School, Ahor","14004 - Govt. Sr. Sec. School, Sayala","14024 - Supasvrnath Govt. Sr. Sec. School, Ramseen","14034 - Govt. Sr. Sec. School, Bhadrajun","14037 - Govt. Sr. Sec. School, Aaipura"]
+  },
+  "Jhalawar":{
+    "Jhalawar / Jhalarapatan":["16001 - Govt. Girls Sr. Sec. School, Jhalawar","16005 - Govt. Sr. Sec. School, Naschooln Bhavan, Jhalawar","16027 - Govt. Sr. Sec. School, Jhalarapatan","16050 - Govt. Sr. Sec. School, Pidava","16052 - Govt. Girls HSS, Bhavani Mandi"],
+    "Khanpur / Manoharathana / Bakani":["16015 - Govt. Sr. Sec. School, Manoharathana","16024 - Govt. Sr. Sec. School, Khanpur","16039 - Govt. Sr. Sec. School, Bakani","16051 - Govt. Sr. Sec. School, Akalera","16055 - Govt. Girls Sr. Sec. School, Khanpur"]
+  },
+  "Jhunjhunu":{
+    "Jhunjhunu / Buhana":["15001 - Shahid Karnal Je. Pi. Jnoo Govt. Sr. Sec. School, Jhunjhunu","15005 - Govt. Girls Sr. Sec. School, Jhunjhunu","15061 - Govt. Sr. Sec. School, Buhana","15115 - Shri Je.Di. Ke. Govt. Sr. Sec. School, Alsisar","15135 - Smt. Teeja Devi More Govt. Girls Sr. Sec. School, Nawalgarh"],
+    "Chirawa / Udaipurwati / Khetri":["15139 - Govt. Adukia Sr. Sec. School, Chirawa","15141 - Govt. Sec. School, Bajawa Suron Ka","15143 - Mahatma Gandhi Govt. School, Singhana","15144 - Govt. Sr. Sec. School, Dheelsar","15150 - Govt. Sr. Sec. School, Aduka"]
+  },
+  "Jodhpur":{
+    "Jodhpur City":["17002 - Govt. M.G. Sr. Sec. School, Jodhpur","17011 - Govt. Naschooln Sr. Sec. School, Jodhpur","17014 - Govt. Sr. Sec. School, Chainapura, Jodhpur","17026 - Govt. Girls Sr. Sec. School, Rajmahal, Jodhpur","17028 - Govt. Girls Sr. Sec. School, Sardarpura, Jodhpur"],
+    "Bilad / Mandore":["17041 - Govt. Sr. Sec. School, Bilad, Jodhpur","17112 - GOVT Secondary School Nandadi Mandore","17136 - Govt. Sr. Sec. School, Chamu","17138 - Govt. Sr. Sec. School, Rohina","17139 - MG Govt. School, Ambedkar Nagar, Soorsagar"]
+  },
+  "Karauli":{
+    "Karauli / Hindaun":["32001 - Svatntrata Senani Chirajilal Sharma Govt. Sr. Sec. School, Karauli","32006 - Govt. Girls Sr. Sec. School, Karauli","32035 - Govt. Sr. Sec. School, Hindon City","32036 - Govt. Girls Sr. Sec. School, Hindon City","32041 - Govt. Sr. Sec. School, Mandrayal"],
+    "Sapotara / Todabhim":["32011 - Govt. Sr. Sec. School, Sapotara","32047 - Govt. Sr. Sec. School, Bahadurpur","32048 - Govt. Sr. Sec. School, Gudla","32050 - Govt. Sr. Sec. School, Narayana","32054 - Govt. Sr. Sec. School, Jeerota"]
+  },
+  "Kota":{
+    "Kota City / Ladpura":["18005 - Govt. Mahatma Gandhi Sr. Sec. School, Rampura, Kota","18016 - Govt. Sr. Sec. School, Gumanpura, Kota","18037 - Govt. Girls Sr. Sec. School, Rampura, Kota","18038 - Govt. Sr. Sec. School, Mahaveer Nagar Pratham, Kota","18053 - Govt. Sr. Sec. School, Kothun Ladpura"],
+    "Ramganjmandi / Sangod / Sultanpur":["18036 - Shri Jvahar Lal Nehru Govt. Sr. Sec. School, Bhimganjmandi","18061 - Govt. Sr. Sec. School, Sultanpur","18067 - Govt. Sr. Sec. School, Ramganjmandi","18073 - Govt. Sr. Sec. School, Sangod","18075 - Mahatma Gandhi Govt. School, Mandana"]
+  },
+  "Nagaur":{
+    "Nagaur City / Merta / Degana":["19001 - Govt. Sr. Sec. School, S.K.L.K. Nagaur","19002 - Shrimati Bahan Rajmal Chaudhary Govt. Balika Sr. Sec. School, Nagaur","19042 - Govt. Sr. Sec. School, Medata City","19092 - Govt. Sr. Sec. School, Degana","19103 - Govt. Sr. Sec. School, Jayal"],
+    "Kuchaman / Ladnoon / Mundwa":["19024 - Govt. Sr. Sec. School, Riyabadi","19055 - Govt. Sr. Sec. School, Marwar Mundwa","19114 - Govt. Sr. Sec. School, Kuchera","19115 - Govt. Sr. Sec. School, Khinvsar","19117 - Govt. Sr. Sec. School, Roon"]
+  },
+  "Pali":{
+    "Pali City / Rohat / Sojat":["20005 - S.M. Baliya Govt. Girls Sr. Sec. School, Pali","20010 - GOVT SEC.SEC. SCHOOL KHUNDAWAS ROHAT","20014 - Govt. Sr. Sec. School, Rohat","20031 - Govt. Sr. Sec. School, Sojat City","20054 - Chimaba-II Govt. Ma. School, Mil Kshetra, Pali"],
+    "Sumerpur / Bali / Marwar Jn":["20018 - Govt. Sr. Sec. School, Desuri","20021 - Govt. Sr. Sec. School, Marwar Junction","20039 - Shri P.R. Naval Ji Govt. Sr. Sec. School, Rani Station","20045 - Govt. Sr. Sec. School, Sumerpur","20053 - Govt. Sr. Sec. School, Bali"]
+  },
+  "Pratapgarh":{
+    "Pratapgarh / Chhoti Saddi":["33001 - Govt. Sr. Sec. School, Pratapgarh","33002 - Govt. Sr. Sec. School, Pipal Khunt","33003 - Gulab Chand Mevadi Govt. Sr. Sec. School, Chhoti Sadadi","33006 - Govt. Sr. Sec. School, Suhagapura","33007 - Govt. Girls Sr. Sec. School, Pratapgarh"],
+    "Aranod / Dhariyavad":["33004 - Govt. Sr. Sec. School, Aranod","33005 - Govt. Sr. Sec. School, Dhariyavad","33009 - Mahatma Gandhi Rajkiya Vidyalaya, Dhariyabad","33010 - Govt. Girls Sr. Sec. School, Chhoti Sadri","33011 - Govt. Sr. Sec. School, Bamotar"]
+  },
+  "Rajsamand":{
+    "Rajsamand / Nathdwara / Kankroli":["30001 - Govt. Sr. Sec. School, Rajsamand","30006 - Shri Balakrisn Schooldya Bhavan Govt. Sr. Sec. School, Kankroli","30007 - Govt. Balika Sr. Sec. School, Kankaroli","30008 - Shri Goradhan Govt. Sr. Sec. School, Nathdwara","30015 - Govt. Sr. Sec. School, Railmagara"],
+    "Bhim / Devgarh / Amet":["30019 - Maharan Kumbha Govt. Sr. Sec. School, Kelwara","30022 - Govt. Sr. Sec. School, Devgarh","30023 - Govt. Sr. Sec. School, Amet","30024 - Govt. Sr. Sec. School, Bhim","30004 - Maharan Pratap Govt. Sr. Sec. School, Khamnor"]
+  },
+  "Sawai Madhopur":{
+    "Sawai Madhopur / Khandar":["21001 - Govt. Sr. Sec. School, Sawaimadhopur","21002 - Govt. Girls Sr. Sec. School, Sawaimadhopur","21003 - GSSS Sawai Madhopur","21045 - Govt. Sr. Sec. School, Khandar","21051 - Govt. Sr. Sec. School, Bauli"],
+    "Gangapur / Bonli":["21064 - Govt. Sr. Sec. School, Chauth ka Barwara","21065 - Govt. Sr. Sec. School, Barnawda","21067 - Govt. Girls Sr. Sec. School, Malarna Chod","21068 - Govt. Sr. Sec. School, Lorwara","21073 - Govt. Sr. Sec. School, Isarda"]
+  },
+  "Sikar":{
+    "Sikar City / Fatehpur":["22001 - Shri Kalyan Govt. Sr. Sec. School, Sikar","22011 - Radha Krishan Maroo Govt. Girls Sr. Sec. School, Sikar","22014 - Govt. Sr. Sec. School, Data Ramgarh","22082 - Govt. Nevatiya Sr. Sec. School, Fatehpur","22123 - JodRaja Mohanlal Bajaj Govt. Sr. Sec. School, Laxmangarh"],
+    "Khandela / Neem Ka Thana":["22118 - Govt. Sr. Sec. School, Khandela","22126 - Govt. Sr. Sec. School, Biraniya","22127 - Govt. Sr. Sec. School, Karad","22129 - Sahid Shrwan Singh Shekhawat Govt. Sr. Sec. School, Aantri","22131 - Mahatma Gandhi Govt. School, Palsana"]
+  },
+  "Sirohi":{
+    "Sirohi / Abu Road":["23002 - Govt. Sr. Sec. School, Naveen Bhavan, Sirohi","23003 - GGSSS Sirohi","23007 - Govt. Sr. Sec. School, Aburoad","23014 - Govt. Sr. Sec. School, Revdar","23016 - Govt. Sr. Sec. School, Shivganj"],
+    "Pindwara / Sheoganj":["23013 - Shri Bi. Es. Je. Govt. Sr. Sec. School, Pindwara","23017 - Govt. Sr. Sec. School, Kalandi","23021 - Govt. Sr. Sec. School, Paldi M, Sirohi","23024 - Govt. Girls Sr. Sec. School, Swaroopganj","23026 - Govt. Sr. Sec. School, Anadara"]
+  },
+  "Sri Ganganagar":{
+    "Sri Ganganagar / Suratgarh":["24001 - Govt. Sr. Sec. School, Multipurpose, Sri Ganganagar","24009 - Govt. Girls Sr. Sec. School, Shri Ganganagar","24030 - SHREE GURUSHARAN CHHABRA GOVT. SR. SEC. SCHOOL, Suratgarh","24063 - Govt. Sr. Sec. School, Suratgarh","24064 - Govt. HSS, 19-2, Sri Ganganagar"],
+    "Padampur / Anupgarh / Sadulshahar":["24022 - Govt. Sr. Sec. School, Sadulshahar","24053 - Shahid Kaiptan En. Es. Es. Govt. Sr. Sec. School, Padampur","24061 - Govt. Sr. Sec. School, Shrikaranpur","24067 - Govt. Sr. Sec. School, Koni","24068 - Govt. Sr. Sec. School, Patroda"]
+  },
+  "Tonk":{
+    "Tonk / Malpura / Niwai":["25001 - Govt. Sr. Sec. School, Tonk","25002 - Govt. Sr. Sec. School, City No. 12, Tonk","25007 - Govt. Girls Sr. Sec. School, Gulajar Bag, Tonk","25012 - Govt. Sr. Sec. School, Malpura","25018 - Govt. Sr. Sec. School, Niwai"],
+    "Uniyara / Devli / Peeplu":["25004 - Govt. Sr. Sec. School, Ruppura, Uniyara","25015 - Govt. Sardar Sr. Sec. School, Uniyara","25020 - Govt. Sr. Sec. School, Devli","25052 - Govt. Girls Sr. Sec. School, Devli","25054 - Govt. Sr. Sec. School, Nagar Fort"]
+  },
+  "Udaipur":{
+    "Udaipur City / Mavli":["26001 - Govt. Fatah Sr. Sec. School, Udaipur","26004 - GOVT. GURU GOVIND SINGH SR. SEC. SCHOOL, UDAIPUR","26010 - Govt. Sr. Sec. School, Paneriyoe Ki Madri","26020 - Govt. Girls Sr. Sec. School, Residency, Udaipur","26071 - GOVT. MKLVGSSS AMBAMATA, UDAIPUR"],
+    "Gogunda / Jhadol / Kherwara":["26024 - Govt. Sr. Sec. School, Mavli Station","26028 - Govt. Sr. Sec. School, Gogunda","26039 - Govt. Sr. Sec. School, Kherawara","26045 - Bhairav Govt. Sr. Sec. School, Bhindar","26060 - Govt. Sr. Sec. School, Jhadol Falasiya"]
+  },
+  "Baran":{
+    "Baran / Chhabra / Anta":["29001 - Govt. Sr. Sec. School, Kota Road, Baran","29012 - Govt. Girls Sr. Sec. School, Baran","29017 - Govt. Sr. Sec. School, Chhipa Barod","29020 - Govt. Sr. Sec. School, Chhabra","29033 - Govt. Sr. Sec. School, Anta"],
+    "Shahabad / Kishanganj / Atru":["29023 - Govt. Sr. Sec. School, Atru","29028 - Govt. Sr. Sec. School, Shahbad","29036 - Govt. Sr. Sec. School, Kishanganj","29037 - Govt. Girls Sr. Sec. School, Chhabra","29038 - Govt. Girls Sr. Sec. School, Chhipabarod"]
+  },
+  "Anoopgarh":{
+    "Anoopgarh / Raisinghnagar":["34001 - Govt. Sr. Sec. School, 10 Sarkari","34002 - Govt. Sr. Sec. School, 11 P Patrora","34005 - Govt. Sr. Sec. School, 2 Mld A","34010 - Govt. Sr. Sec. School, Bugia","34011 - Govt. Sr. Sec. School, Sri Vijaynagar"],
+    "Ghadsana / Others":["34040 - Govt. Sr. Sec. School, Anupgarh","34057 - Govt. Sr. Sec. School, Compulsory Raisinghnagar","34062 - Govt. Sr. Sec. School, Ghadsana","34066 - Govt. Girls Sr. Sec. School, Shree Vijayanagar","34007 - Govt. Sr. Sec. School, Thandewala-Three Ffb"]
+  },
+  "Balotara":{
+    "Balotara / Sindhari / Sivana":["35001 - Govt. Sr. Sec. School, Bhata","35002 - Pmshri Govt. Sr. Sec. School, Kharamachan","35005 - Govt. Sr. Sec. School, Bhagwa","35020 - Govt. Sr. Sec. School, Sindhari","35022 - Govt. Sr. Sec. School, Sivana"],
+    "Bayatu / Jasol / Samdari":["35021 - Govt. Sr. Sec. School, Bayatu","35025 - Govt. Sr. Sec. School, Balotara","35048 - S.N. BHORA GOVT. SENIOR SCHOOL JASOL, BALOTRA","35051 - Govt. Sr. Sec. School, Gida","35057 - Govt. Sr. Sec. School, Samdari"]
+  },
+  "Beawar":{
+    "Beawar / Jaitaran / Masuda":["36028 - Govt. Sr. Sec. School, Jaitaran","36046 - Govt. Patel Sr. Sec. School, Beawar","36059 - Es. Es. Ar. El. Govt. Girls Sr. Sec. School, Jaitaran","36060 - Govt. Sr. Sec. School, Masuda","36078 - Govt. Jain Gurukul Sr. Sec. School, Beawar"],
+    "Jawaja / Badanor / Barla":["36001 - Govt. Sr. Sec. School, Patan","36005 - Govt. Sr. Sec. School, Badkochra","36061 - Govt. Sr. Sec. School, Jawaja","36067 - Govt. Sr. Sec. School, Badanor","36105 - Govt. Sr. Sec. School, Barakhan"]
+  },
+  "Deeg":{
+    "Deeg / Kumher / Nagar":["38021 - Govt. Sr. Sec. School, Kumher","38051 - Kishanalal Joshi Govt. Sr. Sec. School, Deeg","38073 - Govt. Sr. Sec. School, Nagar","38101 - Govt. Sec. Sr. School, Kama","38103 - Kesari Singh Govt. Sec. Sr., Pahari"],
+    "Rural Blocks":["38001 - Govt. Sr. Sec. School, Barouli Choth","38002 - Govt. Sr. Sec. School, Badripur","38003 - Govt. Sr. Sec. School, Bamni","38005 - Govt. Sr. Sec. School, Bolkheda","38006 - Govt. Sr. Sec. School, Kasot"]
+  },
+  "Didwana-Kuchaman":{
+    "Kuchaman / Ladnoon / Makrana":["39027 - Govt. Sr. Sec. School, Makrana","39037 - Govt. Sr. Sec. School, Bangad Didwana","39062 - Govt. Jvahar Sr. Sec. School, Kuchaman City","39067 - Juhari Govt. Sr. Sec. School, Ladnoon","39109 - Govt. Sr. Sec. School, Nawa"],
+    "Parbatsar / Maulasar / Others":["39001 - Govt. Sr. Sec. School, Bajwas","39002 - Govt. Sr. Sec. School, Daulatpura","39005 - Govt. Girls Sr. Sec. School, Meethri","39111 - Govt. Sec. Sr. School, Parbatsar","39113 - Govt. Sr. Sec. School, Maulasar"]
+  },
+  "Dudu":{
+    "Dudu / Phagi":["40001 - Govt. Sr. Sec. School, Chackwara","40002 - Govt. Sr. Sec. School, Nimera","40003 - MG Govt. School, Boraj","40007 - Govt. Sr. Sec. School, Ladera","40155 - Govt. Sr. Sec. School, Phagi"],
+    "Others":["40005 - MG Govt. School, Sewa","40009 - Govt. Girls Sr. Sec. School, Bichun","40011 - Govt. Girls Sr. Sec. School, Mahala","40218 - Govt. Sr. Sec. School, Dudoo","40013 - MG Govt. School, Bhojpura Phagi"]
+  },
+  "Gangapur City":{
+    "Gangapur City / Nadauti / Todabhim":["41019 - Govt. Sr. Sec. School, Todabhim","41023 - Govt. Sr. Sec. School, Nadauti","41039 - Govt. Sr. Sec. School, Gangapur City","41057 - Govt. Sr. Sec. School, Bamanavas Khurd","41001 - MG Govt. School, Jahannagar"],
+    "Others":["41002 - Govt. Sr. Sec. School, Narayanpur Tatwara","41003 - Govt. Sr. Sec. School, Umri","41004 - Govt. Girls Sr. Sec. School, Khandeep","41019 - Govt. Sr. Sec. School, Todabhim"]
+  },
+  "Jaipur (Rural)":{
+    "Chomu / Shahpura / Phulera":["42114 - Govt. Sr. Sec. School, Chaksu","42121 - Govt. Darbar Sr. Sec. School, Sambhar Lake","42141 - Govt. Sr. Sec. School, Govindgarh Malikapur","42144 - GSSS Chomu","42188 - Shri K.S. Govt. Sr. Sec. School, Shahpura"],
+    "Bassi / Jamwa / Jobner":["42190 - Govt. Sr. Sec. School, Jamwaramgarh","42207 - Govt. Sr. Sec. School, Bassi","42219 - Govt. Sr. Sec. School, Phulera","42223 - Govt. Girls Sr. Sec. School, Chomu","42001 - Govt. Sr. Sec. School, Kalwad"]
+  },
+  "Jodhpur (Rural)":{
+    "Osian / Shergarh / Bilara":["44053 - Govt. Sr. Sec. School, Osiyan","44075 - Govt. Sr. Sec. School, Shergarh","44077 - Govt. Sr. Sec. School, Looni","44108 - Govt. Sr. Sec. School, Bhopalagarh","44109 - Govt. Sr. Sec. School, Balesar"],
+    "Tinwari / Mathaniya / Others":["44001 - Govt. Sr. Sec. School, Nathdau","44002 - Govt. Sr. Sec. School, Bhomsagar","44008 - Govt. Sr. Sec. School, Mathaniya","44020 - Govt. Sr. Sec. School, Pal Boranada Road","44113 - Govt. Sr. Sec. School, Pipar City"]
+  },
+  "Kekri":{
+    "Kekri / Bhinay / Todaraisingh":["37051 - Govt. Sr. Sec. School, Todaraisingh","37053 - Govt. Sr. Sec. School, Kekdi","37064 - Govt. Sr. Sec. School, Bhinay","37074 - Govt. Girls Sr. Sec. School, Kekdi","37109 - Govt. Sr. Sec. School, Sarwar"],
+    "Others":["37001 - Govt. Sr. Sec. School, Kanwrawas","37003 - Govt. Girls Sr. Sec. School, Juniya","37005 - Govt. Girls Sr. Sec. School, Bawdi","37007 - Govt. Sr. Sec. School, Gordha","37113 - Govt. Sr. Sec. School, Bandanwara"]
+  },
+  "Khairthal-Tijara":{
+    "Tijara / Bhiwadi / Mundawar":["45088 - Govt. Sr. Sec. School, Tijara","45091 - Govt. Sr. Sec. School, Mundawar","45003 - Govt. Girls Sr. Sec. School, Tapukada","45004 - Govt. Girls Sr. Sec. School, Bhiwadi","45135 - Govt. Sr. Sec. School, Kishangarh Bas"],
+    "Kotkasim / Others":["45001 - Govt. Sr. Sec. School, Bhojrajka","45002 - Govt. Sr. Sec. School, Jajor","45005 - Govt. Sr. Sec. School, Sarekalan","45142 - Govt. Sec. Sr. School, Kotkasim","45143 - Govt. Sr. Sec. School, Budhibawal, Kotkasim"]
+  },
+  "Kotputli-Behror":{
+    "Kotputli / Viratnagar":["46212 - Govt. Sardar Sr. Sec. School, Kotputli","46002 - Pmshri Laxmi Chand Manwati Devi Govt. Girls Sr. Sec. School, Kotputli","46003 - Govt. Sr. Sec. School, Narayanpur","46153 - GGSSS Viratnagar","46296 - Govt. Sr. Sec. School, Paota"],
+    "Behror / Bansur / Neemrana":["46053 - Govt. Sr. Sec. School, Bansur","46067 - Govt. Sr. Sec. School, Neemrana","46075 - Govt. Sr. Sec. School, Bahror","46076 - Govt. Girls Sr. Sec. School, Bahror","46001 - Govt. Sr. Sec. School, Dantil"]
+  },
+  "Neem Ka Thana":{
+    "Neem Ka Thana / Shrimadhopur":["47109 - Gajnand Modi Govt. Sr. Sec. School, Nimakathana","47035 - Govt. Sr. Sec. School, Shrimadhopur","47125 - Sri Jagannath Diwan Govt. Sec. Sr. School, Patan","47133 - Govt. Sr. Sec. School, Udaipurwati","47051 - Govt. Jyasinh Sr. Sec. School, Khetri"],
+    "Others":["47001 - Govt. Sr. Sec. School, Jugrajpura","47002 - Govt. Sr. Sec. School, Bankoti","47003 - Govt. Sr. Sec. School, Kharkada Devran","47006 - Govt. Sr. Sec. School, Bagholi","47008 - Govt. Sr. Sec. School, Basari"]
+  },
+  "Phalodi":{
+    "Phalodi / Lohawat / Bap":["43079 - Govt. Sr. Sec. School, Phalodi","43110 - Govt. Sec. Sc. Kalau Dechu","43114 - Govt. Sr. Sec. School, Ghantiyali","43128 - Govt. Sr. Sec. School, Lohawat","43131 - Govt. Sr. Sec. School, Bap"],
+    "Setrawa / Nokh / Dechu":["43001 - Govt. Sr. Sec. School, Panji Ka Bera, Phalodi","43004 - MG Govt. School, Khara","43005 - Pmshri Govt. Sr. Sec. School, Nokh","43007 - Govt. Sr. Sec. School, Setrawa","43009 - Govt. Sr. Sec. School, Bhojakor"]
+  },
+  "Salumbar":{
+    "Salumbar / Sarada / Jhalara":["48037 - Govt. Sr. Sec. School, Salumbar","48072 - Govt. Girls Sr. Sec. School, Salumbar","48029 - Govt. Sr. Sec. School, Sarada","48009 - Govt. Girls Sr. Sec. School, Sarada","48081 - Govt. HSS, Jhalara"],
+    "Others":["48001 - Govt. Sr. Sec. School, Matasula","48003 - Govt. Sr. Sec. School, Shyampura","48005 - Govt. Sr. Sec. School, Singhatwada","48006 - Govt. Sr. Sec. School, Koon","48088 - MG Govt. School, Lasadiya"]
+  },
+  "Sanchore":{
+    "Sanchore / Raniwara / Bagoda":["49012 - GSSS Sanchore","49001 - Govt. Sr. Sec. School, Sarwana","49002 - Govt. Sr. Sec. School, Karda","49014 - Govt. Sr. Sec. School, Sarnau","49018 - Govt. Sr. Sec. School, Raniwada Kalan"],
+    "Others":["49003 - Govt. Sr. Sec. School, Jaab","49005 - Govt. Sr. Sec. School, Bhatki","49007 - Govt. Sr. Sec. School, Khirodi","49009 - Govt. Sr. Sec. School, Dhanol","49031 - Singhvi Lahiri Devi Jain Govt. Sr. Sec. School, Chitalwana"]
+  },
+  "Shahpura":{
+    "Shahpura / Jahazpur / Baneda":["50031 - Govt. Sr. Sec. School, Shahpura","50023 - Govt. Maharana Sr. Sec. School, Jahajpur","50022 - Aksay Smarak Govt. Sr. Sec. School, Baneda","50044 - Govt. Sr. Sec. School, Kotadi","50068 - Govt. Girls Sr. Sec. School, Shahpura"],
+    "Others":["50001 - Govt. Sr. Sec. School, Gharta","50003 - Govt. Sr. Sec. School, Dohriya","50005 - Govt. Sr. Sec. School, Kunchalwara Kalan","50069 - Govt. Sr. Sec. School, Fuliya Kalan","50070 - MGGS Jahazpur"]
+  }
+};
+
+const SUBJECTS = {
+  "10th":[{code:"001",name:"Hindi"},{code:"002",name:"English"},{code:"003",name:"Mathematics"},{code:"004",name:"Science"},{code:"005",name:"Social Science"},{code:"006",name:"Sanskrit"},{code:"007",name:"Urdu"},{code:"008",name:"Sindhi"},{code:"009",name:"Punjabi"},{code:"010",name:"Drawing & Painting"},{code:"011",name:"Home Science"},{code:"012",name:"Commerce"},{code:"013",name:"Rajasthani"},{code:"014",name:"ICH (Indian Culture and Heritage)"},{code:"015",name:"Data Entry Operations"}],
+  "12th-Stream 1 (Arts)":[{code:"101",name:"Hindi (Compulsory)"},{code:"102",name:"English"},{code:"103",name:"History"},{code:"104",name:"Geography"},{code:"105",name:"Political Science"},{code:"106",name:"Economics"},{code:"107",name:"Sociology"},{code:"108",name:"Psychology"},{code:"109",name:"Philosophy"},{code:"110",name:"Sanskrit"},{code:"111",name:"Urdu"},{code:"112",name:"Rajasthani"},{code:"113",name:"Drawing & Painting"},{code:"114",name:"Home Science"},{code:"115",name:"ICH (Indian Culture and Heritage)"},{code:"116",name:"Data Entry Operations"}],
+  "12th-Stream 2 (Science/Commerce)":[{code:"201",name:"Hindi (Compulsory)"},{code:"202",name:"English"},{code:"203",name:"Physics"},{code:"204",name:"Chemistry"},{code:"205",name:"Mathematics"},{code:"206",name:"Biology"},{code:"207",name:"Accountancy"},{code:"208",name:"Business Studies"},{code:"209",name:"Economics"},{code:"210",name:"Computer Science"},{code:"211",name:"Rajasthani"},{code:"212",name:"ICH (Indian Culture and Heritage)"},{code:"213",name:"Data Entry Operations"}]
+};
+
+/* ════════ STATE ════════ */
+let CU=null,curStep=1,aadhOk=false,mobOk=false,payMethod='',docs={},submCount=0,allSubs=[],removedSubs=[];
+const STEPS=[
+  {id:1,lbl:"AI Center"},{id:2,lbl:"Student Category"},{id:3,lbl:"Aadhaar/OTP"},
+  {id:4,lbl:"Stream & Type"},{id:5,lbl:"Mobile OTP"},{id:6,lbl:"Personal Details"},
+  {id:7,lbl:"Address"},{id:8,lbl:"Bank Details"},{id:9,lbl:"Documents"},
+  {id:10,lbl:"Study Material"},{id:11,lbl:"Subjects"},{id:12,lbl:"Confirm Subjects"},
+  {id:13,lbl:"Fee Details"},{id:14,lbl:"Review & Lock"},{id:15,lbl:"Payment"}
+];
+
+/* ════════ INIT ════════ */
+window.addEventListener('DOMContentLoaded',()=>{
+  const existingUsers=JSON.parse(localStorage.getItem('rsos_users')||'[]');
+  // Re-seed if first time OR if existing users don't have ssoId yet
+  if(!localStorage.getItem('rsos_seed')||existingUsers.some(u=>!u.ssoId)){
+    localStorage.setItem('rsos_users',JSON.stringify(SEED_USERS));
+    localStorage.setItem('rsos_seed','2');
+  }
+  buildSNav();populateDists();
+  document.getElementById('s6-dob').max=new Date().toISOString().split('T')[0];
+  document.getElementById('s6-disab').addEventListener('change',function(){document.getElementById('disab-pct-grp').style.display=this.value!=='None'?'flex':'none';});
+});
+
+/* ════════ AUTH ════════ */
+function switchTab(t){
+  document.querySelectorAll('.auth-tab').forEach(x=>x.classList.remove('active'));
+  document.getElementById('tab-'+t).classList.add('active');
+  document.getElementById('user-pane').style.display=t==='user'?'block':'none';
+  document.getElementById('admin-pane').style.display=t==='admin'?'block':'none';
+}
+function uLogin(){
+  const e=document.getElementById('ul-email').value.trim();
+  const p=document.getElementById('ul-pass').value;
+  const err=document.getElementById('uerr');
+  if(!e||!p){err.textContent='Enter SSO ID and password.';err.style.display='block';return;}
+  const users=JSON.parse(localStorage.getItem('rsos_users')||'[]');
+  // Match on ssoId field first, fall back to email for legacy accounts
+  const u=users.find(x=>(x.ssoId&&x.ssoId.toLowerCase()===e.toLowerCase())||(x.email&&x.email.toLowerCase()===e.toLowerCase()&&!x.ssoId)||(x.email&&x.email.toLowerCase()===e.toLowerCase()&&x.password===p));
+  const uMatch=users.find(x=>((x.ssoId&&x.ssoId.toLowerCase()===e.toLowerCase())||(x.email&&x.email.toLowerCase()===e.toLowerCase()))&&x.password===p);
+  if(!uMatch){err.textContent='Invalid SSO ID or password. Contact your coordinator.';err.style.display='block';return;}
+  CU=uMatch;
+  const loginId=uMatch.ssoId||uMatch.email;
+  const today=new Date().toDateString();
+  submCount=getSubs().filter(s=>s.userEmail===loginId&&new Date(s.timestamp).toDateString()===today).length;
+  document.getElementById('auth-screen').style.display='none';
+  document.getElementById('portal').style.display='block';
+  document.getElementById('uhdr').style.display='flex';
+  document.getElementById('dispname').textContent=uMatch.name||loginId;
+  document.getElementById('dispcnt').textContent=submCount;
+  document.getElementById('scnt').textContent=submCount;
+  goStep(1);updateSNav();
+}
+function aLogin(){
+  const e=document.getElementById('al-email').value.trim().toLowerCase();
+  const p=document.getElementById('al-pass').value;
+  const err=document.getElementById('aerr');
+  const a=ADMIN_USERS.find(x=>x.email.toLowerCase()===e&&x.password===p);
+  if(!a){err.textContent='Invalid admin credentials.';err.style.display='block';return;}
+  document.getElementById('auth-screen').style.display='none';
+  document.getElementById('admin-screen').style.display='block';
+  document.getElementById('ahdr').style.display='flex';
+  document.getElementById('adm-name').textContent=a.name;
+  loadAdmin();
+}
+function doLogout(){if(!confirm('Logout? Unsaved progress will be lost.'))return;CU=null;docs={};submCount=0;allSubs=[];aadhOk=false;mobOk=false;document.getElementById('portal').style.display='none';document.getElementById('uhdr').style.display='none';document.getElementById('receipt-panel').style.display='none';document.getElementById('auth-screen').style.display='flex';document.getElementById('ul-email').value='';document.getElementById('ul-pass').value='';}
+function doAdminLogout(){document.getElementById('admin-screen').style.display='none';document.getElementById('ahdr').style.display='none';document.getElementById('auth-screen').style.display='flex';}
+
+/* ════════ ADMIN ════════ */
+function admTab(name,el){document.querySelectorAll('.atab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.apane').forEach(p=>p.classList.remove('active'));el.classList.add('active');document.getElementById('ap-'+name).classList.add('active');if(name!=='users')loadAdmin();else loadUsers();}
+function getSubs(){return JSON.parse(localStorage.getItem('rsos_subs')||'[]');}
+function saveSub(s){const a=getSubs();a.push(s);try{localStorage.setItem('rsos_subs',JSON.stringify(a));}catch(e){const slim={...s,docs:{note:'Storage limit reached'}};a[a.length-1]=slim;localStorage.setItem('rsos_subs',JSON.stringify(a));}}
+function loadAdmin(){
+  const subs=getSubs();
+  const users=[...new Set(subs.map(s=>s.userEmail))];
+  document.getElementById('adm-stats').innerHTML=`<div class="sc"><div class="n">${subs.length}</div><div class="l">Total Submissions</div></div><div class="sc"><div class="n">${users.length}</div><div class="l">Active Users</div></div><div class="sc"><div class="n">${subs.filter(s=>s.payStatus&&s.payStatus.includes('Paid')).length}</div><div class="l">Paid Forms</div></div><div class="sc"><div class="n">${subs.filter(s=>s.docs&&s.docs.photo&&s.docs.photo.b64).length}</div><div class="l">With Photo</div></div>`;
+  const tb=document.getElementById('sub-tbody');tb.innerHTML='';
+  subs.forEach((s,i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${i+1}</td><td><strong>${s.userEmail||'—'}</strong><br><small>${s.userName||''}</small></td><td>${s.learnerName||'—'}</td><td>${s.dob||'—'}</td><td>${s.course||'—'}<br><small style="color:var(--muted)">${s.stream||''}</small></td><td style="max-width:160px;word-break:break-word;font-size:11px">${s.center||'—'}</td><td>${s.district||'—'}</td><td>${s.mobile||'—'}</td><td>${s.category||'—'}</td><td id="dc-${i}" style="display:flex;gap:6px;flex-wrap:wrap"></td><td><span class="badge ${s.payStatus&&s.payStatus.includes('Paid')?'bp':'bn'}">${s.payStatus||'—'}</span></td><td><input type="number" min="0" max="100" value="${s.accuracy||''}" placeholder="0-100" style="width:58px;border:1px solid #ccc;border-radius:4px;padding:3px 6px;font-size:11px" onchange="saveAcc(${i},this.value)"></td><td style="font-size:10px">${s.timestamp?new Date(s.timestamp).toLocaleString('en-IN'):'—'}</td>`;
+    tb.appendChild(tr);
+    buildDocCell(s,i);
+  });
+  if(!subs.length)tb.innerHTML='<tr><td colspan="13" style="text-align:center;color:#999;padding:20px">No submissions yet.</td></tr>';
+  // Summary
+  const st=document.getElementById('sum-tbody');if(!st)return;st.innerHTML='';
+  const byUser={};subs.forEach(s=>{if(!byUser[s.userEmail])byUser[s.userEmail]={name:s.userName,cnt:0,paid:0,last:''};byUser[s.userEmail].cnt++;if(s.payStatus&&s.payStatus.includes('Paid'))byUser[s.userEmail].paid++;if(s.timestamp>byUser[s.userEmail].last)byUser[s.userEmail].last=s.timestamp;});
+  Object.entries(byUser).forEach(([em,d])=>{st.innerHTML+=`<tr><td>${em}</td><td>${d.name||'—'}</td><td><strong>${d.cnt}</strong></td><td>${d.paid}</td><td style="font-size:11px">${d.last?new Date(d.last).toLocaleString('en-IN'):'—'}</td></tr>`;});
+  document.getElementById('sum-stats').innerHTML=`<div class="sc"><div class="n">${subs.length}</div><div class="l">Total Forms</div></div><div class="sc"><div class="n">${Object.keys(byUser).length}</div><div class="l">Users</div></div><div class="sc"><div class="n">${subs.filter(s=>s.payStatus&&s.payStatus.includes('Paid')).length}</div><div class="l">Paid</div></div>`;
+}
+function buildDocCell(s,i){
+  const cell=document.getElementById('dc-'+i);if(!cell)return;
+  if(!s.docs){cell.innerHTML='<span style="font-size:10px;color:#999">—</span>';return;}
+  const keys={photo:'📷',sign:'✍️',dob:'📄',aadhaar:'🪪',prevqual:'📜',caste:'📑',disabcert:'♿'};
+  let h='';let hasAnyDoc=false;
+  Object.entries(keys).forEach(([k,ic])=>{
+    if(s.docs[k]&&s.docs[k].b64){hasAnyDoc=true;const isImg=s.docs[k].type&&s.docs[k].type.startsWith('image');h+=`<div style="text-align:center">${isImg?`<img src="${s.docs[k].b64}" style="width:40px;height:40px;object-fit:cover;border:1px solid #ddd;border-radius:4px;cursor:pointer;display:block" onclick="viewDoc(${i},'${k}')" title="${k}">`:`<div style="width:40px;height:40px;background:#e2e8f0;display:flex;align-items:center;justify-content:center;border-radius:4px;cursor:pointer;font-size:16px" onclick="viewDoc(${i},'${k}')">${ic}</div>`}<div style="font-size:9px;color:var(--muted)">${k}</div><button onclick="dlDoc(${i},'${k}')" style="background:var(--navy2);color:#fff;border:none;padding:2px 5px;border-radius:2px;font-size:9px;cursor:pointer;margin-top:1px">DL</button></div>`;
+  }});
+  if(hasAnyDoc){h+=`<div style="text-align:center;align-self:flex-end"><button onclick="dlAllDocs(${i})" style="background:var(--green);color:#fff;border:none;padding:4px 8px;border-radius:3px;font-size:9px;cursor:pointer;font-weight:700;margin-top:2px">⬇ All</button></div>`;}
+  cell.innerHTML=h||'<span style="font-size:10px;color:#999">No docs</span>';
+}
+function dlAllDocs(si){
+  const subs=getSubs();const s=subs[si];if(!s||!s.docs)return;
+  const keys=['photo','sign','dob','aadhaar','prevqual','caste','disabcert'];
+  let count=0;
+  keys.forEach(k=>{
+    if(s.docs[k]&&s.docs[k].b64){
+      count++;
+      setTimeout(()=>{
+        const a=document.createElement('a');
+        a.href=s.docs[k].b64;
+        const ext=s.docs[k].name?.split('.').pop()||'jpg';
+        a.download=`${s.learnerName||'doc'}_${k}_${s.ackNum||si}.${ext}`;
+        a.click();
+      },count*400);
+    }
+  });
+  if(!count)alert('No documents found for this submission.');
+}
+function viewDoc(si,dk){const subs=getSubs();const s=subs[si];if(!s||!s.docs||!s.docs[dk])return;const d=s.docs[dk];document.getElementById('dmtitle').textContent=dk.toUpperCase()+' — '+(s.learnerName||'Learner');const img=document.getElementById('dimg');if(d.type&&d.type.startsWith('image')){img.src=d.b64;img.style.display='block';}else{img.style.display='none';window.open(d.b64,'_blank');return;}document.getElementById('dmdl').href=d.b64;document.getElementById('dmdl').download=`${s.learnerName||'doc'}_${dk}.${d.name?.split('.').pop()||'jpg'}`;document.getElementById('docmodal').style.display='flex';}
+function dlDoc(si,dk){const subs=getSubs();const s=subs[si];if(!s||!s.docs||!s.docs[dk])return;const d=s.docs[dk];const a=document.createElement('a');a.href=d.b64;a.download=`${s.learnerName||'doc'}_${dk}_${s.ackNum||''}.${d.name?.split('.').pop()||'jpg'}`;a.click();}
+function saveAcc(i,v){const subs=getSubs();if(subs[i]){subs[i].accuracy=v;localStorage.setItem('rsos_subs',JSON.stringify(subs));}}
+function loadUsers(){
+  const users=JSON.parse(localStorage.getItem('rsos_users')||'[]');
+  const subs=getSubs();
+  const tb=document.getElementById('user-tbody');tb.innerHTML='';
+  users.forEach((u,i)=>{const loginId=u.ssoId||u.email;const us=subs.filter(s=>s.userEmail===loginId);const last=us.length?new Date(us[us.length-1].timestamp).toLocaleDateString('en-IN'):'—';tb.innerHTML+=`<tr><td>${i+1}</td><td><strong>${u.name}</strong></td><td>${u.ssoId||'—'}</td><td>${u.email||'—'}</td><td><strong>${us.length}</strong></td><td>${last}</td><td><button class="bsm b-del" onclick="delUser('${loginId}')">🗑 Remove</button></td></tr>`;});
+  if(!users.length)tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:#999;padding:20px">No users.</td></tr>';
+}
+function addUser(){const n=document.getElementById('nu-n').value.trim();const sso=document.getElementById('nu-sso').value.trim();const e=document.getElementById('nu-e').value.trim().toLowerCase();const p=document.getElementById('nu-p').value;const msg=document.getElementById('au-msg');if(!n||!sso||!p){msg.textContent='Fill Name, SSO ID and Password.';msg.className='alert alert-e show';return;}const users=JSON.parse(localStorage.getItem('rsos_users')||'[]');if(users.find(u=>u.ssoId&&u.ssoId.toLowerCase()===sso.toLowerCase())){msg.textContent='SSO ID already exists.';msg.className='alert alert-e show';return;}users.push({name:n,ssoId:sso,email:e||sso,password:p});localStorage.setItem('rsos_users',JSON.stringify(users));msg.textContent='✅ User added: '+sso+' (can login immediately)';msg.className='alert alert-s show';document.getElementById('nu-n').value='';document.getElementById('nu-sso').value='';document.getElementById('nu-e').value='';document.getElementById('nu-p').value='';setTimeout(()=>{msg.className='alert';loadUsers();},3000);}
+function delUser(id){if(!confirm('Remove user: '+id+'?'))return;const users=JSON.parse(localStorage.getItem('rsos_users')||'[]').filter(u=>(u.ssoId||u.email)!==id);localStorage.setItem('rsos_users',JSON.stringify(users));loadUsers();}
+function exportCSV(){const subs=getSubs();if(!subs.length){alert('No data.');return;}const hdrs=['User Email','User Name','Learner Name','DOB','Gender','Category','Course','Stream','Admission Type','AI Center','District','Mobile','Subjects','Payment Status','TXN ID','Ack No','Timestamp','Photo','Signature','DOB Proof','Aadhaar','Prev Qual Cert','Accuracy'];const rows=subs.map(s=>[s.userEmail,s.userName,s.learnerName,s.dob,s.gender,s.category,s.course,s.stream,s.admtype,s.center,s.district,s.mobile,(s.subjects||[]).join(';'),s.payStatus,s.txnId||'',s.ackNum||'',s.timestamp,s.docs?.photo?'Yes':'No',s.docs?.sign?'Yes':'No',s.docs?.dob?'Yes':'No',s.docs?.aadhaar?'Yes':'No',s.docs?.prevqual?'Yes':'No',s.accuracy||'']);const csv=[hdrs,...rows].map(r=>r.map(v=>'"'+(v||'').toString().replace(/"/g,'""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='rsos_submissions_'+new Date().toISOString().slice(0,10)+'.csv';a.click();}
+
+/* ════════ DROPDOWNS ════════ */
+function populateDists(){const dists=Object.keys(CD).sort();['s1-dist','s7-pdist','s7-cdist'].forEach(id=>{const el=document.getElementById(id);if(!el)return;dists.forEach(d=>el.appendChild(new Option(d,d)));});}
+function onDist(){const d=v('s1-dist');const bk=document.getElementById('s1-block'),ck=document.getElementById('s1-center');bk.innerHTML='<option value="">-- Select Tehsil --</option>';ck.innerHTML='<option value="">-- Select Center --</option>';bk.disabled=true;ck.disabled=true;document.getElementById('center-confirm').style.display='none';if(!d)return;Object.keys(CD[d]).sort().forEach(b=>bk.appendChild(new Option(b,b)));bk.disabled=false;}
+function onBlock(){const d=v('s1-dist'),b=v('s1-block');const ck=document.getElementById('s1-center');ck.innerHTML='<option value="">-- Select Center --</option>';ck.disabled=true;document.getElementById('center-confirm').style.display='none';if(!d||!b)return;(CD[d][b]||[]).forEach(c=>ck.appendChild(new Option(c,c)));ck.disabled=false;ck.addEventListener('change',function(){if(this.value){document.getElementById('center-confirm').style.display='block';document.getElementById('center-display').textContent=this.value;}},true);}
+function onClass(){const c=v('s4-class');document.getElementById('s4-stream-grp').style.display=c==='12th'?'flex':'none';}
+
+/* ════════ OTP ════════ */
+function sendAadhOTP(){const m=v('s5-mobile')||v('s3-janaadh')||'—';const el=document.getElementById('aadh-otp-sent');el.style.display='block';document.getElementById('btn-send-aadh-otp').textContent='Resend OTP';}
+function verifyAadhOTP(){const otp=v('s3-otp');const el=document.getElementById('aadh-verified');el.style.display='block';if(otp==='1234'){aadhOk=true;el.textContent='✅ Aadhaar verified successfully!';el.style.color='var(--success)';document.getElementById('btn-verify-aadh').disabled=true;}else{el.textContent='❌ Wrong OTP. Use 1234 (simulation)';el.style.color='var(--error)';}}
+function sendMobOTP(){const m=v('s5-mobile');if(!/^\d{10}$/.test(m)){showE('e5-mobile','Valid 10-digit mobile required.');return;}clearE('e5-mobile');document.getElementById('mob-otp-sent').style.display='block';document.getElementById('mob-otp-grp').style.display='flex';document.getElementById('btn-mob-otp').textContent='Resend OTP';}
+function verifyMobOTP(){const otp=v('s5-otp');const el=document.getElementById('mob-verified');el.style.display='block';if(otp==='1234'){mobOk=true;el.textContent='✅ Mobile number verified!';el.style.color='var(--success)';document.getElementById('btn-verify-mob').disabled=true;}else{el.textContent='❌ Wrong OTP. Use 1234.';el.style.color='var(--error)';}}
+function maskAadh(inp){let x=inp.value.replace(/\D/g,'').slice(0,12);inp.value=[x.slice(0,4),x.slice(4,8),x.slice(8,12)].filter(Boolean).join(' ');}
+
+/* ════════ RADIO CARD HELPER ════════ */
+function selRcard(el,name,val){document.querySelectorAll(`[name="${name}"]`).forEach(r=>r.closest('.rcard,.mcard')?.classList.remove('sel'));el.classList.add('sel');}
+function onCatChange(cat){
+  const janFields=document.getElementById('jan-aadh-fields');
+  const otherFields=document.getElementById('other-state-aadh-fields');
+  const infoBox=document.getElementById('aadh-infobox');
+  if(cat==='other'){
+    janFields.style.display='none';
+    otherFields.style.display='block';
+    if(infoBox)infoBox.textContent='Student from Other State: Enter your 12-digit Aadhaar number. Jan Aadhaar is not required.';
+    aadhOk=true; // skip OTP for other-state
+  } else {
+    janFields.style.display='block';
+    otherFields.style.display='none';
+    if(infoBox)infoBox.textContent='Enter your Jan Aadhaar Number for OTP verification. Rajasthan students get NIL fees.';
+    aadhOk=false;
+  }
+}
+
+/* ════════ SUBJECTS ════════ */
+function renderSubjects(){
+  const c=v('s4-class'),s=v('s4-stream');
+  let key=c==='12th'?(s?`12th-${s}`:'12th-Stream 1 (Arts)'):c||'10th';
+  const subjs=SUBJECTS[key]||SUBJECTS['10th'];
+  const list=document.getElementById('subj-list');
+  list.innerHTML='';
+  subjs.forEach(sub=>{
+    const item=document.createElement('label');item.className='subi';item.dataset.code=sub.code;
+    item.innerHTML=`<input type="checkbox" value="${sub.code}"> ${sub.name} <span class="scode">Code: ${sub.code}</span>`;
+    item.querySelector('input').addEventListener('change',function(){item.classList.toggle('sel',this.checked);updateSubCnt();});
+    list.appendChild(item);
+  });
+  // Extra subject dropdown
+  const extra=document.getElementById('s11-extra');extra.innerHTML='<option value="">-- None --</option>';
+  subjs.forEach(sub=>{extra.appendChild(new Option(sub.name+' ('+sub.code+')',sub.code));});
+  updateSubCnt();
+}
+function updateSubCnt(){document.getElementById('sub-cnt').textContent=document.querySelectorAll('#subj-list input:checked').length;}
+function renderSubConfirm(){
+  const checked=Array.from(document.querySelectorAll('#subj-list input:checked'));
+  const extra=document.getElementById('s11-extra');
+  const tb=document.getElementById('sub-confirm-tbody');tb.innerHTML='';
+  const allSel=[...checked.map(cb=>({code:cb.value,name:cb.parentElement.childNodes[1]?.textContent?.trim()||cb.value,type:'Main'}))];
+  if(extra.value){const n=extra.options[extra.selectedIndex].text;allSel.push({code:extra.value,name:n,type:'Extra'});}
+  allSel.forEach((s,i)=>{const tr=document.createElement('tr');tr.id='sub-row-'+i;tr.innerHTML=`<td>${i+1}</td><td>${s.name}</td><td>${s.code}</td><td><span class="badge ${s.type==='Extra'?'bs':'bp'}">${s.type}</span></td><td><button class="btn-remove-sub" onclick="removeSub(${i},'${s.code}')">Remove</button></td>`;tb.appendChild(tr);});
+  if(!allSel.length)tb.innerHTML='<tr><td colspan="5" style="text-align:center;color:#999;padding:12px">No subjects selected.</td></tr>';
+}
+function removeSub(i,code){const cb=document.querySelector(`#subj-list input[value="${code}"]`);if(cb){cb.checked=false;cb.closest('.subi').classList.remove('sel');}const extra=document.getElementById('s11-extra');if(extra.value===code)extra.value='';renderSubConfirm();}
+
+/* ════════ UPLOAD ════════ */
+function doUpload(inp,key){
+  const file=inp.files[0];if(!file)return;
+  if(file.size>600*1024){alert(`File too large (${(file.size/1024).toFixed(0)}KB). Max 500KB. Please compress.`);inp.value='';return;}
+  const r=new FileReader();
+  r.onload=e=>{
+    docs[key]={b64:e.target.result,name:file.name,type:file.type,size:file.size};
+    document.getElementById('uc-'+key).classList.add('has');
+    document.getElementById('uok-'+key).textContent='✅ '+file.name;
+    document.getElementById('usz-'+key).textContent=(file.size/1024).toFixed(1)+'KB';
+    const pr=document.getElementById('upr-'+key);
+    if(file.type.startsWith('image')){pr.src=e.target.result;pr.style.display='block';}else pr.style.display='none';
+  };r.readAsDataURL(file);
+}
+
+/* ════════ ADDRESS COPY ════════ */
+function copyAddr(){const same=document.getElementById('same-addr').checked;const sec=document.getElementById('corr-sec');if(same){['addr','tehsil','vill'].forEach(f=>{document.getElementById('s7-c'+f).value=document.getElementById('s7-p'+f).value;});document.getElementById('s7-cpin').value=document.getElementById('s7-ppin').value;document.getElementById('s7-cdist').value=document.getElementById('s7-pdist').value;sec.style.opacity='.5';sec.style.pointerEvents='none';}else{sec.style.opacity='1';sec.style.pointerEvents='auto';}}
+
+/* ════════ FEE CALC ════════ */
+function renderFee(el){
+  const cat=v('s6-cat')||'General';
+  const studentCat=document.querySelector('[name=cat]:checked')?.value||'';
+  const isRajasthan=studentCat==='raj';
+  const feeDisp=document.getElementById('fee-cat-disp');
+  if(feeDisp)feeDisp.textContent=cat+(isRajasthan?' (Rajasthan – Fees Waived)':'');
+  if(isRajasthan){
+    el.innerHTML=`<tr><td>Registration Fee</td><td style="color:var(--success)"><strong>NIL</strong></td></tr><tr><td>Examination Fee</td><td style="color:var(--success)"><strong>NIL</strong></td></tr><tr><td>Practical/Lab Fee</td><td style="color:var(--success)"><strong>NIL</strong></td></tr><tr class="tot"><td><strong>Total Amount Payable</strong></td><td><strong style="color:var(--success)">₹ 0 (NIL)</strong></td></tr>`;
+    return 0;
+  }
+  const base={General:350,OBC:300,SC:250,ST:250,EWS:300}[cat]||350;
+  const examFee=500,practical=50,total=base+examFee+practical;
+  el.innerHTML=`<tr><td>Registration Fee</td><td>₹${base}</td></tr><tr><td>Examination Fee (5 subjects × ₹100)</td><td>₹${examFee}</td></tr><tr><td>Practical/Lab Fee</td><td>₹${practical}</td></tr><tr class="tot"><td><strong>Total Amount Payable</strong></td><td><strong>₹${total}</strong></td></tr>`;
+  return total;
+}
+
+/* ════════ PREVIEW ════════ */
+function renderPreview(){
+  const pc=document.getElementById('prev-content');
+  const checked=Array.from(document.querySelectorAll('#subj-list input:checked')).map(cb=>`${cb.parentElement.childNodes[1]?.textContent?.trim()||cb.value}(${cb.value})`);
+  const extra=document.getElementById('s11-extra');const exV=extra.value?extra.options[extra.selectedIndex].text:'—';
+  const fname=v('s6-fname'),mname=v('s6-mname'),lname=v('s6-lname');
+  const fullName=[fname,mname,lname].filter(Boolean).join(' ');
+  const docsHtml=buildPrevDocs();
+  pc.innerHTML=`
+    <div class="prev-sec"><h3>📍 AI Center</h3><div class="prev-grid">${pi('District',v('s1-dist'))}${pi('Tehsil',v('s1-block'))}${pi('AI Center',v('s1-center'))}</div></div>
+    <div class="prev-sec"><h3>🏫 Category & Aadhaar</h3><div class="prev-grid">${pi('Student Category',document.querySelector('[name=cat]:checked')?.value||'—')}${pi('Jan Aadhaar',v('s3-janaadh'))}${pi('Aadhaar No.',v('s3-aadh'))}</div></div>
+    <div class="prev-sec"><h3>📚 Course & Stream</h3><div class="prev-grid">${pi('Class',v('s4-class'))}${pi('Stream',v('s4-stream')||'N/A')}${pi('Admission Type',v('s4-admtype'))}${pi('Medium',v('s6-medium'))}</div></div>
+    <div class="prev-sec"><h3>👤 Personal Details</h3><div class="prev-grid">${pi('Full Name',fullName)}${pi("Father's Name",v('s6-father'))}${pi("Mother's Name",v('s6-mother'))}${pi('DOB',v('s6-dob'))}${pi('Gender',v('s6-gender'))}${pi('Category',v('s6-cat'))}${pi('Religion',v('s6-religion'))}${pi('Mobile',v('s5-mobile'))}${pi('Nationality',v('s6-nation'))}${pi('Area',v('s6-area'))}${pi('Employment',v('s6-employ'))}${pi('Disability',v('s6-disab'))}${pi('Prev. Qualification',v('s6-qual'))}</div></div>
+    <div class="prev-sec"><h3>🏠 Address</h3><div class="prev-grid">${pi('Perm. Address',v('s7-paddr'))}${pi('District',v('s7-pdist'))}${pi('Tehsil',v('s7-ptehsil'))}${pi('Village/City',v('s7-pvill'))}${pi('Pincode',v('s7-ppin'))}</div></div>
+    <div class="prev-sec"><h3>🏦 Bank Details</h3><div class="prev-grid">${pi('Account Holder',v('s8-name'))}${pi('Bank',v('s8-bank'))}${pi('Account No.',v('s8-acc'))}${pi('IFSC',v('s8-ifsc'))}${pi('Branch',v('s8-branch'))}${pi('MICR',v('s8-micr'))}</div></div>
+    <div class="prev-sec"><h3>📋 Subjects</h3><div class="prev-grid">${checked.map((s,i)=>pi('Subject '+(i+1),s)).join('')}${pi('Extra Subject',exV)}${pi('Study Material',document.querySelector('[name=mat]:checked')?.value||'—')}</div></div>
+    <div class="prev-sec"><h3>📎 Documents Uploaded</h3>${docsHtml}</div>`;
+}
+function pi(l,v2){return `<div class="pi"><div class="pl">${l}</div><div class="pv">${v2||'—'}</div></div>`;}
+function buildPrevDocs(){let h='<div class="prev-docs">';const dk={photo:'Photo',sign:'Signature',dob:'DOB Proof',aadhaar:'Aadhaar',prevqual:'Prev Qual',caste:'Caste',disabcert:'Disability'};Object.entries(dk).forEach(([k,lbl])=>{if(docs[k]&&docs[k].b64){h+=`<div class="pdoc">${docs[k].type&&docs[k].type.startsWith('image')?`<img src="${docs[k].b64}">`:'<div style="width:56px;height:56px;background:#e2e8f0;display:flex;align-items:center;justify-content:center;border-radius:4px;font-size:20px">📄</div>'}<span>${lbl} ✅</span></div>`;}else{h+=`<div class="pdoc"><div style="width:56px;height:56px;background:#fee2e2;display:flex;align-items:center;justify-content:center;border-radius:4px;font-size:18px">❌</div><span>${lbl}</span></div>`;}});return h+'</div>';}
+
+/* ════════ LOCK & PAYMENT ════════ */
+function lockSubmit(){if(!document.getElementById('decl-chk').checked){document.getElementById('decl-alert').classList.add('show');return;}document.getElementById('decl-alert').classList.remove('show');document.getElementById('lock-btn').disabled=true;document.getElementById('lock-btn').textContent='🔒 Locked';goStep(15);const total=renderFee(document.getElementById('pay-fee-tbl'));if(total===0){document.getElementById('btn-pay').textContent='Submit (NIL Fees – Rajasthan) ➜';document.getElementById('btn-pay').style.background='var(--green)';}else{document.getElementById('btn-pay').textContent=`Pay ₹${total} (Simulation) ➜`;}}
+function selPay(el,m){document.querySelectorAll('.popt').forEach(p=>p.classList.remove('sel'));el.classList.add('sel');payMethod=m;}
+function doPay(){const btn=document.getElementById('btn-pay');btn.textContent='⏳ Processing...';btn.disabled=true;const total=renderFee(document.createElement('table'));setTimeout(()=>{const txn='TXN'+Date.now().toString().slice(-10);document.getElementById('txnid').textContent=txn;document.getElementById('paymeth').textContent=total===0?'NIL (Rajasthan Waiver)':(payMethod||'PhonePe');Array.from(document.getElementById('pay-inner').children).forEach(c=>{if(c.id!=='pay-ok')c.style.display='none';});document.getElementById('pay-ok').style.display='block';doFinalSubmit(txn);},1800);}
+
+/* ════════ FINAL SUBMIT ════════ */
+function collectData(){
+  const checked=Array.from(document.querySelectorAll('#subj-list input:checked')).map(cb=>`${cb.parentElement.childNodes[1]?.textContent?.trim()||cb.value}(${cb.value})`);
+  const extra=document.getElementById('s11-extra');if(extra.value){const n=extra.options[extra.selectedIndex].text;checked.push(n+' [Extra]');}
+  const fname=v('s6-fname'),mname=v('s6-mname'),lname=v('s6-lname');
+  const loginId=CU?.ssoId||CU?.email||'';
+  const studentCat=document.querySelector('[name=cat]:checked')?.value||'';
+  const aadhaarNum=studentCat==='other'?v('s3-aadh-other'):v('s3-aadh');
+  return {
+    userEmail:loginId,userName:CU?.name||'',
+    district:v('s1-dist'),block:v('s1-block'),center:v('s1-center'),
+    studentCat:studentCat,
+    janAadh:studentCat==='raj'?v('s3-janaadh'):'N/A',aadhaar:aadhaarNum,
+    course:v('s4-class'),stream:v('s4-stream'),admtype:v('s4-admtype'),
+    mobile:v('s5-mobile'),
+    firstName:fname,middleName:mname,lastName:lname,
+    learnerName:[fname,mname,lname].filter(Boolean).join(' '),
+    father:v('s6-father'),mother:v('s6-mother'),dob:v('s6-dob'),
+    gender:v('s6-gender'),category:v('s6-cat'),religion:v('s6-religion'),
+    nationality:v('s6-nation'),area:v('s6-area'),employment:v('s6-employ'),
+    disability:v('s6-disab'),prevQual:v('s6-qual'),medium:v('s6-medium'),
+    permAddr:v('s7-paddr'),permPin:v('s7-ppin'),permTehsil:v('s7-ptehsil'),permVill:v('s7-pvill'),permDist:v('s7-pdist'),
+    corrAddr:v('s7-caddr'),corrDist:v('s7-cdist'),corrVill:v('s7-cvill'),corrPin:v('s7-cpin'),
+    bankName:v('s8-name'),bankAcc:v('s8-acc'),bankBank:v('s8-bank'),bankIfsc:v('s8-ifsc'),bankBranch:v('s8-branch'),bankMicr:v('s8-micr'),bankBAddr:v('s8-baddr'),
+    subjects:checked,studyMat:document.querySelector('[name=mat]:checked')?.value||'',
+    docs:{photo:docs.photo||null,sign:docs.sign||null,dob:docs.dob||null,aadhaar:docs.aadhaar||null,prevqual:docs.prevqual||null,caste:docs.caste||null,disabcert:docs.disabcert||null},
+    payStatus:'Pending',timestamp:new Date().toISOString()
+  };
+}
+function doFinalSubmit(txn){
+  const data=collectData();
+  data.payStatus='Paid (Simulated)';data.txnId=txn;data.timestamp=new Date().toISOString();
+  data.ackNum='RSOS26-'+Math.floor(10000000+Math.random()*90000000);
+  allSubs.push(data);submCount++;
+  document.getElementById('dispcnt').textContent=submCount;document.getElementById('scnt').textContent=submCount;
+  saveSub(data);
+  if(CFG.SHEET_URL&&CFG.SHEET_URL!=='YOUR_APPS_SCRIPT_WEB_APP_URL_HERE'){
+    const payload={userEmail:data.userEmail,userName:data.userName,learnerName:data.learnerName,dob:data.dob,gender:data.gender,category:data.category,course:data.course+(data.stream?' - '+data.stream:''),admtype:data.admtype,aiCenter:data.center,district:data.district,mobile:data.mobile,subjects:data.subjects.join(' | '),payStatus:data.payStatus,txnId:txn,ackNum:data.ackNum,medium:data.medium,timestamp:data.timestamp,hasPhoto:!!docs.photo,hasSign:!!docs.sign,hasDOB:!!docs.dob,hasAadhaar:!!docs.aadhaar};
+    fetch(CFG.SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{});
+  }
+}
+
+/* ════════ RECEIPT ════════ */
+function genReceipt(){
+  const sub=allSubs[allSubs.length-1];if(!sub)return;
+  document.querySelectorAll('.spanel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('receipt-panel').style.display='block';
+  document.getElementById('rack-num').textContent=sub.ackNum;
+  document.getElementById('rack-date').textContent=new Date(sub.timestamp).toLocaleString('en-IN');
+  const b=document.getElementById('rcpt-body');
+  b.innerHTML=`<div class="rsec"><h4>Admission & Center</h4><div class="rgrid">${ri('AI Center',sub.center)}${ri('District',sub.district)}${ri('Class',sub.course)}${ri('Stream',sub.stream||'N/A')}${ri('Admission Type',sub.admtype)}${ri('Medium',sub.medium)}</div></div>
+    <div class="rsec"><h4>Learner Details</h4><div class="rgrid">${ri('Full Name',sub.learnerName)}${ri("Father's Name",sub.father)}${ri("Mother's Name",sub.mother)}${ri('DOB',sub.dob)}${ri('Gender',sub.gender)}${ri('Category',sub.category)}${ri('Mobile',sub.mobile)}${ri('Aadhaar',sub.aadhaar)}${ri('Prev. Qualification',sub.prevQual)}${ri('Area',sub.area)}</div></div>
+    <div class="rsec"><h4>Subjects</h4><div class="rgrid">${sub.subjects.map((s,i)=>ri('Subject '+(i+1),s)).join('')}${ri('Study Material',sub.studyMat)}</div></div>
+    <div class="rsec"><h4>Address</h4><div class="rgrid">${ri('Address',sub.permAddr)}${ri('District',sub.permDist)}${ri('Village/City',sub.permVill)}${ri('Pincode',sub.permPin)}</div></div>
+    <div class="rsec"><h4>Payment</h4><div class="rgrid">${ri('Amount','₹900')}${ri('TXN ID',sub.txnId)}${ri('Method',payMethod||'PhonePe')}${ri('Status',sub.payStatus)}</div></div>
+    <div class="rsec"><h4>Submitted By</h4><div class="rgrid">${ri('Operator',sub.userEmail)}${ri('Operator Name',sub.userName)}${ri('Time',new Date(sub.timestamp).toLocaleString('en-IN'))}</div></div>`;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function ri(l,v2){return `<div class="ri"><div class="rl">${l}</div><div class="rv">${v2||'—'}</div></div>`;}
+function dlForm(){const sub=allSubs[allSubs.length-1];if(!sub){alert('Submit form first.');return;}const win=window.open('','_blank');win.document.write(`<html><head><title>RSOS Form – ${sub.ackNum}</title></head><body style="font-family:Arial;padding:20px"><h2>RSOS Admission Form – Training Copy</h2><p><strong>Acknowledgment No:</strong> ${sub.ackNum}</p><hr><pre>${JSON.stringify(sub,null,2).replace(/,/g,',\n')}</pre></body></html>`);win.document.close();win.print();}
+
+/* ════════ NEW FORM ════════ */
+function newForm(){
+  if(submCount>=CFG.MAX_FORMS){alert('Maximum '+CFG.MAX_FORMS+' forms per session.');return;}
+  document.querySelectorAll('#portal input:not([type=checkbox]):not([type=radio]):not([type=file]),#portal select,#portal textarea').forEach(el=>{el.value='';el.classList.remove('err');});
+  document.querySelectorAll('.em').forEach(e=>e.classList.remove('show'));
+  document.querySelectorAll('.subi').forEach(s=>s.classList.remove('sel'));
+  document.querySelectorAll('#subj-list input').forEach(c=>c.checked=false);
+  document.querySelectorAll('.rcard,.mcard').forEach(c=>c.classList.remove('sel'));
+  document.getElementById('decl-chk').checked=false;
+  document.getElementById('lock-btn').disabled=false;document.getElementById('lock-btn').textContent='🔒 Lock & Submit Form';
+  document.getElementById('same-addr').checked=false;document.getElementById('corr-sec').style.cssText='';
+  document.getElementById('s4-stream-grp').style.display='none';
+  document.getElementById('disab-pct-grp').style.display='none';
+  document.getElementById('center-confirm').style.display='none';
+  // Reset Aadhaar section to Rajasthan default
+  const janF=document.getElementById('jan-aadh-fields');if(janF)janF.style.display='block';
+  const othF=document.getElementById('other-state-aadh-fields');if(othF)othF.style.display='none';
+  const aInfo=document.getElementById('aadh-infobox');if(aInfo)aInfo.textContent='Enter your Jan Aadhaar Number for OTP verification.';
+  document.getElementById('s1-block').innerHTML='<option value="">-- Select Tehsil --</option>';document.getElementById('s1-block').disabled=true;
+  document.getElementById('s1-center').innerHTML='<option value="">-- Select Center --</option>';document.getElementById('s1-center').disabled=true;
+  ['aadh-otp-sent','aadh-verified','mob-otp-sent','mob-verified'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+  document.getElementById('mob-otp-grp').style.display='none';
+  aadhOk=false;mobOk=false;payMethod='';docs={};
+  ['photo','sign','dob','aadhaar','prevqual','caste','disabcert'].forEach(k=>{const c=document.getElementById('uc-'+k);if(!c)return;c.classList.remove('has');const ok=document.getElementById('uok-'+k);if(ok)ok.textContent='';const sz=document.getElementById('usz-'+k);if(sz)sz.textContent='';const pr=document.getElementById('upr-'+k);if(pr){pr.src='';pr.style.display='none';}const fi=document.getElementById('fi-'+k);if(fi)fi.value='';});
+  document.getElementById('receipt-panel').style.display='none';
+  resetPayInner();STEPS.forEach(s=>{const el=document.getElementById('sn-'+s.id);if(el)el.className='sitem todo';});
+  goStep(1);
+}
+function resetPayInner(){const el=document.getElementById('pay-inner');if(!el)return;el.style.display='flex';document.getElementById('pay-ok').style.display='none';const btn=document.getElementById('btn-pay');if(btn){btn.disabled=false;btn.textContent='Pay (Simulation) ➜';}document.querySelectorAll('.popt').forEach(p=>p.classList.remove('sel'));payMethod='';}
+
+/* ════════ STEP NAV ════════ */
+function buildSNav(){const nav=document.getElementById('snav');nav.innerHTML='';STEPS.forEach((s,i)=>{const d=document.createElement('div');d.className='sitem todo';d.id='sn-'+s.id;d.innerHTML=`<div class="snum">${i+1}</div><div class="slbl">${s.lbl}</div>`;d.addEventListener('click',()=>{if(d.classList.contains('done'))goStep(s.id);});nav.appendChild(d);if(i<STEPS.length-1){const c=document.createElement('div');c.className='sconn';nav.appendChild(c);}});}
+function goStep(n){document.querySelectorAll('.spanel').forEach(p=>p.classList.remove('active'));document.getElementById('receipt-panel').style.display='none';const p=document.getElementById('sp-'+n);if(p)p.classList.add('active');curStep=n;updateSNav();window.scrollTo({top:78,behavior:'smooth'});if(n===11)renderSubjects();if(n===12)renderSubConfirm();if(n===13)renderFee(document.getElementById('fee-tbl'));if(n===14)renderPreview();showToast();}
+function goP(from){const idx=STEPS.findIndex(s=>s.id===from);if(idx>0)goStep(STEPS[idx-1].id);}
+function goN(from){if(!validate(from))return;markDone(from);const idx=STEPS.findIndex(s=>s.id===from);if(idx<STEPS.length-1)goStep(STEPS[idx+1].id);}
+function markDone(id){const el=document.getElementById('sn-'+id);if(el){el.classList.remove('active','todo');el.classList.add('done');}}
+function updateSNav(){STEPS.forEach(s=>{const el=document.getElementById('sn-'+s.id);if(!el)return;if(s.id===curStep){el.classList.remove('done','todo');el.classList.add('active');}else if(!el.classList.contains('done')){el.classList.remove('active');el.classList.add('todo');}else{el.classList.remove('active');}});}
+
+/* ════════ VALIDATION ════════ */
+function validate(step){
+  let ok=true;
+  const req=(fid,eid)=>{const f=document.getElementById(fid);if(!f)return;if(!f.value||!f.value.trim()){f.classList.add('err');showE(eid,'Required.');ok=false;}else{f.classList.remove('err');clearE(eid);}};
+  const chk=(fid,eid)=>{const f=document.getElementById(fid);if(!f)return;if(!f.value){showE(eid,'Required.');f.classList.add('err');ok=false;}else{clearE(eid);f.classList.remove('err');}};
+  if(step===1){chk('s1-dist','e1-dist');chk('s1-block','e1-block');chk('s1-center','e1-center');}
+  if(step===2){const cat=document.querySelector('[name=cat]:checked');const e=document.getElementById('e2-cat');if(!cat){e.style.display='block';ok=false;}else{e.style.display='none';}}
+  if(step===3){
+    const cat=document.querySelector('[name=cat]:checked')?.value;
+    if(cat==='other'){
+      // Other state: only Aadhaar needed, no Jan Aadhaar, no OTP
+      const aOther=v('s3-aadh-other').replace(/\s/g,'');
+      if(!/^\d{12}$/.test(aOther)){showE('e3-aadh-other','Valid 12-digit Aadhaar required.');document.getElementById('s3-aadh-other').classList.add('err');ok=false;}
+      else{clearE('e3-aadh-other');document.getElementById('s3-aadh-other').classList.remove('err');}
+      aadhOk=true; // auto-pass OTP for other state
+    } else {
+      req('s3-janaadh','e3-janaadh');
+      const a=v('s3-aadh').replace(/\s/g,'');
+      if(!/^\d{12}$/.test(a)){showE('e3-aadh','Valid 12-digit Aadhaar required.');document.getElementById('s3-aadh').classList.add('err');ok=false;}else{clearE('e3-aadh');document.getElementById('s3-aadh').classList.remove('err');}
+      if(!aadhOk){showE('e3-otp','Please verify OTP.');ok=false;}else clearE('e3-otp');
+    }
+  }
+  if(step===4){chk('s4-class','e4-class');chk('s4-admtype','e4-admtype');if(v('s4-class')==='12th')chk('s4-stream','e4-stream');}
+  if(step===5){const m=v('s5-mobile');if(!/^\d{10}$/.test(m)){showE('e5-mobile','10-digit mobile required.');ok=false;}else clearE('e5-mobile');}
+  if(step===6){req('s6-fname','e6-fname');req('s6-father','e6-father');req('s6-mother','e6-mother');chk('s6-dob','e6-dob');chk('s6-gender','e6-gender');chk('s6-cat','e6-cat');chk('s6-religion','e6-religion');chk('s6-area','e6-area');chk('s6-qual','e6-qual');chk('s6-medium','e6-medium');}
+  if(step===7){req('s7-paddr','e7-paddr');req('s7-ptehsil','e7-ptehsil');req('s7-pvill','e7-pvill');chk('s7-pdist','e7-pdist');const pin=v('s7-ppin');if(!/^\d{6}$/.test(pin)){showE('e7-ppin','6-digit pincode required.');ok=false;}else clearE('e7-ppin');}
+  if(step===8){req('s8-name','e8-name');req('s8-acc','e8-acc');req('s8-bank','e8-bank');req('s8-ifsc','e8-ifsc');}
+  if(step===9){const da=document.getElementById('doc-alert');if(!docs.photo||!docs.sign||!docs.dob||!docs.aadhaar){da.classList.add('show');ok=false;}else da.classList.remove('show');}
+  if(step===10){const mat=document.querySelector('[name=mat]:checked');const e=document.getElementById('e10-mat');if(!mat){e.classList.add('show');ok=false;}else e.classList.remove('show');}
+  if(step===11){const cnt=document.querySelectorAll('#subj-list input:checked').length;const a=document.getElementById('subj-alert');if(cnt<5){a.classList.add('show');ok=false;}else a.classList.remove('show');}
+  if(step===12){const cnt=document.querySelectorAll('#subj-list input:checked').length+(document.getElementById('s11-extra').value?1:0);const a=document.getElementById('sub-confirm-alert');if(cnt<5){a.classList.add('show');ok=false;}else a.classList.remove('show');}
+  if(!ok)window.scrollTo({top:document.querySelector('.spanel.active')?.offsetTop||78,behavior:'smooth'});
+  return ok;
+}
+function showE(id,m){const e=document.getElementById(id);if(e){e.textContent=m;e.classList.add('show');}}
+function clearE(id){const e=document.getElementById(id);if(e)e.classList.remove('show');}
+function v(id){const el=document.getElementById(id);return el?el.value:'';}
+function showToast(){const t=document.getElementById('toast');if(!t)return;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000);}
+</script>
+</body>
+</html>
